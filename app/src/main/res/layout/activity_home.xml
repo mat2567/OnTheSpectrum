@@ -17,6 +17,7 @@
         android:layout_marginTop="50dp"
         android:onClick="moveToCallScreen"
         android:text="Call"
+        android:background="@color/turqoise"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -32,6 +33,7 @@
         android:layout_marginTop="25dp"
         android:onClick="moveToProfileScreen"
         android:text="Profile"
+        android:background="@color/turqoise"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button"
@@ -48,6 +50,7 @@
         android:layout_marginTop="25dp"
         android:onClick="moveToEmergencyListScreen"
         android:text="Emergency List"
+        android:background="@color/turqoise"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button2" />
@@ -61,6 +64,7 @@
         android:layout_marginTop="25dp"
         android:onClick="moveToSettingsScreen"
         android:text="Settings"
+        android:background="@color/turqoise"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button3" />
