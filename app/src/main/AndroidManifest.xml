@@ -20,6 +20,7 @@
         <activity android:name=".SettingsActivity" />
         <activity android:name=".CallActivity" />
         <activity android:name=".EmergencyListActivity"></activity>
+        <!-- Vidya's test line -->
     </application>
 
 </manifest>
