@@ -41,8 +41,8 @@ public class ProfileActivity extends AppCompatActivity {
                             .inflate(R.layout.profile_item, null, false);
                 }
 
-                TextView infoType = (TextView)convertView.findViewById(R.id.infoType);
-                TextView userInfo = (TextView)convertView.findViewById(R.id.userInfo);
+                EditText infoType = (EditText) convertView.findViewById(R.id.infoType);
+                EditText userInfo = (EditText) convertView.findViewById(R.id.userInfo);
 
                 infoType.setText(current.infoType);
                 userInfo.setText(current.userInfo);
