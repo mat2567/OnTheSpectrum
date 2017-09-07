@@ -4,4 +4,12 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="turqoise">#A0E0D0</color>
+
+    <color name="color1">#A0E0D0</color>
+    <color name="color2">#A0E0D0</color>
+    <color name="color3">#A0E0D0</color>
+    <color name="color4">#A0E0D0</color>
+    <color name="color5">#A0E0D0</color>
+    <color name="color6">#A0E0D0</color>
+
 </resources>
