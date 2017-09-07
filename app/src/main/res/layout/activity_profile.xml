@@ -7,10 +7,23 @@
     tools:context=".MainActivity"
     android:weightSum="1">
 
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Profile"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textSize="24sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="15dp" />
+
     <ListView
         android:id="@+id/list"
         android:layout_width="wrap_content"
-        android:layout_height="279dp"></ListView>
+        android:layout_height="327dp"
+        android:layout_weight="0.72"></ListView>
 
     <Space
         android:layout_width="match_parent"
@@ -18,18 +31,18 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/infoType"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:hint="Information Type"
             android:layout_above="@+id/userInfo"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_toLeftOf="@+id/btAdd"
-            android:layout_toStartOf="@+id/btAdd"
-            android:hint="Information Type" />
+            android:layout_toStartOf="@+id/btAdd" />
 
         <EditText
             android:id="@+id/userInfo"
