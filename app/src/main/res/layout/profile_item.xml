@@ -4,14 +4,13 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
+    <TextView
         android:id="@+id/infoType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
         android:text="Information Type"
-        android:textStyle="bold" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/userInfo"
@@ -20,6 +19,6 @@
         android:ems="10"
         android:hint="Your Personal Information"
         android:inputType="textPersonName"
-        android:textSize="14sp" />
+        android:textSize="18sp" />
 
 </LinearLayout>

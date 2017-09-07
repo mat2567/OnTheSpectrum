@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -41,7 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
                             .inflate(R.layout.profile_item, null, false);
                 }
 
-                EditText infoType = (EditText) convertView.findViewById(R.id.infoType);
+                TextView infoType = (TextView) convertView.findViewById(R.id.infoType);
                 EditText userInfo = (EditText) convertView.findViewById(R.id.userInfo);
 
                 infoType.setText(current.infoType);
