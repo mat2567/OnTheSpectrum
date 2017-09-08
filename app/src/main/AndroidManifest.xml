@@ -17,6 +17,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".ProfileActivity" />
+        <!-- <activity android:name=".ProfileActivity"
+            android:windowSoftInputMode="stateVisible">
+
+        </activity> -->
         <activity android:name=".SettingsActivity" />
         <activity android:name=".CallActivity" />
         <activity android:name=".EmergencyListActivity"></activity>

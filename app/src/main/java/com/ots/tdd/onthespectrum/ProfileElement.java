@@ -7,9 +7,11 @@ package com.ots.tdd.onthespectrum;
 public class ProfileElement {
     String infoType;
     String userInfo;
+    int profileNumber;
 
-    public ProfileElement(String infoType, String userInfo) {
+    public ProfileElement(String infoType, String userInfo, int profileNumber) {
         this.infoType = infoType;
         this.userInfo = userInfo;
+        this.profileNumber = profileNumber;
     }
 }
