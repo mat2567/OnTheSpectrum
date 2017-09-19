@@ -22,9 +22,9 @@ public class HomeActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);*/
     }
 
-    public void moveToCallScreen(View v) {
-        Intent intentCall = new Intent(this, CallActivity.class);
-        startActivity(intentCall);
+    public void moveToSelectEmergencyScreen(View v) {
+        Intent intentSelectEmergency = new Intent(this, SelectEmergencyActivity.class);
+        startActivity(intentSelectEmergency);
     }
 
     public void moveToProfileScreen(View v) {
