@@ -25,13 +25,14 @@ public class ProfileActivity extends AppCompatActivity {
     EditText editInfoType;
     EditText editUserInfo;
     TextView alertTextView;
+
     int profileElementCounter;
 
     ArrayList<ProfileElement> itemList;
     ProfileElement[] test = {
-            new ProfileElement("Name", "Testing Name", 0),
-            new ProfileElement("Birth Date", "September 7, 2017", 1),
-            new ProfileElement("Gender", "Female", 2),
+            new ProfileElement("Name", " ", 0),
+            new ProfileElement("Birth Date", "mm/dd/yyyy", 1),
+            new ProfileElement("Gender", " ", 2),
     };
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,11 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         itemList = new ArrayList<ProfileElement>(Arrays.asList(test));
+
+        //Backs the ListView. Enables TextViews to be added dynamically
         adapter=new ArrayAdapter<ProfileElement>(this, R.layout.profile_item, itemList) {
+
+            // TODO: What is this doing?
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 ProfileElement current = itemList.get(position);

@@ -30,14 +30,15 @@
         android:layout_width="291dp"
         android:layout_height="48dp"
         android:text="General Emergency"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toTopOf="@+id/gridview"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
+        android:layout_marginEnd="8dp"
+        app:layout_constraintHorizontal_bias="0.506" />
 
     <GridView
         android:id="@+id/gridview"
