@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HomeActivity">
+        <activity android:name=".LoadInfoActivity">
             <intent-filter>
 
                 <!-- Select this activity as the starting point -->
@@ -28,7 +28,8 @@
         <activity android:name=".SettingsActivity" />
         <activity android:name=".CallActivity" />
         <activity android:name=".EmergencyListActivity" />
-        <activity android:name=".TestVoiceActivity"></activity>
+        <activity android:name=".TestVoiceActivity" />
+        <activity android:name=".HomeActivity" />
     </application>
 
 </manifest>
