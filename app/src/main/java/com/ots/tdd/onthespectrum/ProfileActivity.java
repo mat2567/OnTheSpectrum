@@ -246,6 +246,7 @@ public class ProfileActivity extends AppCompatActivity {
             itemList.add(new ProfileElement("Gender", "", 1));
             itemList.add(new ProfileElement("Age", "", 2));
             itemList.add(new ProfileElement("Phone Number", "", 3));
+            itemList.add(new ProfileElement("Home Address", "", 4));
         } else {
             String[] fields = savedProfFields.split(";;");
             for (int i = 0; i < fields.length; i++) {
