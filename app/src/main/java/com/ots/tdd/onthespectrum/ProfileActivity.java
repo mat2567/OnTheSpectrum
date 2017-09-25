@@ -36,7 +36,21 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        loadInfo();
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        String savedProfFields = sharedPref.getString("ProfileFields", null);
+        if (null == savedProfFields) {
+            itemList.add(new ProfileElement("Name", "", 0));
+            itemList.add(new ProfileElement("Gender", "", 1));
+            itemList.add(new ProfileElement("Age", "", 2));
+            itemList.add(new ProfileElement("Phone Number", "", 3));
+        } else {
+            String[] fields = savedProfFields.split(";;");
+            for (int i = 0; i < fields.length; i++) {
+                String info = sharedPref.getString(fields[i], "");
+                itemList.add(new ProfileElement(fields[i], info, i));
+            }
+        }
+        profileElementCounter = itemList.size();
 
         adapter=new ArrayAdapter<ProfileElement>(this, R.layout.profile_item, itemList) {
             @Override
@@ -236,24 +250,6 @@ public class ProfileActivity extends AppCompatActivity {
         currEditInfo.setVisibility(View.VISIBLE);
         currSaveInfo.setVisibility(View.GONE);
         currCancelInfo.setVisibility(View.GONE);
-    }
-
-    private void loadInfo() {
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-        String savedProfFields = sharedPref.getString("ProfileFields", null);
-        if (null == savedProfFields) {
-            itemList.add(new ProfileElement("Name", "", 0));
-            itemList.add(new ProfileElement("Gender", "", 1));
-            itemList.add(new ProfileElement("Age", "", 2));
-            itemList.add(new ProfileElement("Phone Number", "", 3));
-        } else {
-            String[] fields = savedProfFields.split(";;");
-            for (int i = 0; i < fields.length; i++) {
-                String info = sharedPref.getString(fields[i], "");
-                itemList.add(new ProfileElement(fields[i], info, i));
-            }
-        }
-        profileElementCounter = itemList.size();
     }
 }
 
