@@ -218,5 +218,24 @@ public class ProfileActivity extends AppCompatActivity {
         currSaveInfo.setVisibility(View.GONE);
         currCancelInfo.setVisibility(View.GONE);
     }
+
+    private void loadInfo() {
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        String savedProfFields = sharedPref.getString("ProfileFields", null);
+        if (null == savedProfFields) {
+            itemList.add(new ProfileElement("Name", "", 0));
+            itemList.add(new ProfileElement("Gender", "", 1));
+            itemList.add(new ProfileElement("Age", "", 2));
+            itemList.add(new ProfileElement("Phone Number", "", 3));
+            itemList.add(new ProfileElement("Home Address", "", 4));
+        } else {
+            String[] fields = savedProfFields.split(";;");
+            for (int i = 0; i < fields.length; i++) {
+                String info = sharedPref.getString(fields[i], "");
+                itemList.add(new ProfileElement(fields[i], info, i));
+            }
+        }
+        profileElementCounter = itemList.size();
+    }
 }
 
