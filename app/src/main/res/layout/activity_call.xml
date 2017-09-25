@@ -6,17 +6,56 @@
     android:layout_height="match_parent"
     tools:context="com.ots.tdd.onthespectrum.CallActivity">
 
-    <TextView
-        android:id="@+id/textView"
+
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="139dp"
-        android:text="Ring Ring Ring. Phone Call."
-        android:textSize="30sp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        tools:layout_constraintBottom_creator="1"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1" />
+        tools:layout_constraintTop_creator="1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintVertical_bias="1.0">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="34dp"
+            android:text="Ring Ring Ring. Phone Call."
+            android:textSize="30sp"
+            app:layout_constraintHorizontal_bias="0.52"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_constraintLeft_creator="1"
+            tools:layout_constraintRight_creator="1"
+            tools:layout_constraintTop_creator="1" />
+
+
+        <!-- gravity: Controls the allignment of the text, in this case centers it-->
+        <TextView
+            android:id="@+id/emergencyMsg"
+            android:layout_width="312dp"
+            android:layout_height="292dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="32dp"
+            android:gravity="center_horizontal"
+            android:text="My name is_. I am noverbal autistic and communicating with you through an app as an aid. I am in an emergency at _ ."
+            tools:layout_editor_absoluteX="31dp"
+            tools:layout_editor_absoluteY="186dp" />
+
+
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
