@@ -5,7 +5,7 @@ android {
     buildToolsVersion "26.0.0"
     defaultConfig {
         applicationId "com.ots.tdd.onthespectrum"
-        minSdkVersion 15
+        minSdkVersion 23
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -17,14 +17,75 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    useLibrary 'org.apache.http.legacy' // delete if using a different http library
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    configurations {
+        compile.exclude group: "org.apache.httpcomponents", module: "httpclient"
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    //this automatically takes in the libs folder's .jar files
+    //compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.google.code.gson:gson:2.3.1'
     testCompile 'junit:junit:4.12'
+    // https://mvnrepository.com/artifact/com.bandwidth.sdk/bandwidth-java-sdk
+    //compile 'com.bandwidth.sdk:bandwidth-java-sdk:1.10'
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore
+    compile 'org.apache.httpcomponents:httpcore:4.4.1'
+    compile 'org.apache.httpcomponents:httpclient-android:4.3.5.1'
+    compile 'cz.msebera.android:httpclient:4.4.1.1'
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore
+    //compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.3.2'
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    compile 'org.apache.commons:commons-lang3:3.4'
+    // https://mvnrepository.com/artifact/joda-time/joda-time
+    compile 'joda-time:joda-time:2.8'
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    compile 'commons-io:commons-io:2.4'
+    // https://mvnrepository.com/artifact/commons-codec/commons-codec
+    compile 'commons-codec:commons-codec:1.10'
+    // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+    compile 'com.googlecode.json-simple:json-simple:1.1.1'
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.5.3'
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+    compile 'com.fasterxml.jackson.core:jackson-core:2.5.3'
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.5.3'
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-core
+    compile 'ch.qos.logback:logback-core:1.1.3'
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+    testCompile 'ch.qos.logback:logback-classic:1.1.3'
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-access
+    compile 'ch.qos.logback:logback-access:1.1.3'
+    // https://mvnrepository.com/artifact/junit/junit
+    //testCompile group: 'junit', name: 'junit', version: '4.8.1'
+    compile 'junit:junit:4.12'
+    // https://mvnrepository.com/artifact/xmlunit/xmlunit
+    testCompile 'xmlunit:xmlunit:1.5'
+    // https://mvnrepository.com/artifact/org.hamcrest/hamcrest-core
+    compile 'org.hamcrest:hamcrest-core:1.3'
+    compile files('libs/httpclient-android-4.3.5-rep.jar')
+    compile files('libs/httpclient-4.3.3-rep.jar')
+    compile files('libs/bandwidth-java-sdk-1.11.jar')
+// https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.7'
+// https://mvnrepository.com/artifact/commons-logging/commons-logging
+    compile group: 'commons-logging', name: 'commons-logging', version: '1.2'
+
 }
+
