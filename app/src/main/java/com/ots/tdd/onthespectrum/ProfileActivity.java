@@ -38,10 +38,7 @@ public class ProfileActivity extends AppCompatActivity {
         profileElementCounter = 3;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        //itemList = LoadInfoActivity.getProfile();
-        //itemList = new ArrayList<ProfileElement>(Arrays.asList(test));
-        Intent intent = getIntent();
-        itemList = intent.getParcelableArrayListExtra("Profile");
+        itemList = new ArrayList<ProfileElement>(Arrays.asList(test));
         adapter=new ArrayAdapter<ProfileElement>(this, R.layout.profile_item, itemList) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
