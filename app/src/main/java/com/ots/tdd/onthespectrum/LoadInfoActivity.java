@@ -28,7 +28,7 @@ public class LoadInfoActivity extends AppCompatActivity {
             profile.add(new ProfileElement("Age", "", 2));
             profile.add(new ProfileElement("Phone Number", "", 3));
         } else {
-            String[] fields = savedProfFields.split("||");
+            String[] fields = savedProfFields.split(";;");
             for (int i = 0; i < fields.length; i++) {
                 String info = sharedPref.getString(fields[i], "");
                 profile.add(new ProfileElement(fields[i], info, i));
@@ -40,7 +40,4 @@ public class LoadInfoActivity extends AppCompatActivity {
         startActivity(intentCall);
     }
 
-    public ArrayList<ProfileElement> getProfile() {
-        return profile;
-    }
 }
