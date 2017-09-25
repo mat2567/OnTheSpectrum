@@ -1,8 +1,6 @@
 package com.ots.tdd.onthespectrum;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -30,12 +28,18 @@ public class ProfileActivity extends AppCompatActivity {
     int profileElementCounter;
 
     ArrayList<ProfileElement> itemList;
-
+    ProfileElement[] test = {
+            new ProfileElement("Name", "Testing Name", 0),
+            new ProfileElement("Birth Date", "September 7, 2017", 1),
+            new ProfileElement("Gender", "Female", 2),
+    };
 
     protected void onCreate(Bundle savedInstanceState) {
         profileElementCounter = 3;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        //itemList = LoadInfoActivity.getProfile();
+        //itemList = new ArrayList<ProfileElement>(Arrays.asList(test));
         Intent intent = getIntent();
         itemList = intent.getParcelableArrayListExtra("Profile");
         adapter=new ArrayAdapter<ProfileElement>(this, R.layout.profile_item, itemList) {
@@ -159,23 +163,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         });
 
-    }
-
-    protected void onPause() {
-        super.onPause();
-        SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        String fieldNames = "";
-        for (ProfileElement item : itemList) {
-            //fieldNames.concat(item.infoType);
-            //fieldNames.concat("||");
-            fieldNames += item.infoType;
-            fieldNames += ";;";
-            editor.putString(item.infoType, item.userInfo);
-        }
-        editor.putString("ProfileFields", fieldNames);
-
-        editor.apply();
     }
 
 
