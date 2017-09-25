@@ -15,7 +15,7 @@ public class CallActivity extends AppCompatActivity {
 
     TextView msgTxtV;
     MessageFormat personalMsg = new MessageFormat("My name is{0}. I am noverbal autistic and communicating with you through an app as an aid. I am in an emergency at {1}. \n{2}");
-    Object[] profileElements ={};
+    Object[] profileElements = new Object[3];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,14 +23,14 @@ public class CallActivity extends AppCompatActivity {
         setContentView(R.layout.activity_call);
 
         msgTxtV = (TextView) findViewById(R.id.emergencyMsg);
-        msgTxtV.setText(personalMsg.toPattern());
-        //loadEmergencyMessage(msgTxtV);
+        loadEmergencyMessage(msgTxtV);
 
         // (1) Get all Info From Profile
         // (2) Concatenate info with base text String.
         // (3) Display info
 
     }
+
 
      /**Loads user's information into View to deliver to call recipient
      * @param v the Text view to be edited.
@@ -39,27 +39,26 @@ public class CallActivity extends AppCompatActivity {
     public void loadEmergencyMessage(TextView v){
         /*TODO: Set check for when ProfileActivities values aren't loaded*/
 
-        String additionalInfo = " ";
-        int i = 0;
+        String additionalInfo = "";
 
         /* Add Profile Info into array */
         String userName = (ProfileActivity.itemList.get(0)).userInfo;
         String userLocation = (ProfileActivity.itemList.get(1)).userInfo;
-        profileElements[0] = userName;
-        profileElements[1] = userLocation;
 
         for(ProfileElement element: ProfileActivity.itemList) {
             additionalInfo += element.infoType + ": " + element.userInfo + "\n";
         }
         additionalInfo = additionalInfo.substring(2);
+        profileElements[0] = userName;
+        profileElements[1] = userLocation;
         profileElements[2] = additionalInfo;
         //DEBUG
-        //v.setText(additionalInfo);
+        v.setText(additionalInfo);
 
         /* Add appropriate info to message */
-        personalMsg.format(profileElements);
+        //personalMsg.format(profileElements);
 
         /* Update xml file with new formatted message */
-        v.setText(personalMsg.toPattern());
+        v.setText(personalMsg.format(profileElements));
     }
 }
