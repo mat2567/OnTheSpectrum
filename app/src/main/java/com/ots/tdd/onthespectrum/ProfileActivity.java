@@ -29,15 +29,29 @@ public class ProfileActivity extends AppCompatActivity {
     TextView alertTextView;
     int profileElementCounter;
 
-    ArrayList<ProfileElement> itemList;
+    ArrayList<ProfileElement> itemList = new ArrayList<>();
 
 
     protected void onCreate(Bundle savedInstanceState) {
-        profileElementCounter = 3;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        Intent intent = getIntent();
-        itemList = intent.getParcelableArrayListExtra("Profile");
+
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        String savedProfFields = sharedPref.getString("ProfileFields", null);
+        if (null == savedProfFields) {
+            itemList.add(new ProfileElement("Name", "", 0));
+            itemList.add(new ProfileElement("Gender", "", 1));
+            itemList.add(new ProfileElement("Age", "", 2));
+            itemList.add(new ProfileElement("Phone Number", "", 3));
+        } else {
+            String[] fields = savedProfFields.split(";;");
+            for (int i = 0; i < fields.length; i++) {
+                String info = sharedPref.getString(fields[i], "");
+                itemList.add(new ProfileElement(fields[i], info, i));
+            }
+        }
+        profileElementCounter = itemList.size();
+
         adapter=new ArrayAdapter<ProfileElement>(this, R.layout.profile_item, itemList) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -206,6 +220,9 @@ public class ProfileActivity extends AppCompatActivity {
         ImageView currCancelInfo = ProfileElementViewContainer.getCancel(pevc);
         EditText currEditText = ProfileElementViewContainer.getEditText(pevc);
 
+        String field = itemList.get(pevc.profileNumber).infoType;
+        String info = currEditText.getText().toString();
+        itemList.set(pevc.profileNumber, new ProfileElement(field, info, pevc.profileNumber));
         //currEditText.setFocusable(false);
         //currEditText.setClickable(false);
         currEditText.setEnabled(false);
