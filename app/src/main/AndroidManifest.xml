@@ -29,6 +29,7 @@
         <activity android:name=".CallActivity" />
         <activity android:name=".EmergencyListActivity" />
         <activity android:name=".TestVoiceActivity"></activity>
+        <activity android:name=".PreCallCheckActivity"></activity>
     </application>
 
 </manifest>

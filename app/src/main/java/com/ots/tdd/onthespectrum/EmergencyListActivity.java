@@ -20,7 +20,8 @@ public class EmergencyListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 // Intent is what you use to start another activity
-                Intent intent = new Intent(EmergencyListActivity.this, SelectedEmergencyActivity.class);
+                Intent intent = new Intent(EmergencyListActivity.this, PreCallCheckActivity.class);
+                intent.putExtra("Selected", "thisScenario");
                 startActivity(intent);
             }
         });
