@@ -17,7 +17,8 @@ public class CallActivity extends AppCompatActivity {
 
     TextView msgTxtV;
     MessageFormat personalMsg = new MessageFormat("My name is{0}. I am noverbal autistic and communicating with you through an app as an aid. I am in an emergency at {1}. \n{2}");
-    ArrayList<ProfileElement> profileElements = new ArrayList<>();
+    //ArrayList<ProfileElement> profileElements = new ArrayList<>();
+    Object[] profileElements = new Object[3];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,43 +40,47 @@ public class CallActivity extends AppCompatActivity {
      * @author Ecclesia Morain
      */
     public void loadEmergencyMessage(TextView v){
+
         /*TODO: Set check for when ProfileActivities values aren't loaded*/
-        String additionalInfo = "";
+        /*TODO: Get Profile Information from device instead of ProfileActivity*/
+        String additionalInfo = "  ";
 
         /* Add Profile Info into array */
         String userName = (ProfileActivity.itemList.get(0)).userInfo;
-        String userLocation = (ProfileActivity.itemList.get(1)).userInfo;
+        String userLocation = (ProfileActivity.itemList.get(3)).userInfo;
 
         for(ProfileElement element: ProfileActivity.itemList) {
-            additionalInfo += element.infoType + ": " + element.userInfo + "\n";
+            additionalInfo += "My " + element.infoType + " is " + element.userInfo + "\n";
         }
         additionalInfo = additionalInfo.substring(2);
-        
-        //DEBUG
-        v.setText(additionalInfo);
+        profileElements[0] = userName;
+        profileElements[1] = userLocation;
+        profileElements[2] = additionalInfo;
 
-        /* Add appropriate info to message */
-        //personalMsg.format(profileElements);
-
-        /* Update xml file with new formatted message */
+        /* Add appropriate info to message and update xml file with new formatted message */
         v.setText(personalMsg.format(profileElements));
     }
 
-    private void loadInfo() {
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-        String savedProfFields = sharedPref.getString("ProfileFields", null);
-        if (null == savedProfFields) {
-            profileElements.add(new ProfileElement("Name", "", 0));
-            profileElements.add(new ProfileElement("Gender", "", 1));
-            profileElements.add(new ProfileElement("Age", "", 2));
-            profileElements.add(new ProfileElement("Phone Number", "", 3));
-            profileElements.add(new ProfileElement("Home Address", "", 4));
-        } else {
-            String[] fields = savedProfFields.split(";;");
-            for (int i = 0; i < fields.length; i++) {
-                String info = sharedPref.getString(fields[i], "");
-                profileElements.add(new ProfileElement(fields[i], info, i));
-            }
-        }
-    }
+
+
+     // TODO: What is this method doing ? IT seems to be adding Profile Elements to an array, but to do what with?
+//    private void loadInfo() {
+//        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+//        String savedProfFields = sharedPref.getString("ProfileFields", null);
+//
+//        //Why are there values being loaded here
+//        if (null == savedProfFields) {
+//            profileElements.add(new ProfileElement("Name", "", 0));
+//            profileElements.add(new ProfileElement("Gender", "", 1));
+//            profileElements.add(new ProfileElement("Age", "", 2));
+//            profileElements.add(new ProfileElement("Phone Number", "", 3));
+//            profileElements.add(new ProfileElement("Home Address", "", 4));
+//        } else {
+//            String[] fields = savedProfFields.split(";;");
+//            for (int i = 0; i < fields.length; i++) {
+//                String info = sharedPref.getString(fields[i], "");
+//                profileElements.add(new ProfileElement(fields[i], info, i));
+//            }
+//        }
+//    }
 }

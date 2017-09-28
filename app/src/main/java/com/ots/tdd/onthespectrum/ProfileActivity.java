@@ -33,6 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
             new ProfileElement("Name", " ", 0),
             new ProfileElement("Birth Date", "mm/dd/yyyy", 1),
             new ProfileElement("Gender", " ", 2),
+            new ProfileElement("Address", " ", 3),
     };
 
     protected void onCreate(Bundle savedInstanceState) {
