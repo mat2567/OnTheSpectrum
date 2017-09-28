@@ -21,9 +21,10 @@
         android:layout_height="15dp" />
 
     <Button
-        android:id="@+id/button13"
+        android:id="@+id/generalEmergency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:tag="general emergency"
         android:text="General Emergency" />
 
     <Space
@@ -40,21 +41,31 @@
             android:id="@+id/firstLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toLeftOf="@+id/secondView"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/secondView"
+            android:layout_alignEnd="@+id/secondView">
 
             <ImageButton
-                android:id="@+id/imageButton10"
+                android:id="@+id/emergency1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:tag="Fire"
+                android:tag="emergency1"
                 app:srcCompat="@mipmap/ic_launcher" />
 
             <ImageButton
-                android:id="@+id/imageButton8"
+                android:id="@+id/emergency3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:tag="emergency3"
+                app:srcCompat="@mipmap/ic_launcher" />
+
+            <ImageButton
+                android:id="@+id/emergency5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="emergency5"
                 app:srcCompat="@mipmap/ic_launcher" />
         </LinearLayout>
 
@@ -72,15 +83,24 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/imageButton11"
+                android:id="@+id/emergency2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:tag="emergency2"
                 app:srcCompat="@mipmap/ic_launcher" />
 
             <ImageButton
-                android:id="@+id/imageButton9"
+                android:id="@+id/emergency4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:tag="emergency4"
+                app:srcCompat="@mipmap/ic_launcher" />
+
+            <ImageButton
+                android:id="@+id/emergency6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="emergency6"
                 app:srcCompat="@mipmap/ic_launcher" />
         </LinearLayout>
     </RelativeLayout>
