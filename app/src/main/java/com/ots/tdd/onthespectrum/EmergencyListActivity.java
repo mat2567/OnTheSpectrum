@@ -28,7 +28,7 @@ public class EmergencyListActivity extends AppCompatActivity {
                 // Intent is what you use to start another activity
                 Intent intent = new Intent(EmergencyListActivity.this, SelectedEmergencyActivity.class);
                 String emergency1Tag = (emergency1.getTag()).toString();
-                intent.putExtra("message", emergency1Tag);
+                intent.putExtra("scenario", "Someone is breaking in.");
                 startActivity(intent);
             }
         });
@@ -40,7 +40,7 @@ public class EmergencyListActivity extends AppCompatActivity {
                 // Intent is what you use to start another activity
                 Intent intent = new Intent(EmergencyListActivity.this, SelectedEmergencyActivity.class);
                 String emergency2Tag = (emergency2.getTag()).toString();
-                intent.putExtra("message", emergency2Tag);
+                intent.putExtra("scenario", "I or someone near me cannot breathe.");
                 startActivity(intent);
             }
         });
@@ -52,7 +52,7 @@ public class EmergencyListActivity extends AppCompatActivity {
                 // Intent is what you use to start another activity
                 Intent intent = new Intent(EmergencyListActivity.this, SelectedEmergencyActivity.class);
                 String emergency3Tag = (emergency3.getTag()).toString();
-                intent.putExtra("message", emergency3Tag);
+                intent.putExtra("scenario", "There is a large fire.");
                 startActivity(intent);
             }
         });
@@ -64,7 +64,7 @@ public class EmergencyListActivity extends AppCompatActivity {
                 // Intent is what you use to start another activity
                 Intent intent = new Intent(EmergencyListActivity.this, SelectedEmergencyActivity.class);
                 String emergency4Tag = (emergency4.getTag()).toString();
-                intent.putExtra("message", emergency4Tag);
+                intent.putExtra("scenario", "I or someone near me is seriously injured.");
                 startActivity(intent);
             }
         });
@@ -76,7 +76,7 @@ public class EmergencyListActivity extends AppCompatActivity {
                 // Intent is what you use to start another activity
                 Intent intent = new Intent(EmergencyListActivity.this, SelectedEmergencyActivity.class);
                 String emergency5Tag = (emergency5.getTag()).toString();
-                intent.putExtra("message", emergency5Tag);
+                intent.putExtra("scenario", "I am lost and need help getting home.");
                 startActivity(intent);
             }
         });
@@ -88,7 +88,7 @@ public class EmergencyListActivity extends AppCompatActivity {
                 // Intent is what you use to start another activity
                 Intent intent = new Intent(EmergencyListActivity.this, SelectedEmergencyActivity.class);
                 String emergency6Tag = (emergency6.getTag()).toString();
-                intent.putExtra("message", emergency6Tag);
+                intent.putExtra("scenario", "I or someone near me is in extreme pain.");
                 startActivity(intent);
             }
         });
@@ -100,7 +100,7 @@ public class EmergencyListActivity extends AppCompatActivity {
                 // Intent is what you use to start another activity
                 Intent intent = new Intent(EmergencyListActivity.this, SelectedEmergencyActivity.class);
                 String generalEmergencyTag = (generalEmergency.getTag()).toString();
-                intent.putExtra("message", generalEmergencyTag);
+                intent.putExtra("scenario", "There is an emergency happening around me.");
                 startActivity(intent);
             }
         });
