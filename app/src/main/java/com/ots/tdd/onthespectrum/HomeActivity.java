@@ -3,10 +3,7 @@ package com.ots.tdd.onthespectrum;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.app.Activity;
-import android.view.Menu;
 import android.view.View;
-import android.app.ActionBar;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -23,7 +20,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void moveToCallScreen(View v) {
-        Intent intentCall = new Intent(this, CallActivity.class);
+        Intent intentCall = new Intent(this, ChooseEmergencyActivity.class);
         startActivity(intentCall);
     }
 
@@ -38,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void moveToEmergencyListScreen(View v) {
-        Intent intentEmergencyList = new Intent(this, EmergencyListActivity.class);
+        Intent intentEmergencyList = new Intent(this, ChooseEmergencyActivity.class);
         startActivity(intentEmergencyList);
     }
 
