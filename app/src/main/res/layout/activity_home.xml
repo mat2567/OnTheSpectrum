@@ -16,7 +16,7 @@
         android:layout_marginStart="54dp"
         android:layout_marginTop="50dp"
         android:onClick="moveToCallScreen"
-        android:text="Call"
+        android:text="I am in an emergency!"
         android:background="@color/turqoise"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
