@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-public class EmergencyListActivity extends AppCompatActivity {
+public class ChooseEmergencyActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +26,7 @@ public class EmergencyListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 // Intent is what you use to start another activity
-                Intent intent = new Intent(EmergencyListActivity.this, SelectedEmergencyActivity.class);
+                Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
                 String emergency1Tag = (emergency1.getTag()).toString();
                 intent.putExtra("scenario", "Someone is breaking in.");
                 startActivity(intent);
@@ -38,7 +38,7 @@ public class EmergencyListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 // Intent is what you use to start another activity
-                Intent intent = new Intent(EmergencyListActivity.this, SelectedEmergencyActivity.class);
+                Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
                 String emergency2Tag = (emergency2.getTag()).toString();
                 intent.putExtra("scenario", "I or someone near me cannot breathe.");
                 startActivity(intent);
@@ -50,7 +50,7 @@ public class EmergencyListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 // Intent is what you use to start another activity
-                Intent intent = new Intent(EmergencyListActivity.this, SelectedEmergencyActivity.class);
+                Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
                 String emergency3Tag = (emergency3.getTag()).toString();
                 intent.putExtra("scenario", "There is a large fire.");
                 startActivity(intent);
@@ -62,7 +62,7 @@ public class EmergencyListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 // Intent is what you use to start another activity
-                Intent intent = new Intent(EmergencyListActivity.this, SelectedEmergencyActivity.class);
+                Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
                 String emergency4Tag = (emergency4.getTag()).toString();
                 intent.putExtra("scenario", "I or someone near me is seriously injured.");
                 startActivity(intent);
@@ -74,7 +74,7 @@ public class EmergencyListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 // Intent is what you use to start another activity
-                Intent intent = new Intent(EmergencyListActivity.this, SelectedEmergencyActivity.class);
+                Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
                 String emergency5Tag = (emergency5.getTag()).toString();
                 intent.putExtra("scenario", "I am lost and need help getting home.");
                 startActivity(intent);
@@ -86,7 +86,7 @@ public class EmergencyListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 // Intent is what you use to start another activity
-                Intent intent = new Intent(EmergencyListActivity.this, SelectedEmergencyActivity.class);
+                Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
                 String emergency6Tag = (emergency6.getTag()).toString();
                 intent.putExtra("scenario", "I or someone near me is in extreme pain.");
                 startActivity(intent);
@@ -98,7 +98,7 @@ public class EmergencyListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 // Intent is what you use to start another activity
-                Intent intent = new Intent(EmergencyListActivity.this, SelectedEmergencyActivity.class);
+                Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
                 String generalEmergencyTag = (generalEmergency.getTag()).toString();
                 intent.putExtra("scenario", "There is an emergency happening around me.");
                 startActivity(intent);
