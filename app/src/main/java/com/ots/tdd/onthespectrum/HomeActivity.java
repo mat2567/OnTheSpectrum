@@ -41,4 +41,9 @@ public class HomeActivity extends AppCompatActivity {
         Intent intentEmergencyList = new Intent(this, EmergencyListActivity.class);
         startActivity(intentEmergencyList);
     }
+
+    public void moveToTestVoiceScreen(View v) {
+        Intent intentTestVoice = new Intent(this, TestVoiceActivity.class);
+        startActivity(intentTestVoice);
+    }
 }
