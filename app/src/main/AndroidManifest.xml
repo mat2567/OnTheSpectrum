@@ -26,9 +26,16 @@
         </activity>
         -->
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".CallActivity" />
-        <activity android:name=".EmergencyListActivity" />
+        <activity android:name=".ChooseEmergencyActivity" />
         <activity android:name=".TestVoiceActivity"></activity>
+        <activity
+            android:name=".SelectedEmergencyActivity"
+            android:label="Select Emergency Activity"
+            android:parentActivityName=".ChooseEmergencyActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ots.tdd.onthespectrum.ChooseEmergencyActivity" />
+        </activity>
     </application>
 
 </manifest>
