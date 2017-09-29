@@ -2,6 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ots.tdd.onthespectrum">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,9 +39,50 @@
         </activity>
         -->
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".CallActivity" />
         <activity android:name=".EmergencyListActivity" />
-        <activity android:name=".TestVoiceActivity"></activity>
+        <activity android:name=".TestVoiceActivity" />
+        <activity android:name=".SelectEmergencyActivity" />
+        <activity android:name=".OngoingCallActivity"></activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".IncomingCallActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:allowTaskReparenting="true">
+        </activity>
+        <activity
+            android:name=".CallActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:allowTaskReparenting="true">
+        </activity>
+
+        <service
+            android:name="com.ots.tdd.onthespectrum.reference.CallService"
+            android:exported="false">
+            <intent-filter android:label="service">
+                <action android:name="com.bandwidth.ringto.CallBackgroundService" />
+            </intent-filter>
+        </service>
+
+        <!-- Start the service on system startup -->
+        <receiver android:name="com.ots.tdd.onthespectrum.reference.intent.Autostart">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.HOME" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/OnTheSpectrum.iml" filepath="$PROJECT_DIR$/OnTheSpectrum.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libSoftphone-debug/libSoftphone-debug.iml" filepath="$PROJECT_DIR$/libSoftphone-debug/libSoftphone-debug.iml" />
     </modules>
   </component>
 </project>
