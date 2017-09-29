@@ -28,21 +28,16 @@ public class ProfileActivity extends AppCompatActivity {
     EditText editUserInfo;
     TextView alertTextView;
 
-    int profileElementCounter;
+    int profileElementCounter = 0;
 
-    public static ArrayList<ProfileElement> itemList;
-    ProfileElement[] test = {
-            new ProfileElement("Name", " ", 0),
-            new ProfileElement("Birth Date", "mm/dd/yyyy", 1),
-            new ProfileElement("Gender", " ", 2),
-            new ProfileElement("Address", " ", 3),
-    };
+    ArrayList<ProfileElement> itemList = new ArrayList<>();
+
 
     protected void onCreate(Bundle savedInstanceState) {
-        profileElementCounter = 3;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        itemList = new ArrayList<ProfileElement>(Arrays.asList(test));
+
+        loadInfo();
 
         /*Backs the ListView. Enables TextViews to be added dynamically */
         adapter=new ArrayAdapter<ProfileElement>(this, R.layout.profile_item, itemList) {
@@ -170,6 +165,21 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        String fieldNames = "";
+        for (ProfileElement item : itemList) {
+            fieldNames += item.infoType;
+            fieldNames += ";;";
+            editor.putString(item.infoType, item.userInfo);
+        }
+        editor.putString("ProfileFields", fieldNames);
+
+        editor.apply();
+    }
+
 
     public void editInfo(View v) {
         ImageView currEditInfo = (ImageView) v;
@@ -198,6 +208,9 @@ public class ProfileActivity extends AppCompatActivity {
         ImageView currCancelInfo = ProfileElementViewContainer.getCancel(pevc);
         EditText currEditText = ProfileElementViewContainer.getEditText(pevc);
 
+        String field = itemList.get(pevc.profileNumber).infoType;
+        String info = currEditText.getText().toString();
+        itemList.set(pevc.profileNumber, new ProfileElement(field, info, pevc.profileNumber));
         //currEditText.setFocusable(false);
         //currEditText.setClickable(false);
         currEditText.setEnabled(false);
