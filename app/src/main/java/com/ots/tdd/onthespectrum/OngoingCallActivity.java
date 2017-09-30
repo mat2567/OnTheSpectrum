@@ -16,12 +16,14 @@ public class OngoingCallActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1234;
     String telNum = "";
+    String toSpeak = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ongoing_call2);
         telNum = getIntent().getStringExtra("TELEPHONE_NUMBER");
+        toSpeak = getIntent().getStringExtra("TO_SPEAK");
         try {
             try {
                 // number is something like "tel:8886667777"

@@ -27,18 +27,22 @@ public class ProfileActivity extends AppCompatActivity {
     EditText editInfoType;
     EditText editUserInfo;
     TextView alertTextView;
+
     int profileElementCounter = 0;
 
     ArrayList<ProfileElement> itemList = new ArrayList<>();
 
+
     protected void onCreate(Bundle savedInstanceState) {
-        profileElementCounter = 3;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
         loadInfo();
 
+        /*Backs the ListView. Enables TextViews to be added dynamically */
         adapter=new ArrayAdapter<ProfileElement>(this, R.layout.profile_item, itemList) {
+
+
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 ProfileElement current = itemList.get(position);
@@ -176,6 +180,7 @@ public class ProfileActivity extends AppCompatActivity {
         editor.apply();
     }
 
+
     public void editInfo(View v) {
         ImageView currEditInfo = (ImageView) v;
         ProfileElementViewContainer pevc = ProfileElementViewContainer.
@@ -206,7 +211,6 @@ public class ProfileActivity extends AppCompatActivity {
         String field = itemList.get(pevc.profileNumber).infoType;
         String info = currEditText.getText().toString();
         itemList.set(pevc.profileNumber, new ProfileElement(field, info, pevc.profileNumber));
-
         //currEditText.setFocusable(false);
         //currEditText.setClickable(false);
         currEditText.setEnabled(false);
