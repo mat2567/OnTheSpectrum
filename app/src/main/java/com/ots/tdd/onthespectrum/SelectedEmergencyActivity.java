@@ -19,7 +19,7 @@ public class SelectedEmergencyActivity extends AppCompatActivity {
 
     ScrollView infoScrollView;
     ArrayList<ProfileElement> profArray = new ArrayList<>();
-    String telNum = "8322645195";
+    String telNum = "4706293412";
     String toSpeak = "Hello.";
 
     @Override
