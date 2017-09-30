@@ -9,7 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_weight="0.16"
+        android:onClick="initiateCall"
         android:text="Call" />
+
+    <EditText
+        android:id="@+id/phoneNumberEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="### ### ####"
+        android:inputType="phone" />
 
     <Space
         android:layout_width="match_parent"
