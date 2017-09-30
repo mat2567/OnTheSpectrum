@@ -1,107 +1,56 @@
 package com.ots.tdd.onthespectrum;
 
 import android.app.ActionBar;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.TextView;
-
-import java.text.Format;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class CallActivity extends AppCompatActivity {
 
-
-    TextView msgTxtV;
-    MessageFormat personalMsg = new MessageFormat("My name is{0}. I am noverbal autistic and communicating with you through an app as an aid. I am in an emergency at {1}. \n{2}");
-    //ArrayList<ProfileElement> profileElements = new ArrayList<>();
-    Object[] userInfo = new Object[3];
+    String telNum = "4706293412";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call);
 
-        msgTxtV = (TextView) findViewById(R.id.emergencyMsg);
-        loadEmergencyMessage(msgTxtV);
-
-        // (1) Get all Info From Profile
-        // (2) Concatenate info with base text String.
-        // (3) Display info
-
+        // Show the action bar and return arrow at the top of the screen
+        /*ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);*/
     }
 
+    public void initiateCall(View v) {
 
-     /**Loads user's information into View to deliver to call recipient
-     * @param v the Text view to be edited.
-     * @author Ecclesia Morain
-     */
-    public void loadEmergencyMessage(TextView v){
-
-        /*TODO: Set check for when ProfileActivities values aren't loaded*/
-        /*TODO: Get Profile Information from device instead of ProfileActivity*/
-        String userName = "";
-        String userLocation = "";
-        String additionalInfo = "  ";
-        ArrayList<ProfileElement> profileElements = new ArrayList<>();
-
-        /* Add Profile Info From Device Into Array */
-
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-        String savedProfFields = sharedPref.getString("ProfileFields", null);
-
-        //Why are there values being loaded here
-        if (null == savedProfFields) {
-            profileElements.add(new ProfileElement("Name", "", 0));
-            profileElements.add(new ProfileElement("Gender", "", 1));
-            profileElements.add(new ProfileElement("Age", "", 2));
-            profileElements.add(new ProfileElement("Phone Number", "", 3));
-            profileElements.add(new ProfileElement("Home Address", "", 4));
-        } else {
-            String[] fields = savedProfFields.split(";;");
-            userName = fields[0];
-            userLocation = fields[3];
-            for (int i = 0; i < fields.length; i++) {
-                additionalInfo = sharedPref.getString(fields[i], "");
-                //profileElements.add(new ProfileElement(fields[i], info, i));
+        EditText txtPhn = (EditText)findViewById(R.id.phoneNumberEditText);
+        telNum = txtPhn.getText().toString();
+        if (telNum.length() == 10) {
+            boolean valid = true;
+            for (int i = 0; i < 10; i++) {
+                if(!Character.isDigit(telNum.charAt(i))) {
+                    valid = false;
+                }
             }
+            if (valid) {
+                Intent intentOngoingCall = new Intent(this, OngoingCallActivity.class);
+                intentOngoingCall.putExtra("TELEPHONE_NUMBER", telNum);
+                startActivity(intentOngoingCall);
+            } else {
+                String errorMessage = "Invalid phone number (not digit): " + telNum;
+                displayExceptionMessage(errorMessage);
+            }
+        } else {
+            String errorMessage = "Invalid phone number (too short): " + telNum + ": " + telNum.length();
+            displayExceptionMessage(errorMessage);
         }
 
-//        for(ProfileElement element: ProfileActivity.itemList) {
-//            additionalInfo += "My " + element.infoType + " is " + element.userInfo + "\n";
-//        }
-        additionalInfo = additionalInfo.substring(1);
-        userInfo[0] = userName;
-        userInfo[1] = userLocation;
-        userInfo[2] = additionalInfo;
 
-        /* Add appropriate info to message and update xml file with new formatted message */
-        v.setText(personalMsg.format(userInfo));
     }
 
-
-
-//     // TODO: What is this method doing ? IT seems to be adding Profile Elements to an array, but to do what with?
-//    private void loadInfo() {
-//        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-//        String savedProfFields = sharedPref.getString("ProfileFields", null);
-//
-//        //Why are there values being loaded here
-//        if (null == savedProfFields) {
-//            profileElements.add(new ProfileElement("Name", "", 0));
-//            profileElements.add(new ProfileElement("Gender", "", 1));
-//            profileElements.add(new ProfileElement("Age", "", 2));
-//            profileElements.add(new ProfileElement("Phone Number", "", 3));
-//            profileElements.add(new ProfileElement("Home Address", "", 4));
-//        } else {
-//            String[] fields = savedProfFields.split(";;");
-//            for (int i = 0; i < fields.length; i++) {
-//                String info = sharedPref.getString(fields[i], "");
-//                profileElements.add(new ProfileElement(fields[i], info, i));
-//            }
-//        }
-//    }
+    public void displayExceptionMessage(String msg)
+    {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
 }
