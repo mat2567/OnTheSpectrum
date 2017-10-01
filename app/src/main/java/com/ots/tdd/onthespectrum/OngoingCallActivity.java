@@ -5,6 +5,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -12,20 +14,29 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.Locale;
+
+
 public class OngoingCallActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1234;
     String telNum = "";
+    String toSpeak = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ongoing_call2);
         telNum = getIntent().getStringExtra("TELEPHONE_NUMBER");
+        //telNum = "6784670532";
+        toSpeak = getIntent().getStringExtra("TO_SPEAK");
         try {
+
             try {
                 // number is something like "tel:8886667777"
-
                 if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.CALL_PHONE)
                         != PackageManager.PERMISSION_GRANTED) {
@@ -37,6 +48,7 @@ public class OngoingCallActivity extends AppCompatActivity {
 
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
                 callIntent.setData(Uri.parse("tel:" + telNum));
+                Log.i("prior to new activity", "lets see");
                 startActivity(callIntent);
             } catch (SecurityException securityException) {
                 Log.e("Calling a Phone Number", "Call failed", securityException);
