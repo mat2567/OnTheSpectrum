@@ -152,12 +152,12 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("Break In", file.getName()));
+                scenarioList.add(new EmergencyElement("Break In", file.getAbsolutePath()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            file = new File (myDir, "choking");
+            file = new File (myDir, "choking.jpg");
             if (file.exists ()) file.delete ();
             try {
                 FileOutputStream out = new FileOutputStream(file);
@@ -166,12 +166,12 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("Choking", file.getName()));
+                scenarioList.add(new EmergencyElement("Choking", file.getAbsolutePath()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            file = new File (myDir, "lost");
+            file = new File (myDir, "lost.jpg");
             if (file.exists ()) file.delete ();
             try {
                 FileOutputStream out = new FileOutputStream(file);
@@ -180,12 +180,12 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("Lost", file.getName()));
+                scenarioList.add(new EmergencyElement("Lost", file.getAbsolutePath()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            file = new File (myDir, "pain");
+            file = new File (myDir, "pain.jpg");
             if (file.exists ()) file.delete ();
             try {
                 FileOutputStream out = new FileOutputStream(file);
@@ -194,15 +194,15 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("In Pain", file.getName()));
+                scenarioList.add(new EmergencyElement("In Pain", file.getAbsolutePath()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             String[] fields = savedScenarios.split(";;");
             for (int i = 0; i < fields.length; i++) {
-                String scenario = sharedPref.getString(fields[i], "");
-
+                String imgLocation = sharedPref.getString(fields[i], "");
+                scenarioList.add(new EmergencyElement(fields[i], imgLocation));
             }
         }
     }
