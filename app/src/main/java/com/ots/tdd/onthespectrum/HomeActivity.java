@@ -35,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void moveToEmergencyListScreen(View v) {
-        Intent intentEmergencyList = new Intent(this, ChooseEmergencyActivity.class);
+        Intent intentEmergencyList = new Intent(this, ListOfEmergenciesActivity.class);
         startActivity(intentEmergencyList);
     }
 
