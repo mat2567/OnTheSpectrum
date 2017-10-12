@@ -4,106 +4,116 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+
+import java.util.ArrayList;
 
 public class ChooseEmergencyActivity extends AppCompatActivity {
+
+    ArrayAdapter<EmergencyElement> adapter;
+
+    ArrayList<EmergencyElement> itemList = new ArrayList<>();
+
+    int emergencyElementCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emergency_list);
-        final ImageButton emergency1 = (ImageButton) findViewById(R.id.emergency1);
-        final ImageButton emergency2 = (ImageButton) findViewById(R.id.emergency2);
-        final ImageButton emergency3 = (ImageButton) findViewById(R.id.emergency3);
-        final ImageButton emergency4 = (ImageButton) findViewById(R.id.emergency4);
-        final ImageButton emergency5 = (ImageButton) findViewById(R.id.emergency5);
-        final ImageButton emergency6 = (ImageButton) findViewById(R.id.emergency6);
-        final Button generalEmergency = (Button) findViewById(R.id.generalEmergency);
 
-        emergency1.setOnClickListener(new View.OnClickListener(){
-            // When the button is pressed/clicked, it will run the code below
-            @Override
-            public void onClick(View view){
-                // Intent is what you use to start another activity
-                Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
-                String emergency1Tag = (emergency1.getTag()).toString();
-                intent.putExtra("scenario", "Someone is breaking in.");
-                startActivity(intent);
-            }
-        });
 
-        emergency2.setOnClickListener(new View.OnClickListener(){
-            // When the button is pressed/clicked, it will run the code below
-            @Override
-            public void onClick(View view){
-                // Intent is what you use to start another activity
-                Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
-                String emergency2Tag = (emergency2.getTag()).toString();
-                intent.putExtra("scenario", "I or someone near me cannot breathe.");
-                startActivity(intent);
-            }
-        });
+        GridView gridView = (GridView) findViewById(R.id.listOfEmergenciesGridView);
+        gridView.setNumColumns(3);
 
-        emergency3.setOnClickListener(new View.OnClickListener(){
-            // When the button is pressed/clicked, it will run the code below
-            @Override
-            public void onClick(View view){
-                // Intent is what you use to start another activity
-                Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
-                String emergency3Tag = (emergency3.getTag()).toString();
-                intent.putExtra("scenario", "There is a large fire.");
-                startActivity(intent);
-            }
-        });
+        // These instantiations are repeated in ListOfEmergencyActivity
+        // Need to double check when persistence is added
 
-        emergency4.setOnClickListener(new View.OnClickListener(){
-            // When the button is pressed/clicked, it will run the code below
-            @Override
-            public void onClick(View view){
-                // Intent is what you use to start another activity
-                Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
-                String emergency4Tag = (emergency4.getTag()).toString();
-                intent.putExtra("scenario", "I or someone near me is seriously injured.");
-                startActivity(intent);
-            }
-        });
+        EmergencyElement emergencyElement1 = new EmergencyElement("Break in", getResources().getDrawable(R.drawable.breakin), 0);
+        EmergencyElement emergencyElement2 = new EmergencyElement("Choking", getResources().getDrawable(R.drawable.choking), 1);
+        EmergencyElement emergencyElement3 = new EmergencyElement("Fire", getResources().getDrawable(R.drawable.fire), 2);
+        EmergencyElement emergencyElement4 = new EmergencyElement("Injury", getResources().getDrawable(R.drawable.injury), 3);
+        EmergencyElement emergencyElement5 = new EmergencyElement("Lost", getResources().getDrawable(R.drawable.lost), 4);
+        EmergencyElement emergencyElement6 = new EmergencyElement("Pain", getResources().getDrawable(R.drawable.pain), 5);
+        itemList.add(emergencyElement1);
+        itemList.add(emergencyElement2);
+        itemList.add(emergencyElement3);
+        itemList.add(emergencyElement4);
+        itemList.add(emergencyElement5);
+        itemList.add(emergencyElement6);
+        emergencyElementCounter = 6;
 
-        emergency5.setOnClickListener(new View.OnClickListener(){
-            // When the button is pressed/clicked, it will run the code below
-            @Override
-            public void onClick(View view){
-                // Intent is what you use to start another activity
-                Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
-                String emergency5Tag = (emergency5.getTag()).toString();
-                intent.putExtra("scenario", "I am lost and need help getting home.");
-                startActivity(intent);
-            }
-        });
 
-        emergency6.setOnClickListener(new View.OnClickListener(){
-            // When the button is pressed/clicked, it will run the code below
+        adapter=new ArrayAdapter<EmergencyElement>(this, R.layout.emergency_item, itemList) {
             @Override
-            public void onClick(View view){
-                // Intent is what you use to start another activity
-                Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
-                String emergency6Tag = (emergency6.getTag()).toString();
-                intent.putExtra("scenario", "I or someone near me is in extreme pain.");
-                startActivity(intent);
-            }
-        });
+            public View getView(int position, View convertView, ViewGroup parent) {
+                EmergencyElement current = itemList.get(position);
 
-        generalEmergency.setOnClickListener(new View.OnClickListener(){
-            // When the button is pressed/clicked, it will run the code below
-            @Override
-            public void onClick(View view){
-                // Intent is what you use to start another activity
-                Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
-                String generalEmergencyTag = (generalEmergency.getTag()).toString();
-                intent.putExtra("scenario", "There is an emergency happening around me.");
-                startActivity(intent);
+                // Inflate only once
+                if(convertView == null) {
+                    convertView = getLayoutInflater()
+                            .inflate(R.layout.emergency_item, null, false);
+                }
+
+                int currEmergencyNumber = current.emergencyNumber;
+                EmergencyElementViewContainer currEEVC = null;
+                currEEVC = EmergencyElementViewContainer.findContainerUsingNumber(currEmergencyNumber);
+                if (currEEVC == null) {
+                    final ImageButton imageButton = (ImageButton) convertView.findViewById(R.id.emergencyImageButton);
+                    imageButton.setBackground( current.getImage());
+                    imageButton.setTag(current.getTitle());
+                    imageButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Intent is what you use to start another activity
+                            Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
+                            String emergencyTag = (imageButton.getTag()).toString(); //to be passed in
+                            // save full message somewhere?
+                            String emergencyMessage = "I am in a " + emergencyTag + " emergency.";
+                            intent.putExtra("scenario", emergencyMessage);
+                            startActivity(intent);
+                        }
+                    });
+                    //imageButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 132));
+                    imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
+
+
+                    EmergencyElementViewContainer newEmergencyElement = new EmergencyElementViewContainer(
+                            imageButton, current.getEmergencyNumber());
+                    EmergencyElementViewContainer.addEEVCToArray(newEmergencyElement);
+
+
+                } else {
+                    final ImageButton imageButton= (ImageButton) convertView.findViewById(R.id.emergencyImageButton);
+
+                    imageButton.setBackground( current.getImage());
+                    imageButton.setTag(current.getTitle());
+                    imageButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Intent is what you use to start another activity
+                            Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
+                            String emergencyTag = (imageButton.getTag()).toString(); //to be passed in
+                            // save full message somewhere?
+                            String emergencyMessage = "I am in a " + emergencyTag + " emergency.";
+                            intent.putExtra("scenario", emergencyMessage);
+                            startActivity(intent);
+                        }
+                    });
+                    //imageButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 132));
+                    imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
+
+                }
+
+                return convertView;
             }
-        });
+        };
+
+        gridView.setAdapter(adapter);
     }
 
 
