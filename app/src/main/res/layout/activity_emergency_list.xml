@@ -27,81 +27,13 @@
         android:tag="general emergency"
         android:text="General Emergency" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MainActivity">
-
-        <LinearLayout
-            android:id="@+id/firstLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignEnd="@+id/secondView"
-            android:layout_alignParentTop="true"
-            android:layout_alignRight="@+id/secondView"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/emergency1"
-                android:layout_width="match_parent"
-                android:layout_height="132dp"
-                android:background="@drawable/breakin"
-                android:tag="emergency1" />
-
-            <ImageButton
-                android:id="@+id/emergency3"
-                android:layout_width="match_parent"
-                android:layout_height="135dp"
-                android:background="@drawable/fire"
-                android:clickable="true"
-                android:tag="emergency3" />
-
-            <ImageButton
-                android:id="@+id/emergency5"
-                android:layout_width="match_parent"
-                android:layout_height="135dp"
-                android:background="@drawable/lost"
-                android:tag="emergency5" />
-        </LinearLayout>
-
-        <View
-            android:id="@+id/secondView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true" />
-
-        <LinearLayout
-            android:id="@+id/thirdLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/secondView"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/emergency2"
-                android:layout_width="match_parent"
-                android:layout_height="135dp"
-                android:background="@drawable/choking"
-                android:tag="emergency2" />
-
-            <ImageButton
-                android:id="@+id/emergency4"
-                android:layout_width="match_parent"
-                android:layout_height="135dp"
-                android:background="@drawable/injury"
-                android:tag="emergency4" />
-
-            <ImageButton
-                android:id="@+id/emergency6"
-                android:layout_width="match_parent"
-                android:layout_height="135dp"
-                android:background="@drawable/pain"
-                android:tag="emergency6" />
-        </LinearLayout>
-    </RelativeLayout>
-
     <Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <GridView
+        android:id="@+id/listOfEmergenciesGridView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>
