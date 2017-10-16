@@ -5,6 +5,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 /**
@@ -13,12 +15,14 @@ import java.util.ArrayList;
 
 public class EmergencyElementViewContainer {
     ImageButton emergencyButton;
+    TextView emergencyTitle;
     int emergencyNumber;
 
     static ArrayList<EmergencyElementViewContainer> emergencyElements= new ArrayList<EmergencyElementViewContainer>();
 
-    public EmergencyElementViewContainer(ImageButton emergencyButton, int emergencyNumber) {
+    public EmergencyElementViewContainer(ImageButton emergencyButton, TextView emergencyTitle, int emergencyNumber) {
         this.emergencyButton = emergencyButton;
+        this.emergencyTitle = emergencyTitle;
         this.emergencyNumber = emergencyNumber;
     }
 
@@ -26,10 +30,24 @@ public class EmergencyElementViewContainer {
         return pevc.emergencyButton;
     }
 
+    public static TextView getTextView(EmergencyElementViewContainer pevc) {
+        return pevc.emergencyTitle;
+    }
+
     public static EmergencyElementViewContainer findContainerUsingButton(ImageButton eButton) {
         for (int i = 0; i < emergencyElements.size(); i++) {
             EmergencyElementViewContainer curr = emergencyElements.get(i);
             if (curr.emergencyButton.equals(eButton)) {
+                return curr;
+            }
+        }
+        return null;
+    }
+
+    public static EmergencyElementViewContainer findContainerUsingTitle(TextView title) {
+        for (int i = 0; i < emergencyElements.size(); i++) {
+            EmergencyElementViewContainer curr = emergencyElements.get(i);
+            if (curr.emergencyTitle.equals(title)) {
                 return curr;
             }
         }
