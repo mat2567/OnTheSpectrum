@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,6 +39,7 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
 
         GridView gridView = (GridView) findViewById(R.id.listOfEmergenciesGridView);
         gridView.setNumColumns(3);
+        gridView.setVerticalSpacing(50);
 
         loadInfo();
 
@@ -71,12 +73,14 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     });
-                    //imageButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 132));
                     imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
 
+                    final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
+                    textView.setText(current.getTitle());
+                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 45));
 
                     EmergencyElementViewContainer newEmergencyElement = new EmergencyElementViewContainer(
-                            imageButton, current.getEmergencyNumber());
+                            imageButton, textView, current.getEmergencyNumber());
                     EmergencyElementViewContainer.addEEVCToArray(newEmergencyElement);
 
 
@@ -100,6 +104,9 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                     //imageButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 132));
                     imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
 
+                    final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
+                    textView.setText(current.getTitle());
+                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 45));
                 }
 
                 return convertView;

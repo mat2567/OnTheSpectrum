@@ -9,4 +9,15 @@
         android:id="@+id/emergencyImageButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/emergencyTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:allowUndo="false"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="#060606"
+        android:textStyle="bold" />
 </LinearLayout>
