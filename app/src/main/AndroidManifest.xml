@@ -42,7 +42,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ots.tdd.onthespectrum.ChooseEmergencyActivity" />
         </activity>
-        <activity android:name=".ListOfEmergenciesActivity"></activity>
+        <activity android:name=".ListOfEmergenciesActivity" />
+        <activity android:name=".EditEmergencyActivity"></activity>
     </application>
 
 </manifest>
