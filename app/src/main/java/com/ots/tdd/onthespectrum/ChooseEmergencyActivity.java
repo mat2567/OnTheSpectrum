@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,7 +26,7 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
 
     ArrayAdapter<EmergencyElement> adapter;
 
-    ArrayList<EmergencyElement> itemList = new ArrayList<>();
+    ArrayList<EmergencyElement> scenarioList = new ArrayList<>();
 
     int emergencyElementCounter = 0;
 
@@ -38,28 +39,12 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
         GridView gridView = (GridView) findViewById(R.id.listOfEmergenciesGridView);
         gridView.setNumColumns(3);
 
-        // These instantiations are repeated in ListOfEmergencyActivity
-        // Need to double check when persistence is added
+        loadInfo();
 
-        EmergencyElement emergencyElement1 = new EmergencyElement("Break in", getResources().getDrawable(R.drawable.breakin), 0);
-        EmergencyElement emergencyElement2 = new EmergencyElement("Choking", getResources().getDrawable(R.drawable.choking), 1);
-        EmergencyElement emergencyElement3 = new EmergencyElement("Fire", getResources().getDrawable(R.drawable.fire), 2);
-        EmergencyElement emergencyElement4 = new EmergencyElement("Injury", getResources().getDrawable(R.drawable.injury), 3);
-        EmergencyElement emergencyElement5 = new EmergencyElement("Lost", getResources().getDrawable(R.drawable.lost), 4);
-        EmergencyElement emergencyElement6 = new EmergencyElement("Pain", getResources().getDrawable(R.drawable.pain), 5);
-        itemList.add(emergencyElement1);
-        itemList.add(emergencyElement2);
-        itemList.add(emergencyElement3);
-        itemList.add(emergencyElement4);
-        itemList.add(emergencyElement5);
-        itemList.add(emergencyElement6);
-        emergencyElementCounter = 6;
-
-
-        adapter=new ArrayAdapter<EmergencyElement>(this, R.layout.emergency_item, itemList) {
+        adapter=new ArrayAdapter<EmergencyElement>(this, R.layout.emergency_item, scenarioList) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                EmergencyElement current = itemList.get(position);
+                EmergencyElement current = scenarioList.get(position);
 
                 // Inflate only once
                 if(convertView == null) {
@@ -72,7 +57,7 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                 currEEVC = EmergencyElementViewContainer.findContainerUsingNumber(currEmergencyNumber);
                 if (currEEVC == null) {
                     final ImageButton imageButton = (ImageButton) convertView.findViewById(R.id.emergencyImageButton);
-                    imageButton.setBackground( current.getImage());
+                    imageButton.setBackground( new BitmapDrawable(getResources(), current.getImage()) );
                     imageButton.setTag(current.getTitle());
                     imageButton.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -98,7 +83,7 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                 } else {
                     final ImageButton imageButton= (ImageButton) convertView.findViewById(R.id.emergencyImageButton);
 
-                    imageButton.setBackground( current.getImage());
+                    imageButton.setBackground( new BitmapDrawable(getResources(), current.getImage()) );
                     imageButton.setTag(current.getTitle());
                     imageButton.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -131,9 +116,9 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sp.edit();
         String scenarioNames = "";
         for (EmergencyElement item : scenarioList) {
-            scenarioNames += item.title;
+            scenarioNames += item.getTitle();
             scenarioNames += ";;";
-            editor.putString(item.title, item.imageMemLocation);
+            editor.putString(item.getTitle(), item.imageMemLocation);
         }
         editor.putString("ScenarioNames", scenarioNames);
 
@@ -144,6 +129,7 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         String savedScenarios = sharedPref.getString("ScenarioNames", null);
         if (null == savedScenarios) {
+            int assignCount = 0;
             String root = getFilesDir().getAbsolutePath();
             File myDir = new File(root + "/saved_images");
             myDir.mkdirs();
@@ -157,7 +143,8 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("Break In", file.getAbsolutePath()));
+                scenarioList.add(new EmergencyElement("Break In", file.getAbsolutePath(), assignCount));
+                assignCount++;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -171,7 +158,38 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("Choking", file.getAbsolutePath()));
+                scenarioList.add(new EmergencyElement("Choking", file.getAbsolutePath(), assignCount));
+                assignCount++;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            file = new File (myDir, "fire.jpg");
+            if (file.exists ()) file.delete ();
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.fire);
+                img.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+
+                scenarioList.add(new EmergencyElement("Fire", file.getAbsolutePath(), assignCount));
+                assignCount++;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            file = new File (myDir, "injury.jpg");
+            if (file.exists ()) file.delete ();
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.injury);
+                img.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+
+                scenarioList.add(new EmergencyElement("Injury", file.getAbsolutePath(), assignCount));
+                assignCount++;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -185,7 +203,8 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("Lost", file.getAbsolutePath()));
+                scenarioList.add(new EmergencyElement("Lost", file.getAbsolutePath(), assignCount));
+                assignCount++;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -199,16 +218,19 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("In Pain", file.getAbsolutePath()));
+                scenarioList.add(new EmergencyElement("In Pain", file.getAbsolutePath(), assignCount));
+                assignCount++;
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            emergencyElementCounter = assignCount;
         } else {
-            String[] fields = savedScenarios.split(";;");
-            for (int i = 0; i < fields.length; i++) {
-                String imgLocation = sharedPref.getString(fields[i], "");
-                scenarioList.add(new EmergencyElement(fields[i], imgLocation));
+            String[] scenarioNames = savedScenarios.split(";;");
+            for (int i = 0; i < scenarioNames.length; i++) {
+                String imgLocation = sharedPref.getString(scenarioNames[i], "");
+                scenarioList.add(new EmergencyElement(scenarioNames[i], imgLocation, i));
             }
+            emergencyElementCounter = scenarioNames.length;
         }
     }
 
