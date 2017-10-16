@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 public class CallActivity extends AppCompatActivity {
 
-    String telNum = ""; //4706293412
+    String telNum = ""; //4706293412 (ECCLESIA'S PHONE)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,18 +23,27 @@ public class CallActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);*/
     }
 
+
+
+
+    /* Initiates call with number associated with the telNum variable and
+    *  sends to activity_ongoing_call2 screen
+    *  
+    * @param v   I don't think this is used
+    * */
+
     public void initiateCall(View v) {
 
         EditText txtPhn = (EditText)findViewById(R.id.phoneNumberEditText);
         telNum = txtPhn.getText().toString();
         if (telNum.length() == 10) {
-            boolean valid = true;
+            boolean validLength = true;
             for (int i = 0; i < 10; i++) {
                 if(!Character.isDigit(telNum.charAt(i))) {
-                    valid = false;
+                    validLength = false;
                 }
             }
-            if (valid) {
+            if (validLength) {
                 Intent intentOngoingCall = new Intent(this, OngoingCallActivity.class);
                 intentOngoingCall.putExtra("TELEPHONE_NUMBER", telNum);
                 startActivity(intentOngoingCall);
@@ -49,6 +58,12 @@ public class CallActivity extends AppCompatActivity {
 
 
     }
+
+
+
+
+
+
 
     public void displayExceptionMessage(String msg)
     {

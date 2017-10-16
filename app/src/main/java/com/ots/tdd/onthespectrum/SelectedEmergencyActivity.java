@@ -3,6 +3,7 @@ package com.ots.tdd.onthespectrum;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
@@ -10,28 +11,56 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sinch.android.rtc.PushPair;
+import com.sinch.android.rtc.Sinch;
+import com.sinch.android.rtc.SinchClient;
+import com.sinch.android.rtc.calling.Call;
+import com.sinch.android.rtc.calling.CallListener;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class SelectedEmergencyActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
     ScrollView infoScrollView;
     ArrayList<ProfileElement> profArray = new ArrayList<>();
-    String telNum = "6784670532"; //4706293412
+    String telNum = "+4706293412"; //6784670532
     String toSpeak = "Hello.";
     TextToSpeech ttobj;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selected_emergency);
-        String scenarioInfo = getIntent().getStringExtra("scenario");
 
+        // Start Sinch Client
+//        try {
+            //TODO Does it make sense to initiate this here?
+            SinchClient sinchClient = Sinch.getSinchClientBuilder()
+                    .context(this)
+                    .userId("current-user-id")
+                    .applicationKey("f59d26b3-3ca3-49dd-8d88-0f309049bd28") //
+                    .applicationSecret("0wZ54QhUBEylRod2EyaShA==")
+                    .environmentHost("clientapi.sinch.com")
+                    .build();
+            sinchClient.setSupportCalling(true);
+            sinchClient.start();
+//        }
+//        catch (Exception ex) {
+//            Log.e("Error on sinchClient", ex.getMessage());
+//        }
+
+        String scenarioInfo = getIntent().getStringExtra("scenario");
         ttobj=new TextToSpeech(this, this);
 
         String appInfo = "I have nonverbal autism, and I am speaking to you through an application on my phone. ";
@@ -46,6 +75,51 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
 
         String infoText = "What will be said on your call:\n\nHello. " + appInfo + scenarioInfo + " " + profInfo;
         toSpeak = "Hello. " + appInfo + scenarioInfo + " " + profInfo;
+
+        //Watch for call button to be clicked
+//        final Button button = (Button) findViewById(R.id.button11);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            //Call call;
+//            TextView callState = (TextView) findViewById(R.id.callState);
+//            @Override
+//            public void onClick(View view) {
+//                // make a call!
+////                if (call == null) {
+////                    call = sinchClient.getCallClient().callUser(telNum);
+////                    button.setText("Hang Up");
+////                } else {
+////                    call.hangup();
+////                }
+//                sinchClient.getCallClient().callUser(telNum);
+//                callState.setText("connected");
+//            }
+
+//            class SinchCallListener implements CallListener {
+//                @Override
+//                public void onCallEnded(Call endedCall) {
+//                    //call ended by either party
+//                    call = null;
+//                    button.setText("Call");
+//                    callState.setText("Call Ended");
+//                    setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);
+//                }
+//                @Override
+//                public void onCallEstablished(Call establishedCall) {
+//                    //incoming call was picked up
+//                    callState.setText("connected");
+//                    setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
+//                }
+//                @Override
+//                public void onCallProgressing(Call progressingCall) {
+//                    //call is ringing
+//                    callState.setText("ringing");
+//                }
+//                @Override
+//                public void onShouldSendPushNotification(Call call, List<PushPair> pushPairs) {
+//                    //don't worry about this right now
+//                }
+//            }
+//        });
 
         infoScrollView = (ScrollView) findViewById(R.id.infoScrollView);
         TextView infoTextView = new TextView(this);
@@ -90,33 +164,33 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         }
     }
 
-    public void initiateCall(View v) {
-
-        EditText txtPhn = (EditText)findViewById(R.id.phoneNumberEditText);
-        telNum = txtPhn.getText().toString();
-        if (telNum.length() == 10) {
-            boolean valid = true;
-            for (int i = 0; i < 10; i++) {
-                if(!Character.isDigit(telNum.charAt(i))) {
-                    valid = false;
-                }
-            }
-            if (valid) {
-                Intent intentOngoingCall = new Intent(this, OngoingCallActivity.class);
-                intentOngoingCall.putExtra("TELEPHONE_NUMBER", telNum);
-                intentOngoingCall.putExtra("TO_SPEAK", toSpeak);
-                startActivity(intentOngoingCall);
-            } else {
-                String errorMessage = "Invalid phone number (not digit): " + telNum;
-                displayExceptionMessage(errorMessage);
-            }
-        } else {
-            String errorMessage = "Invalid phone number (too short): " + telNum + ": " + telNum.length();
-            displayExceptionMessage(errorMessage);
-        }
-
-
-    }
+////    public void initiateCall(View v) {
+////
+////        EditText txtPhn = (EditText)findViewById(R.id.phoneNumberEditText);
+////        telNum = txtPhn.getText().toString();
+////        if (telNum.length() == 10) {
+////            boolean validLength = true;
+////            for (int i = 0; i < 10; i++) {
+////                if(!Character.isDigit(telNum.charAt(i))) {
+////                    validLength = false;
+////                }
+////            }
+////            if (validLength) {
+////                Intent intentOngoingCall = new Intent(this, OngoingCallActivity.class);
+////                intentOngoingCall.putExtra("TELEPHONE_NUMBER", telNum);
+////                intentOngoingCall.putExtra("TO_SPEAK", toSpeak);
+////                startActivity(intentOngoingCall);
+////            } else {
+////                String errorMessage = "Invalid phone number (not digit): " + telNum;
+////                displayExceptionMessage(errorMessage);
+////            }
+////        } else {
+////            String errorMessage = "Invalid phone number (too short): " + telNum + ": " + telNum.length();
+////            displayExceptionMessage(errorMessage);
+////        }
+////
+//
+//    }
 
     public void displayExceptionMessage(String msg)
     {
