@@ -116,22 +116,6 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
         gridView.setAdapter(adapter);
     }
 
-
-    protected void onPause() {
-        super.onPause();
-        SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        String scenarioNames = "";
-        for (EmergencyElement item : scenarioList) {
-            scenarioNames += item.getTitle();
-            scenarioNames += ";;";
-            editor.putString(item.getTitle(), item.imageMemLocation);
-        }
-        editor.putString("ScenarioNames", scenarioNames);
-
-        editor.apply();
-    }
-
     private void loadInfo() {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         String savedScenarios = sharedPref.getString("ScenarioNames", null);

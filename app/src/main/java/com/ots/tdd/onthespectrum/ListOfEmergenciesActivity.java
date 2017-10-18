@@ -146,6 +146,21 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
         gridView.setAdapter(adapter);
 
     }
+  
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        String scenarioNames = "";
+        for (EmergencyElement item : scenarioList) {
+            scenarioNames += item.getTitle();
+            scenarioNames += ";;";
+            editor.putString(item.getTitle(), item.imageMemLocation);
+        }
+        editor.putString("ScenarioNames", scenarioNames);
+
+        editor.apply();
+    }
 
     private void loadInfo() {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
@@ -278,11 +293,24 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int whichButton) {
                 int curr = index;
                 int len = scenarioList.size() - 1;
-                scenarioList.remove(index);
+                EmergencyElement removed = scenarioList.remove(index);
                 while (curr < len) {
                     scenarioList.get(curr).setEmergencyNumber(curr);
                     curr++;
                 }
+
+                SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                //remove scenario
+                editor.remove(removed.getTitle());
+
+                //remove scenario from list of scenario names
+                String allScenarios = sharedPref.getString("ScenarioNames", null);
+                allScenarios = allScenarios.replace((removed.getTitle() + ";;"), "");
+                editor.putString("ScenarioNames", allScenarios);
+
+                editor.commit();
+
                 // notify gridview of data changed
                 adapter.notifyDataSetChanged();
             }

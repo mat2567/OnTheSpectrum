@@ -35,9 +35,9 @@ public class EmergencyElement {
         return emergencyNumber;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public String getImageMemLocation() { return imageMemLocation; }
+
+    public void setTitle(String title) { this.title = title; }
 
     public void setImage(Bitmap image) {
         this.image = image;
@@ -46,4 +46,6 @@ public class EmergencyElement {
     public void setEmergencyNumber(int emergencyNumber) {
         this.emergencyNumber = emergencyNumber;
     }
+
+    public void setImageMemLocation(String memLocation) { this.imageMemLocation = memLocation; }
 }
