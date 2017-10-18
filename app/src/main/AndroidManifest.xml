@@ -48,7 +48,8 @@
                 android:value="com.ots.tdd.onthespectrum.ChooseEmergencyActivity" />
         </activity>
         <activity android:name=".ListOfEmergenciesActivity" />
-        <activity android:name=".EditEmergencyActivity"></activity>
+        <activity android:name=".EditEmergencyActivity" />
+        <activity android:name=".AddEmergencyActivity"></activity>
     </application>
 
 </manifest>

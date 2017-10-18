@@ -2,11 +2,9 @@ package com.ots.tdd.onthespectrum;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -14,39 +12,36 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class EditEmergencyActivity extends AppCompatActivity {
+public class AddEmergencyActivity extends AppCompatActivity {
 
-    public EmergencyElement emergency;
     public EditText emergencyTitle;
     public ImageButton emergencyImage;
 
     private static int RESULT_LOAD_IMAGE = 1;
 
-    BitmapFactory.Options options;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_emergency);
-        int emergencyNum = Integer.parseInt(getIntent().getStringExtra("emergencyNum"));
-        emergency = ListOfEmergenciesActivity.scenarioList.get(emergencyNum);
+        setContentView(R.layout.activity_add_emergency);
+
+        EmergencyElement addEmergency = ListOfEmergenciesActivity.scenarioList.get(ListOfEmergenciesActivity.scenarioList.size() - 1);
         emergencyTitle = (EditText) findViewById(R.id.emergencyTitle);
         emergencyImage = (ImageButton) findViewById(R.id.emergencyImage);
 
-        emergencyTitle.setText(emergency.getTitle());
-        emergencyImage.setBackground( new BitmapDrawable(getResources(), emergency.getImage()) );
+        emergencyImage.setBackground( new BitmapDrawable(getResources(), addEmergency.getImage()) );
         emergencyImage.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
-
-
     }
 
     public void saveChanges(View v) {
-        emergency.setTitle(emergencyTitle.getText().toString());
+        EmergencyElement emergency = new EmergencyElement(emergencyTitle.getText().toString(),
+                null,
+                ListOfEmergenciesActivity.scenarioList.size() - 1);
+        //emergency.setTitle(emergencyTitle.getText().toString());
         //emergency.setImage(((BitmapDrawable)emergencyImage.getBackground()).getBitmap());
+        //emergency.setImage(((BitmapDrawable)emergencyImage.getDrawable()).getBitmap());
         if (((BitmapDrawable)emergencyImage.getDrawable()) != null) {
             emergency.setImage(((BitmapDrawable)emergencyImage.getDrawable()).getBitmap());
         } else {
@@ -54,8 +49,14 @@ public class EditEmergencyActivity extends AppCompatActivity {
         }
 
 
-        // notify gridview of data changed
-        ListOfEmergenciesActivity.adapter.notifyDataSetChanged();
+        if (((BitmapDrawable)emergencyImage.getDrawable()) != null) {
+            ListOfEmergenciesActivity.scenarioList.add(ListOfEmergenciesActivity.scenarioList.size() - 1, emergency);
+            ListOfEmergenciesActivity.scenarioList.get(ListOfEmergenciesActivity.scenarioList.size() - 1).setEmergencyNumber(ListOfEmergenciesActivity.scenarioList.size() - 1);
+
+            // notify gridview of data changed
+            ListOfEmergenciesActivity.adapter.notifyDataSetChanged();
+        }
+
         finish();
     }
 
