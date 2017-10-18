@@ -47,6 +47,24 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
 
         if(scenarioList.size() < 1) {
             loadInfo();
+
+            String root = getFilesDir().getAbsolutePath();
+            File myDir = new File(root + "/saved_images");
+            myDir.mkdirs();
+            File file = new File (myDir, "addition.jpg");
+            int assignNum = scenarioList.size();
+            if (file.exists ()) file.delete ();
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.addition);
+                img.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+
+                scenarioList.add(new EmergencyElement("", file.getAbsolutePath(), assignNum));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         adapter=new ArrayAdapter<EmergencyElement>(this, R.layout.emergency_item, scenarioList) {
@@ -67,12 +85,21 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                     final ImageButton imageButton = (ImageButton) convertView.findViewById(R.id.emergencyImageButton);
                     imageButton.setBackground( new BitmapDrawable(getResources(), current.getImage()) );
                     imageButton.setTag(current.getEmergencyNumber());
-                    imageButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            showPopUp(Integer.parseInt((imageButton.getTag()).toString()));
-                        }
-                    });
+                    if (currEmergencyNumber == scenarioList.size() - 1) {
+                        imageButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                newEmergency(v);
+                            }
+                        });
+                    } else {
+                        imageButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                showPopUp(Integer.parseInt((imageButton.getTag()).toString()));
+                            }
+                        });
+                    }
                     imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
 
                     final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
@@ -89,12 +116,21 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
 
                     imageButton.setBackground( new BitmapDrawable(getResources(), current.getImage()) );
                     imageButton.setTag(current.getEmergencyNumber());
-                    imageButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            showPopUp(Integer.parseInt((imageButton.getTag()).toString()));
-                        }
-                    });
+                    if (currEmergencyNumber == scenarioList.size() - 1) {
+                        imageButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                newEmergency(v);
+                            }
+                        });
+                    } else {
+                        imageButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                showPopUp(Integer.parseInt((imageButton.getTag()).toString()));
+                            }
+                        });
+                    }
                     //imageButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 132));
                     imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
 
@@ -108,18 +144,6 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
         };
 
         gridView.setAdapter(adapter);
-
-    }
-
-    public void editInfo(View v) {
-
-    }
-
-    public void saveInfo(View v) {
-
-    }
-
-    public void cancelInfo(View v) {
 
     }
 
@@ -268,5 +292,10 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
         AlertDialog helpDialog = helpBuilder.create();
         helpDialog.show();
 
+    }
+
+    public void newEmergency(View v) {
+        Intent intent = new Intent(ListOfEmergenciesActivity.this, AddEmergencyActivity.class);
+        startActivity(intent);
     }
 }
