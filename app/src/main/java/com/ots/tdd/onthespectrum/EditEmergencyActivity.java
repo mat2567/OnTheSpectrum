@@ -61,7 +61,9 @@ public class EditEmergencyActivity extends AppCompatActivity {
 
         if (!title.equals(originalTitle)) { //both or only title changed
             emergency.setTitle(title);
-            emergency.setImage(((BitmapDrawable)emergencyImage.getDrawable()).getBitmap());
+            if ((BitmapDrawable)emergencyImage.getDrawable() != null){
+                emergency.setImage(((BitmapDrawable) emergencyImage.getDrawable()).getBitmap());
+            }
 
             SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
@@ -79,7 +81,9 @@ public class EditEmergencyActivity extends AppCompatActivity {
 
             editor.commit();
         } else if (!currentImage.equals(originalImage)) { //only image changed
-            emergency.setImage(((BitmapDrawable)emergencyImage.getDrawable()).getBitmap());
+            if ((BitmapDrawable)emergencyImage.getDrawable() != null){
+                emergency.setImage(((BitmapDrawable) emergencyImage.getDrawable()).getBitmap());
+            }
 
             SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
