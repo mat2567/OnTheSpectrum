@@ -111,6 +111,21 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
 
     }
 
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        String scenarioNames = "";
+        for (EmergencyElement item : scenarioList) {
+            scenarioNames += item.getTitle();
+            scenarioNames += ";;";
+            editor.putString(item.getTitle(), item.imageMemLocation);
+        }
+        editor.putString("ScenarioNames", scenarioNames);
+
+        editor.apply();
+    }
+
     public void editInfo(View v) {
 
     }
