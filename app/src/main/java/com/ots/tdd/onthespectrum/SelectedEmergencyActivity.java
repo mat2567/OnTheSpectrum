@@ -43,22 +43,7 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selected_emergency);
 
-        // Start Sinch Client
-//        try {
-            //TODO Does it make sense to initiate this here?
-            SinchClient sinchClient = Sinch.getSinchClientBuilder()
-                    .context(this)
-                    .userId("current-user-id")
-                    .applicationKey("f59d26b3-3ca3-49dd-8d88-0f309049bd28") //
-                    .applicationSecret("0wZ54QhUBEylRod2EyaShA==")
-                    .environmentHost("clientapi.sinch.com")
-                    .build();
-            sinchClient.setSupportCalling(true);
-            sinchClient.start();
-//        }
-//        catch (Exception ex) {
-//            Log.e("Error on sinchClient", ex.getMessage());
-//        }
+
 
         String scenarioInfo = getIntent().getStringExtra("scenario");
         ttobj=new TextToSpeech(this, this);
@@ -76,23 +61,43 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         String infoText = "What will be said on your call:\n\nHello. " + appInfo + scenarioInfo + " " + profInfo;
         toSpeak = "Hello. " + appInfo + scenarioInfo + " " + profInfo;
 
+        // Start Sinch Client
+        //TODO Does it make sense to initiate this here?
+        final SinchClient sinchClient = Sinch.getSinchClientBuilder()
+                .context(this.getApplicationContext())
+                .userId("current-user-id")
+                .applicationKey("f59d26b3-3ca3-49dd-8d88-0f309049bd28") //
+                .applicationSecret("0wZ54QhUBEylRod2EyaShA==")
+                .environmentHost("clientapi.sinch.com")
+                .build();
+        sinchClient.setSupportCalling(true);
+        sinchClient.start();
+
         //Watch for call button to be clicked
-//        final Button button = (Button) findViewById(R.id.button11);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            //Call call;
-//            TextView callState = (TextView) findViewById(R.id.callState);
-//            @Override
-//            public void onClick(View view) {
-//                // make a call!
-////                if (call == null) {
-////                    call = sinchClient.getCallClient().callUser(telNum);
-////                    button.setText("Hang Up");
-////                } else {
-////                    call.hangup();
-////                }
-//                sinchClient.getCallClient().callUser(telNum);
-//                callState.setText("connected");
-//            }
+        final Button button = (Button) findViewById(R.id.button11);
+
+//        try {
+        button.setOnClickListener(new View.OnClickListener() {
+            Call call;
+            TextView callState = (TextView) findViewById(R.id.callState);
+
+            @Override
+            public void onClick(View view) {
+                // make a call!
+                if (call == null) {
+                    call = sinchClient.getCallClient().callPhoneNumber("+46000000000");
+                    button.setText("Hang Up");
+               } else {
+                    call.hangup();
+                    call = null;
+                    button.setText("Call");
+                }
+                callState.setText("connected");
+            }
+        });
+//        } catch(Exception ex) {
+//            Log.e("Error on call button", ex.getMessage());
+//        }
 
 //            class SinchCallListener implements CallListener {
 //                @Override
@@ -120,6 +125,7 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
 //                }
 //            }
 //        });
+
 
         infoScrollView = (ScrollView) findViewById(R.id.infoScrollView);
         TextView infoTextView = new TextView(this);
