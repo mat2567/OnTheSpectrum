@@ -17,11 +17,11 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sinch.android.rtc.PushPair;
+//import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.Sinch;
 import com.sinch.android.rtc.SinchClient;
-import com.sinch.android.rtc.calling.Call;
-import com.sinch.android.rtc.calling.CallListener;
+//import com.sinch.android.rtc.calling.Call;
+//import com.sinch.android.rtc.calling.CallListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,17 +45,19 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
 
         // Start Sinch Client
 //        try {
-            //TODO Does it make sense to initiate this here?
+        android.content.Context context = this.getApplicationContext();
+
+        //TODO Does it make sense to initiate this here?
             SinchClient sinchClient = Sinch.getSinchClientBuilder()
-                    .context(this)
-                    .userId("current-user-id")
+                    .context(context)
                     .applicationKey("f59d26b3-3ca3-49dd-8d88-0f309049bd28") //
                     .applicationSecret("0wZ54QhUBEylRod2EyaShA==")
                     .environmentHost("clientapi.sinch.com")
+                    .userId("current-user-id")
                     .build();
             sinchClient.setSupportCalling(true);
             sinchClient.start();
-//        }
+////        }
 //        catch (Exception ex) {
 //            Log.e("Error on sinchClient", ex.getMessage());
 //        }
@@ -85,7 +87,7 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
 //            public void onClick(View view) {
 //                // make a call!
 ////                if (call == null) {
-////                    call = sinchClient.getCallClient().callUser(telNum);
+////                    call = sinchClient.getCallClient().callPhoneNumber(telNum);
 ////                    button.setText("Hang Up");
 ////                } else {
 ////                    call.hangup();
