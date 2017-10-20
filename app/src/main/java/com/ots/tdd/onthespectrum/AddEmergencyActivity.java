@@ -2,6 +2,7 @@ package com.ots.tdd.onthespectrum;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,10 +16,15 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Random;
+
 public class AddEmergencyActivity extends AppCompatActivity {
 
     public EditText emergencyTitle;
     public ImageButton emergencyImage;
+    private String currentImage;
 
     private static int RESULT_LOAD_IMAGE = 1;
 
@@ -36,27 +42,30 @@ public class AddEmergencyActivity extends AppCompatActivity {
     }
 
     public void saveChanges(View v) {
-        EmergencyElement emergency = new EmergencyElement(emergencyTitle.getText().toString(),
-                null,
+        String title = emergencyTitle.getText().toString();
+        EmergencyElement emergency = new EmergencyElement(title,
+                currentImage,
                 ListOfEmergenciesActivity.scenarioList.size() - 1);
-        //emergency.setTitle(emergencyTitle.getText().toString());
-        //emergency.setImage(((BitmapDrawable)emergencyImage.getBackground()).getBitmap());
-        //emergency.setImage(((BitmapDrawable)emergencyImage.getDrawable()).getBitmap());
-        if (((BitmapDrawable)emergencyImage.getDrawable()) != null) {
-            emergency.setImage(((BitmapDrawable)emergencyImage.getDrawable()).getBitmap());
-        } else {
-            //toastMessage("Null Image");
+        emergency.setTitle(title);
+        if ((BitmapDrawable)emergencyImage.getDrawable() != null){
+            emergency.setImage(((BitmapDrawable) emergencyImage.getDrawable()).getBitmap());
         }
 
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
 
-        if (((BitmapDrawable)emergencyImage.getDrawable()) != null) {
-            ListOfEmergenciesActivity.scenarioList.add(ListOfEmergenciesActivity.scenarioList.size() - 1, emergency);
-            ListOfEmergenciesActivity.scenarioList.get(ListOfEmergenciesActivity.scenarioList.size() - 1).setEmergencyNumber(ListOfEmergenciesActivity.scenarioList.size() - 1);
+        //change ScenarioNames
+        String allScenarios = sharedPref.getString("ScenarioNames", null);
+        allScenarios.concat(title);
+        editor.putString("ScenarioNames", allScenarios);
 
-            // notify gridview of data changed
-            ListOfEmergenciesActivity.adapter.notifyDataSetChanged();
-        }
+        //add new title/image
+        editor.putString(title, currentImage);
 
+        editor.commit();
+
+        // notify gridview of data changed
+        ListOfEmergenciesActivity.adapter.notifyDataSetChanged();
         finish();
     }
 
@@ -87,6 +96,21 @@ public class AddEmergencyActivity extends AppCompatActivity {
                 Bitmap selectedImg = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
                 // Load the selected image into a preview
                 emergencyImage.setImageBitmap(selectedImg);
+
+                // Save the image into app data
+                String root = getFilesDir().getAbsolutePath();
+                File myDir = new File(root + "/saved_images");
+                File file = new File (myDir, getSaltString());
+                if (file.exists ()) file.delete ();
+                try {
+                    FileOutputStream out = new FileOutputStream(file);
+                    selectedImg.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                    out.flush();
+                    out.close();
+                    currentImage = file.getAbsolutePath();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } catch (Exception e) {
                 toastMessage("Choose a different image");
             }
@@ -102,5 +126,18 @@ public class AddEmergencyActivity extends AppCompatActivity {
         int duration = Toast.LENGTH_SHORT;
 
         Toast.makeText(context, text, duration).show();
+    }
+
+    protected String getSaltString() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 10) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
+
     }
 }
