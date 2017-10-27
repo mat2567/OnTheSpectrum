@@ -1,19 +1,26 @@
 package com.ots.tdd.onthespectrum;
 
 import android.app.ActionBar;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
+
+import org.w3c.dom.Text;
 
 import java.sql.SQLOutput;
 
@@ -21,11 +28,18 @@ import static android.support.constraint.R.id.parent;
 
 public class SettingsActivity extends AppCompatActivity {
     private static final String TAG = "Settings Activity";
-    int fontSize = 12;
+    int fontChange;
     boolean locked = false;
     boolean wantTo = false;
     String password = "";
     String currentHint = "";
+    TextView settingsText;
+    TextView appearanceText;
+    TextView profileLockText;
+    TextView fontSizeText;
+    TextView adjustColorText;
+    int titleText = 30;
+    int subtitleTextSize = 18;
 
 
     @Override
@@ -33,29 +47,32 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        //spinner stuff for font size
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.fontSizeAttempt, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setSelection(0);
-        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View selectedItemView, int pos, long id){
-                String fontString = parent.getItemAtPosition(pos).toString();
-                int fontSize = Integer.parseInt(fontString);
-                System.out.println(fontSize);
-                TextView a = (TextView) findViewById(R.id.AdjustColorText);
-                a.setTextSize(fontSize);
-                a =(TextView) findViewById(R.id.FontSizeText);
-                a.setTextSize(fontSize);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent){
+        settingsText = (TextView) findViewById(R.id.Settings);
+        appearanceText = (TextView) findViewById(R.id.appearance);
+        profileLockText = (TextView) findViewById(R.id.profileLockText);
+        fontSizeText = (TextView) findViewById(R.id.FontSizeText);
+        adjustColorText = (TextView) findViewById(R.id.AdjustColorText);
 
+        //font size
+        //default is fontChange of 0 unless specified in SharedPreferences
+        RadioGroup fontRadios = (RadioGroup) findViewById(R.id.fontSizeChoice);
+
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        int fontSharedPref = sharedPref.getInt("FontSizeChange", Integer.MAX_VALUE);
+        if (fontSharedPref == Integer.MAX_VALUE) {
+            fontChange = 0;
+            ((RadioButton)fontRadios.getChildAt(1)).setChecked(true);
+        } else {
+            fontChange = fontSharedPref;
+            if (fontChange < 0) {
+                ((RadioButton)fontRadios.getChildAt(0)).setChecked(true);
+            } else if (fontChange == 0) {
+                ((RadioButton)fontRadios.getChildAt(1)).setChecked(true);
+            } else {
+                ((RadioButton)fontRadios.getChildAt(2)).setChecked(true);
             }
-        });
+        }
+        setFontSizes();
 
         //switch stuff for profile lock
         final Switch switched = (Switch) findViewById(R.id.lock);
@@ -139,5 +156,36 @@ public class SettingsActivity extends AppCompatActivity {
         a.setTextSize(fontSize);
         a = (TextView) findViewById(R.id.FontSizeText);
         a.setTextSize(fontSize);
+    }
+
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?t
+        boolean checked = ((RadioButton) view).isChecked();
+        // Check which radio button was clicked
+        if (checked) {
+            switch(view.getId()) {
+                case R.id.smallRadio:
+                    fontChange = -4;
+                    break;
+                case R.id.mediumRadio:
+                    fontChange = 0;
+                    break;
+                case R.id.largeRadio:
+                    fontChange = 6;
+                    break;
+            }
+
+            setFontSizes();
+        }
+
+    }
+
+    private void setFontSizes() {
+        settingsText.setTextSize(titleText + fontChange);
+        appearanceText.setTextSize(titleText + fontChange);
+
+        profileLockText.setTextSize(subtitleTextSize + fontChange);
+        fontSizeText.setTextSize(subtitleTextSize + fontChange);
+        adjustColorText.setTextSize(subtitleTextSize + fontChange);
     }
 }
