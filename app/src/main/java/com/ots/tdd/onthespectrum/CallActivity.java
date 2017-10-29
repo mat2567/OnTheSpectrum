@@ -4,19 +4,20 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class CallActivity extends AppCompatActivity {
 
-    String telNum = "4706293412";
+    String telNum = ""; //4706293412
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call);
-
+        telNum = getIntent().getStringExtra("TELEPHONE_NUMBER");
         // Show the action bar and return arrow at the top of the screen
         /*ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);*/

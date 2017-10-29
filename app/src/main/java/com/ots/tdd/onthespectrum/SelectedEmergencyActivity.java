@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ScrollView;
@@ -14,19 +16,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
-public class SelectedEmergencyActivity extends AppCompatActivity {
+public class SelectedEmergencyActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
     ScrollView infoScrollView;
     ArrayList<ProfileElement> profArray = new ArrayList<>();
-    String telNum = "4706293412";
+    String telNum = "6784670532"; //4706293412
     String toSpeak = "Hello.";
+    TextToSpeech ttobj;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selected_emergency);
         String scenarioInfo = getIntent().getStringExtra("scenario");
+
+        ttobj=new TextToSpeech(this, this);
 
         String appInfo = "I have nonverbal autism, and I am speaking to you through an application on my phone. ";
 
@@ -45,6 +51,24 @@ public class SelectedEmergencyActivity extends AppCompatActivity {
         TextView infoTextView = new TextView(this);
         infoTextView.setText(infoText);
         infoScrollView.addView(infoTextView);
+    }
+
+    @Override
+    public void onInit(int status)
+    {
+        if (status == TextToSpeech.SUCCESS)
+        {
+            ttobj.setLanguage(Locale.US);
+            //ttobj.speak("hello World", 0, null);
+        }
+        else if (status == TextToSpeech.ERROR)
+        {
+            Log.e("Text To Speach", "ERROR");
+        }
+    }
+
+    public void testVoice(View v) {
+        ttobj.speak(toSpeak, 0, null);
     }
 
 
@@ -68,8 +92,8 @@ public class SelectedEmergencyActivity extends AppCompatActivity {
 
     public void initiateCall(View v) {
 
-        //EditText txtPhn = (EditText)findViewById(R.id.phoneNumberEditText);
-        //telNum = txtPhn.getText().toString();
+        EditText txtPhn = (EditText)findViewById(R.id.phoneNumberEditText);
+        telNum = txtPhn.getText().toString();
         if (telNum.length() == 10) {
             boolean valid = true;
             for (int i = 0; i < 10; i++) {

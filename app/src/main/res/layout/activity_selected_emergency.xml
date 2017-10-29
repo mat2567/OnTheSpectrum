@@ -12,6 +12,14 @@
         android:onClick="initiateCall"
         android:text="Call" />
 
+    <EditText
+        android:id="@+id/phoneNumberEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="### ### ####"
+        android:inputType="phone" />
+
     <Space
         android:layout_width="match_parent"
         android:layout_height="2dp"
@@ -23,5 +31,13 @@
         android:layout_height="wrap_content">
 
     </ScrollView>
+
+    <Button
+        android:id="@+id/testVoiceButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.16"
+        android:onClick="testVoice"
+        android:text="Text to Voice" />
 
 </LinearLayout>

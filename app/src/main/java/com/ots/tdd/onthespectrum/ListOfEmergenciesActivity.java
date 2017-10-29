@@ -1,47 +1,71 @@
 package com.ots.tdd.onthespectrum;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
-import android.os.Bundle;
-import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class ChooseEmergencyActivity extends AppCompatActivity {
+public class ListOfEmergenciesActivity extends AppCompatActivity {
 
-    ArrayAdapter<EmergencyElement> adapter;
+    static ArrayAdapter<EmergencyElement> adapter;
 
-    ArrayList<EmergencyElement> scenarioList = new ArrayList<>();
+    static ArrayList<EmergencyElement> scenarioList = new ArrayList<>();
 
     int emergencyElementCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_emergency_list);
-
+        setContentView(R.layout.activity_list_of_emergencies);
 
         GridView gridView = (GridView) findViewById(R.id.listOfEmergenciesGridView);
         gridView.setNumColumns(3);
         gridView.setVerticalSpacing(50);
 
-        loadInfo();
+        if(scenarioList.size() < 1) {
+            loadInfo();
+
+            String root = getFilesDir().getAbsolutePath();
+            File myDir = new File(root + "/saved_images");
+            myDir.mkdirs();
+            File file = new File (myDir, "addition.jpg");
+            int assignNum = scenarioList.size();
+            if (file.exists ()) file.delete ();
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.addition);
+                img.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+
+                scenarioList.add(new EmergencyElement("", file.getAbsolutePath(), assignNum));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         adapter=new ArrayAdapter<EmergencyElement>(this, R.layout.emergency_item, scenarioList) {
             @Override
@@ -60,19 +84,22 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                 if (currEEVC == null) {
                     final ImageButton imageButton = (ImageButton) convertView.findViewById(R.id.emergencyImageButton);
                     imageButton.setBackground( new BitmapDrawable(getResources(), current.getImage()) );
-                    imageButton.setTag(current.getTitle());
-                    imageButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Intent is what you use to start another activity
-                            Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
-                            String emergencyTag = (imageButton.getTag()).toString(); //to be passed in
-                            // save full message somewhere?
-                            String emergencyMessage = "I am in a " + emergencyTag + " emergency.";
-                            intent.putExtra("scenario", emergencyMessage);
-                            startActivity(intent);
-                        }
-                    });
+                    imageButton.setTag(current.getEmergencyNumber());
+                    if (currEmergencyNumber == scenarioList.size() - 1) {
+                        imageButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                newEmergency(v);
+                            }
+                        });
+                    } else {
+                        imageButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                showPopUp(Integer.parseInt((imageButton.getTag()).toString()));
+                            }
+                        });
+                    }
                     imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
 
                     final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
@@ -88,19 +115,22 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                     final ImageButton imageButton= (ImageButton) convertView.findViewById(R.id.emergencyImageButton);
 
                     imageButton.setBackground( new BitmapDrawable(getResources(), current.getImage()) );
-                    imageButton.setTag(current.getTitle());
-                    imageButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Intent is what you use to start another activity
-                            Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
-                            String emergencyTag = (imageButton.getTag()).toString(); //to be passed in
-                            // save full message somewhere?
-                            String emergencyMessage = "I am in a " + emergencyTag + " emergency.";
-                            intent.putExtra("scenario", emergencyMessage);
-                            startActivity(intent);
-                        }
-                    });
+                    imageButton.setTag(current.getEmergencyNumber());
+                    if (currEmergencyNumber == scenarioList.size() - 1) {
+                        imageButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                newEmergency(v);
+                            }
+                        });
+                    } else {
+                        imageButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                showPopUp(Integer.parseInt((imageButton.getTag()).toString()));
+                            }
+                        });
+                    }
                     //imageButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 132));
                     imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
 
@@ -114,22 +144,7 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
         };
 
         gridView.setAdapter(adapter);
-    }
 
-
-    protected void onPause() {
-        super.onPause();
-        SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        String scenarioNames = "";
-        for (EmergencyElement item : scenarioList) {
-            scenarioNames += item.getTitle();
-            scenarioNames += ";;";
-            editor.putString(item.getTitle(), item.imageMemLocation);
-        }
-        editor.putString("ScenarioNames", scenarioNames);
-
-        editor.apply();
     }
 
     private void loadInfo() {
@@ -241,5 +256,46 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
         }
     }
 
-}
+    private void showPopUp(int scenarioIndex) {
 
+        final int index = scenarioIndex;
+
+        EmergencyElement currentElement = scenarioList.get(scenarioIndex);
+        AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
+        helpBuilder.setTitle(currentElement.getTitle());
+        //helpBuilder.setMessage("This is a Simple Pop Up");
+        helpBuilder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Intent is what you use to start another activity
+                Intent intent = new Intent(ListOfEmergenciesActivity.this, EditEmergencyActivity.class);
+                String emergencyNum = "" + index; //to be passed in
+                intent.putExtra("emergencyNum", emergencyNum);
+                startActivity(intent);
+            }
+        });
+
+        helpBuilder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                int curr = index;
+                int len = scenarioList.size() - 1;
+                scenarioList.remove(index);
+                while (curr < len) {
+                    scenarioList.get(curr).setEmergencyNumber(curr);
+                    curr++;
+                }
+                // notify gridview of data changed
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        // Remember, create doesn't show the dialog
+        AlertDialog helpDialog = helpBuilder.create();
+        helpDialog.show();
+
+    }
+
+    public void newEmergency(View v) {
+        Intent intent = new Intent(ListOfEmergenciesActivity.this, AddEmergencyActivity.class);
+        startActivity(intent);
+    }
+}
