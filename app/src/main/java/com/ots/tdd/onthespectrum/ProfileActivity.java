@@ -30,14 +30,16 @@ public class ProfileActivity extends AppCompatActivity {
 
     int profileElementCounter = 0;
 
-    ArrayList<ProfileElement> itemList = new ArrayList<>();
+    static ArrayList<ProfileElement> itemList = new ArrayList<>();
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        loadInfo();
+        if (itemList.isEmpty()) {
+            loadInfo();
+        }
 
         /*Backs the ListView. Enables TextViews to be added dynamically */
         adapter=new ArrayAdapter<ProfileElement>(this, R.layout.profile_item, itemList) {
@@ -163,6 +165,16 @@ public class ProfileActivity extends AppCompatActivity {
 
         });
 
+        // Set button listener
+        Button callLogButton =(Button)findViewById(R.id.callLogButton);
+        callLogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moveToCallLogScreen(v);
+            }
+
+        });
+
     }
 
     protected void onPause() {
@@ -257,6 +269,11 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
         profileElementCounter = itemList.size();
+    }
+
+    public void moveToCallLogScreen(View v) {
+        Intent intentCall = new Intent(this, CallLogActivity.class);
+        startActivity(intentCall);
     }
 }
 
