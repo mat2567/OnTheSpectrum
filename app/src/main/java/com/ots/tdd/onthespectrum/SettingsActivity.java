@@ -1,6 +1,9 @@
 package com.ots.tdd.onthespectrum;
 
 import android.app.ActionBar;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Toast;
 
 import java.sql.SQLOutput;
 
@@ -24,14 +28,44 @@ public class SettingsActivity extends AppCompatActivity {
     int fontSize = 12;
     boolean locked = false;
     boolean wantTo = false;
-    String password = "";
     String currentHint = "";
 
+    Switch lock = null;
+    EditText passwordEditText = null;
+    Button lockButton = null;
+    static boolean isLocked = false;
+    String password = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        lock = (Switch) findViewById(R.id.lock);
+        passwordEditText = (EditText) findViewById(R.id.password);
+        lockButton = (Button) findViewById(R.id.lockButton);
+        lock.setEnabled(false);
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        String prevPassword = sharedPref.getString("Lock", null);
+        if (null == prevPassword) {
+            updateSharedPreferences("");
+            password = "";
+            lockButton.setText("Lock");
+            lock.setChecked(false);
+            isLocked = false;
+        } else {
+            if (prevPassword.equals("")) {
+                password = "";
+                lockButton.setText("Lock");
+                lock.setChecked(false);
+                isLocked = false;
+            } else {
+                password = prevPassword;
+                lockButton.setText("Unlock");
+                lock.setChecked(true);
+                isLocked = true;
+            }
+        }
 
         //spinner stuff for font size
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
@@ -57,68 +91,38 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        //switch stuff for profile lock
-        final Switch switched = (Switch) findViewById(R.id.lock);
-        switched.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                switched.toggle();
-                if (isChecked) {
-
-                    Log.i(TAG, "checked");
-                    wantTo = true;
-                    EditText passwordEditText = (EditText) findViewById(R.id.password);
-                    if (password.equals("")) {
-                        passwordEditText.setHint("Enter new password and press OK");
-                    } else {
-                        passwordEditText.setHint("Enter password to change");
-                    }
-
-                } else {
-                    Log.i(TAG, "unchecked");
-                    wantTo = false;
-//                    locked = false;
-                    EditText passwordEditText = (EditText) findViewById(R.id.password);
-                    passwordEditText.setHint("Enter password to change");
-                }
-
-                switched.setChecked(locked); //added to prevent it from doing it unnecessary
-            }
-        });
-
-        //okay button
-        Button button = (Button) findViewById(R.id.okButton);
-        button.setOnClickListener(new View.OnClickListener() {
+        //lock button
+        lockButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Code here executes on main thread after user presses button
-                EditText passwordEditText = (EditText) findViewById(R.id.password);
                 if (password.equals("")) { // meaning password not yet set
-//                    System.out.println("setting password");
-                    Log.i(TAG, "setting password");
-                    password = passwordEditText.getText().toString();
-                    locked = true;
-
+                    if (passwordEditText.getText().toString().equals("")) {
+                        displayExceptionMessage("Provide a Password");
+                    } else {
+                        password = passwordEditText.getText().toString();
+                        isLocked = true;
+                        lockButton.setText("Unlock");
+                        passwordEditText.setText("");
+                        updateSharedPreferences(password);
+                        displayExceptionMessage("Customization Locked");
+                    }
                 } else {
                     if (passwordEditText.getText().toString().equals(password)) {
-                        Log.i(TAG, "password correct");
-                        locked = wantTo;
+                        isLocked = false;
+                        lockButton.setText("Lock");
+                        passwordEditText.setText("");
+                        updateSharedPreferences("");
+                        password = "";
 
+                        displayExceptionMessage("Customization Unlocked");
                     } else { //wrong password don't set
-                        Log.i(TAG, "password incorrect");
-                        locked = !wantTo;
+                        passwordEditText.setText("");
+                        isLocked = true;
+
+                        displayExceptionMessage("Incorrect Password");
                     }
 
-                    //then
-//                    if (locked) { //= true
-//                    }
                 }
-                //then
-                System.out.println("wantTo: " + wantTo + " switch: " + switched.isChecked());
-                switched.setChecked(locked);
-                System.out.println("locked: " + locked + " switch: " + switched.isChecked());
-                passwordEditText.setText("");
-                passwordEditText.setHint("");
+                lock.setChecked(isLocked);
             }
         });
     }
@@ -139,5 +143,25 @@ public class SettingsActivity extends AppCompatActivity {
         a.setTextSize(fontSize);
         a = (TextView) findViewById(R.id.FontSizeText);
         a.setTextSize(fontSize);
+    }
+
+    public void updateSharedPreferences(String password) {
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("Lock", password);
+        editor.commit();
+    }
+
+    public void attemptLock(View v) {
+
+    }
+
+    public void attemptUnlock(View v) {
+
+    }
+
+    public void displayExceptionMessage(String msg)
+    {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

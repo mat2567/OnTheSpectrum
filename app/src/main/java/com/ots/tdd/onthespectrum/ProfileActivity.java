@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -70,7 +71,11 @@ public class ProfileActivity extends AppCompatActivity {
                     editInfo.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            editInfo(v);
+                            if (!SettingsActivity.isLocked) {
+                                editInfo(v);
+                            } else {
+                                displayExceptionMessage("Customization is Locked");
+                            }
                         }
                     });
                     saveInfo.setOnClickListener(new View.OnClickListener() {
@@ -144,22 +149,26 @@ public class ProfileActivity extends AppCompatActivity {
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String newType = editInfoType.getText().toString();
-                String newInfo = editUserInfo.getText().toString();
+                if (!SettingsActivity.isLocked) {
+                    String newType = editInfoType.getText().toString();
+                    String newInfo = editUserInfo.getText().toString();
 
-                if (!newType.isEmpty() && !newInfo.isEmpty()) {
-                    alertTextView.setTextColor(Color.argb(0, 255, 64, 129));
-                    // add new item to arraylist
-                    itemList.add(new ProfileElement(newType, newInfo, profileElementCounter));
-                    profileElementCounter++;
-                    // notify listview of data changed
-                    adapter.notifyDataSetChanged();
+                    if (!newType.isEmpty() && !newInfo.isEmpty()) {
+                        alertTextView.setTextColor(Color.argb(0, 255, 64, 129));
+                        // add new item to arraylist
+                        itemList.add(new ProfileElement(newType, newInfo, profileElementCounter));
+                        profileElementCounter++;
+                        // notify listview of data changed
+                        adapter.notifyDataSetChanged();
 
-                    // resets the text boxes
-                    editInfoType.setText("");
-                    editUserInfo.setText("");
+                        // resets the text boxes
+                        editInfoType.setText("");
+                        editUserInfo.setText("");
+                    } else {
+                        alertTextView.setTextColor(Color.argb(255, 255, 64, 129));
+                    }
                 } else {
-                    alertTextView.setTextColor(Color.argb(255, 255, 64, 129));
+                    displayExceptionMessage("Customization is Locked");
                 }
             }
 
@@ -274,6 +283,11 @@ public class ProfileActivity extends AppCompatActivity {
     public void moveToCallLogScreen(View v) {
         Intent intentCall = new Intent(this, CallLogActivity.class);
         startActivity(intentCall);
+    }
+
+    public void displayExceptionMessage(String msg)
+    {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }
 
