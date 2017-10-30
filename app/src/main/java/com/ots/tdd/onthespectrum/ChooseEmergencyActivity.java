@@ -36,6 +36,16 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emergency_list);
 
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        final int titleSize = sharedPref.getInt("TitleFontSize", 0);
+        final int bodySize = sharedPref.getInt("BodyFontSize", 0);
+        final int fontChange = sharedPref.getInt("FontSizeChange", 0);
+
+        TextView title = (TextView) findViewById(R.id.emergencyListTitle);
+        title.setTextSize(titleSize);
+
+        Button generalEmergency = (Button) findViewById(R.id.generalEmergency);
+        generalEmergency.setTextSize(bodySize);
 
         GridView gridView = (GridView) findViewById(R.id.listOfEmergenciesGridView);
         gridView.setNumColumns(3);
@@ -77,7 +87,8 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
 
                     final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
                     textView.setText(current.getTitle());
-                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 45));
+                    textView.setTextSize(bodySize + fontChange);
+                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 55 + fontChange * 4));
 
                     EmergencyElementViewContainer newEmergencyElement = new EmergencyElementViewContainer(
                             imageButton, textView, current.getEmergencyNumber());
@@ -106,7 +117,8 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
 
                     final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
                     textView.setText(current.getTitle());
-                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 45));
+                    textView.setTextSize(bodySize + fontChange);
+                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 55 + fontChange * 4));
                 }
 
                 return convertView;

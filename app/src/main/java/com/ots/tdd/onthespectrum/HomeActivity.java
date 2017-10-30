@@ -85,14 +85,14 @@ public class HomeActivity extends AppCompatActivity {
         if (subtitleSize == 0) {
             //add it to SharedPreferences
             subtitleSize = 18;
-            editor.putInt("SubtitleFontSize", titleSize);
+            editor.putInt("SubtitleFontSize", subtitleSize);
         }
 
-        bodySize = sharedPref.getInt("GeneralFontSize", 0);
+        bodySize = sharedPref.getInt("BodyFontSize", 0);
         if (bodySize == 0) {
             //add it to SharedPreferences
-            bodySize = 14;
-            editor.putInt("BodyFontSize", titleSize);
+            bodySize = 16;
+            editor.putInt("BodyFontSize", bodySize);
         }
 
         fontChange = sharedPref.getInt("FontSizeChange", Integer.MAX_VALUE);
