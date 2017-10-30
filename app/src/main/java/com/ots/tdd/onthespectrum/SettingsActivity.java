@@ -38,9 +38,11 @@ public class SettingsActivity extends AppCompatActivity {
     TextView profileLockText;
     TextView fontSizeText;
     TextView adjustColorText;
-    int titleText = 30;
-    int subtitleTextSize = 18;
 
+    public int titleText = 30;
+    public int subtitleTextSize = 18;
+
+    SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,7 @@ public class SettingsActivity extends AppCompatActivity {
         //default is fontChange of 0 unless specified in SharedPreferences
         RadioGroup fontRadios = (RadioGroup) findViewById(R.id.fontSizeChoice);
 
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         int fontSharedPref = sharedPref.getInt("FontSizeChange", Integer.MAX_VALUE);
         if (fontSharedPref == Integer.MAX_VALUE) {
             fontChange = 0;
@@ -138,6 +140,15 @@ public class SettingsActivity extends AppCompatActivity {
                 passwordEditText.setHint("");
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("FontSizeChange", fontChange);
+        editor.commit();
     }
 
     public void onOkayPress() {

@@ -100,7 +100,7 @@
         android:layout_marginLeft="19dp"
         android:layout_marginTop="18dp"
         android:background="@color/color2"
-        app:layout_constraintLeft_toRightOf="@+id/button5"
+        app:layout_constraintLeft_toRightOf="@+id/settingsButton"
         app:layout_constraintTop_toBottomOf="@+id/AdjustColorText" />
 
     <Button
@@ -119,12 +119,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="23dp"
         android:background="@color/color4"
-        app:layout_constraintTop_toBottomOf="@+id/button5"
+        app:layout_constraintTop_toBottomOf="@+id/settingsButton"
         android:layout_marginLeft="17dp"
         app:layout_constraintLeft_toLeftOf="@+id/AdjustColorText" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/settingsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
