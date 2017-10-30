@@ -30,6 +30,7 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
     String scenarioInfo;
     String scenarioName;
 
+    
 
     /**
      * Loads the emergency information stored on the device and formats them for display on the screen.
