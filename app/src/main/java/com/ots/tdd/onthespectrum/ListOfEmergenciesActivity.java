@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -89,14 +90,22 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                         imageButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                newEmergency(v);
+                                if (!SettingsActivity.isLocked) {
+                                    newEmergency(v);
+                                } else {
+                                    displayExceptionMessage("Customization is Locked");
+                                }
                             }
                         });
                     } else {
                         imageButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                showPopUp(Integer.parseInt((imageButton.getTag()).toString()));
+                                if (!SettingsActivity.isLocked) {
+                                    showPopUp(Integer.parseInt((imageButton.getTag()).toString()));
+                                } else {
+                                    displayExceptionMessage("Customization is Locked");
+                                }
                             }
                         });
                     }
@@ -120,14 +129,22 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                         imageButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                newEmergency(v);
+                                if (!SettingsActivity.isLocked) {
+                                    newEmergency(v);
+                                } else {
+                                    displayExceptionMessage("Customization is Locked");
+                                }
                             }
                         });
                     } else {
                         imageButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                showPopUp(Integer.parseInt((imageButton.getTag()).toString()));
+                                if (!SettingsActivity.isLocked) {
+                                    showPopUp(Integer.parseInt((imageButton.getTag()).toString()));
+                                } else {
+                                    displayExceptionMessage("Customization is Locked");
+                                }
                             }
                         });
                     }
@@ -325,5 +342,10 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
     public void newEmergency(View v) {
         Intent intent = new Intent(ListOfEmergenciesActivity.this, AddEmergencyActivity.class);
         startActivity(intent);
+    }
+
+    public void displayExceptionMessage(String msg)
+    {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }
