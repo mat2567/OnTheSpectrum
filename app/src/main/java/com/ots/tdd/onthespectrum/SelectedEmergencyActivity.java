@@ -30,6 +30,12 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
     String scenarioInfo;
     String scenarioName;
 
+
+    /**
+     * Loads the emergency information stored on the device and formats them for display on the screen.
+     * @param  savedInstanceState Bundle
+     * @see android.app.Activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +64,8 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         infoScrollView.addView(infoTextView);
     }
 
+
+
     @Override
     public void onInit(int status)
     {
@@ -72,10 +80,20 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         }
     }
 
+
+    /**
+     * Developer method to test the Android Text-to-Speech
+     * @param  v  View
+     * @see android.view.View
+     */
     public void testVoice(View v) {
         ttobj.speak(toSpeak, 0, null);
     }
 
+
+    /**
+     * Loads the emergency information stored on the device and adds them to a private array.
+     */
 
     private void loadProfileInfo() {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
@@ -95,6 +113,11 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         }
     }
 
+    /**
+     * Initiates call to 911 and records call information to device
+     * @param  v  View
+     * @see android.view.View
+     */
     public void initiateCall(View v) {
 
         EditText txtPhn = (EditText)findViewById(R.id.phoneNumberEditText);
@@ -169,6 +192,11 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
 
     }
 
+
+    /**
+     *  Display Error
+     * @param  msg String
+     */
     public void displayExceptionMessage(String msg)
     {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
