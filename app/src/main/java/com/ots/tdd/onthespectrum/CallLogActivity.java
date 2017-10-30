@@ -81,49 +81,19 @@ public class CallLogActivity extends AppCompatActivity {
 
     protected void onPause() {
         super.onPause();
-        SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        String callLogEntries = "";
-        for (CallLogElement item : callLogList) {
-            callLogEntries += item.getDate() + "~" + item.getTime() + "~" + item.getScenario();
-            callLogEntries += ";;";
-            //editor.putString(item.getTitle(), item.imageMemLocation);
+        if (callLogList != null && callLogList.size() > 0) {
+            SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            String callLogEntries = "";
+            for (CallLogElement item : callLogList) {
+                callLogEntries += item.getDate() + "~" + item.getTime() + "~" + item.getScenario();
+                callLogEntries += ";;";
+                //editor.putString(item.getTitle(), item.imageMemLocation);
+            }
+            editor.putString("CallLog", callLogEntries);
+
+            editor.apply();
         }
-        editor.putString("CallLog", callLogEntries);
-
-        editor.apply();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        String callLogEntries = "";
-        for (CallLogElement item : callLogList) {
-            callLogEntries += item.getDate() + "~" + item.getTime() + "~" + item.getScenario();
-            callLogEntries += ";;";
-            //editor.putString(item.getTitle(), item.imageMemLocation);
-        }
-        editor.putString("CallLog", callLogEntries);
-
-        editor.apply();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        String callLogEntries = "";
-        for (CallLogElement item : callLogList) {
-            callLogEntries += item.getDate() + "~" + item.getTime() + "~" + item.getScenario();
-            callLogEntries += ";;";
-            //editor.putString(item.getTitle(), item.imageMemLocation);
-        }
-        editor.putString("CallLog", callLogEntries);
-
-        editor.apply();
     }
 
     @Override
