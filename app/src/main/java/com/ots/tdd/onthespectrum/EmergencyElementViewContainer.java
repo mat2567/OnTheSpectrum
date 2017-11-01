@@ -20,40 +20,25 @@ public class EmergencyElementViewContainer {
 
     static ArrayList<EmergencyElementViewContainer> emergencyElements= new ArrayList<EmergencyElementViewContainer>();
 
+
+    /**
+     * Constructor for the view container of the EmergencyElement
+     * @param emergencyButton ImageButton containing the image of the scenario
+     * @param emergencyTitle TextView containing the text with the emergency scenario's title
+     * @param emergencyNumber int of the EmergencyElement, which helps with arranging the list
+     */
     public EmergencyElementViewContainer(ImageButton emergencyButton, TextView emergencyTitle, int emergencyNumber) {
         this.emergencyButton = emergencyButton;
         this.emergencyTitle = emergencyTitle;
         this.emergencyNumber = emergencyNumber;
     }
 
-    public static ImageButton getButton(EmergencyElementViewContainer pevc) {
-        return pevc.emergencyButton;
-    }
 
-    public static TextView getTextView(EmergencyElementViewContainer pevc) {
-        return pevc.emergencyTitle;
-    }
-
-    public static EmergencyElementViewContainer findContainerUsingButton(ImageButton eButton) {
-        for (int i = 0; i < emergencyElements.size(); i++) {
-            EmergencyElementViewContainer curr = emergencyElements.get(i);
-            if (curr.emergencyButton.equals(eButton)) {
-                return curr;
-            }
-        }
-        return null;
-    }
-
-    public static EmergencyElementViewContainer findContainerUsingTitle(TextView title) {
-        for (int i = 0; i < emergencyElements.size(); i++) {
-            EmergencyElementViewContainer curr = emergencyElements.get(i);
-            if (curr.emergencyTitle.equals(title)) {
-                return curr;
-            }
-        }
-        return null;
-    }
-
+    /**
+     * Gets the view container of the EmergencyElement with the given emergency number
+     * @param pNum int emergency number of the desired EmergencyElement
+     * @return EmergencyElementViewContainer of the desired EmergencyElement
+     */
     public static EmergencyElementViewContainer findContainerUsingNumber(int pNum) {
         for (int i = 0; i < emergencyElements.size(); i++) {
             EmergencyElementViewContainer curr = emergencyElements.get(i);
@@ -64,12 +49,12 @@ public class EmergencyElementViewContainer {
         return null;
     }
 
+    /**
+     * Adds another EmergencyElementViewContainer to an array containing all scenarios
+     * @param eevc EmergencyElementViewController of the scenario
+     */
     public static void addEEVCToArray(EmergencyElementViewContainer eevc) {
         emergencyElements.add(eevc);
-    }
-
-    public static int getEmergencyNumber(EmergencyElementViewContainer eevc) {
-        return eevc.emergencyNumber;
     }
 
 }

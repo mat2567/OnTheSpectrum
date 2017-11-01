@@ -36,6 +36,12 @@ public class SettingsActivity extends AppCompatActivity {
     static boolean isLocked = false;
     String password = "";
 
+
+    /**
+     * Loads the information for password/profile lock and sets up the lock, font size, and colors.
+     * @param  savedInstanceState Bundle
+     * @see android.app.Activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,24 +133,12 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
-    public void onOkayPress() {
-        System.out.println("okay pressed");
 
-    }
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-        String fontString = parent.getItemAtPosition(pos).toString();
-
-        int fontSize = Integer.parseInt(fontString);
-        System.out.println(fontSize);
-        TextView a = (TextView) findViewById(R.id.AdjustColorText);
-        a.setTextSize(fontSize);
-        a = (TextView) findViewById(R.id.FontSizeText);
-        a.setTextSize(fontSize);
-    }
-
+    /**
+     * Updates the password saved on the device in SharedPreferences
+     *
+     * @param  password String of the newly saved password
+     */
     public void updateSharedPreferences(String password) {
         SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -152,14 +146,12 @@ public class SettingsActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    public void attemptLock(View v) {
 
-    }
-
-    public void attemptUnlock(View v) {
-
-    }
-
+    /**
+     * Displays the profile lock information change as a toast message ot the user.
+     *
+     * @param  msg String with information about the profile lock
+     */
     public void displayExceptionMessage(String msg)
     {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
