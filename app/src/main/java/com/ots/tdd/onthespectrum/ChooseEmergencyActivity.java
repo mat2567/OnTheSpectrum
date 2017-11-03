@@ -33,9 +33,33 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        int theme = sharedPref.getInt("colorTheme", R.style.AppTheme);
+        setTheme(theme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emergency_list);
 
+        final int titleSize = sharedPref.getInt("TitleFontSize", 0);
+        final int bodySize = sharedPref.getInt("BodyFontSize", 0);
+        final int fontChange = sharedPref.getInt("FontSizeChange", 0);
+
+        TextView title = (TextView) findViewById(R.id.emergencyListTitle);
+        title.setTextSize(titleSize + fontChange);
+
+        Button generalEmergency = (Button) findViewById(R.id.generalEmergency);
+        generalEmergency.setTextSize(bodySize + fontChange);
+        generalEmergency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Intent is what you use to start another activity
+                Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
+                // save full message somewhere?
+                String emergencyMessage = "I am in an emergency.";
+                intent.putExtra("scenario", emergencyMessage);
+                startActivity(intent);
+            }
+        });
 
         GridView gridView = (GridView) findViewById(R.id.listOfEmergenciesGridView);
         gridView.setNumColumns(3);
@@ -77,7 +101,8 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
 
                     final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
                     textView.setText(current.getTitle());
-                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 45));
+                    textView.setTextSize(bodySize + fontChange);
+                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 55 + fontChange * 4));
 
                     EmergencyElementViewContainer newEmergencyElement = new EmergencyElementViewContainer(
                             imageButton, textView, current.getEmergencyNumber());
@@ -106,7 +131,8 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
 
                     final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
                     textView.setText(current.getTitle());
-                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 45));
+                    textView.setTextSize(bodySize + fontChange);
+                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 55 + fontChange * 4));
                 }
 
                 return convertView;

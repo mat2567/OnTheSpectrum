@@ -1,5 +1,6 @@
 package com.ots.tdd.onthespectrum;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,10 +38,25 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
 
     int emergencyElementCounter = 0;
 
+    int titleSize;
+    int bodySize;
+    int fontChange;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        int theme = sharedPref.getInt("colorTheme", R.style.AppTheme);
+        setTheme(theme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_emergencies);
+
+        titleSize = sharedPref.getInt("TitleFontSize", 0);
+        bodySize = sharedPref.getInt("BodyFontSize", 0);
+        fontChange = sharedPref.getInt("FontSizeChange", 0);
+
+        TextView title = (TextView) findViewById(R.id.listForEditingTitle);
+        title.setTextSize(titleSize + fontChange);
 
         GridView gridView = (GridView) findViewById(R.id.listOfEmergenciesGridView);
         gridView.setNumColumns(3);
@@ -113,7 +129,8 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
 
                     final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
                     textView.setText(current.getTitle());
-                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 45));
+                    textView.setTextSize(bodySize + fontChange);
+                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 55 + fontChange * 4));
 
                     EmergencyElementViewContainer newEmergencyElement = new EmergencyElementViewContainer(
                             imageButton, textView, current.getEmergencyNumber());
@@ -153,7 +170,8 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
 
                     final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
                     textView.setText(current.getTitle());
-                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 45));
+                    textView.setTextSize(bodySize + fontChange);
+                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 55 + fontChange * 4));
                 }
 
                 return convertView;
@@ -337,6 +355,8 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
         AlertDialog helpDialog = helpBuilder.create();
         helpDialog.show();
 
+        helpDialog.getButton(Dialog.BUTTON_NEGATIVE).setTextSize(bodySize + fontChange);
+        helpDialog.getButton(Dialog.BUTTON_POSITIVE).setTextSize(bodySize + fontChange);
     }
 
     public void newEmergency(View v) {

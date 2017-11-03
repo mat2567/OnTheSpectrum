@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -34,8 +35,18 @@ public class AddEmergencyActivity extends AppCompatActivity {
 
     private static int RESULT_LOAD_IMAGE = 1;
 
+    int subtitleSize;
+    int bodySize;
+    int fontChange;
+
+    SharedPreferences sharedPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        int theme = sharedPref.getInt("colorTheme", R.style.AppTheme);
+        setTheme(theme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_emergency);
 
@@ -45,6 +56,8 @@ public class AddEmergencyActivity extends AppCompatActivity {
 
         emergencyImage.setBackground( new BitmapDrawable(getResources(), addEmergency.getImage()) );
         emergencyImage.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
+
+        setTextSizes();
     }
 
     /**
@@ -158,5 +171,18 @@ public class AddEmergencyActivity extends AppCompatActivity {
         String saltStr = salt.toString();
         return saltStr;
 
+    }
+
+    private void setTextSizes() {
+        Button createButton = (Button) findViewById(R.id.saveEdit);
+        Button cancelButton = (Button) findViewById(R.id.cancelEdit);
+
+        subtitleSize = sharedPref.getInt("SubtitleFontSize", 0);
+        bodySize = sharedPref.getInt("BodyFontSize", 0);
+        fontChange = sharedPref.getInt("FontSizeChange", 0);
+
+        emergencyTitle.setTextSize(subtitleSize + fontChange);
+        createButton.setTextSize(bodySize + fontChange);
+        cancelButton.setTextSize(bodySize + fontChange);
     }
 }

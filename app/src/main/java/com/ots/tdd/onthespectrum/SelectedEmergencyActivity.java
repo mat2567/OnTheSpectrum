@@ -3,6 +3,7 @@ package com.ots.tdd.onthespectrum;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -27,8 +29,11 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
     String telNum = "6784670532"; //4706293412
     String toSpeak = "Hello.";
     TextToSpeech ttobj;
-    String scenarioInfo;
+    int bodySize;
+    int fontChange;
     String scenarioName;
+
+    SharedPreferences sharedPref;
 
 
 
@@ -39,10 +44,17 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        int theme = sharedPref.getInt("colorTheme", R.style.AppTheme);
+        setTheme(theme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selected_emergency);
+
         scenarioName = getIntent().getStringExtra("scenario");
-        scenarioInfo = "I am in a " + scenarioName + " emergency.";
+        String scenarioInfo = "I am in a " + scenarioName + " emergency.";
+
+        setTextSizes();
 
         ttobj=new TextToSpeech(this, this);
 
@@ -52,7 +64,7 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         String profInfo = "";
         for (ProfileElement profElem : profArray) {
             if (profElem.userInfo != "") {
-                profInfo += "My " + profElem.infoType + " is " + profElem.userInfo + ". ";
+                profInfo += "\nMy " + profElem.infoType + " is " + profElem.userInfo + ". ";
             }
         }
 
@@ -62,7 +74,10 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         infoScrollView = (ScrollView) findViewById(R.id.infoScrollView);
         TextView infoTextView = new TextView(this);
         infoTextView.setText(infoText);
+        infoTextView.setTextSize(bodySize + fontChange);
+        infoTextView.setTextColor(Color.BLACK);
         infoScrollView.addView(infoTextView);
+
     }
 
 
@@ -77,7 +92,7 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         }
         else if (status == TextToSpeech.ERROR)
         {
-            Log.e("Text To Speach", "ERROR");
+            Log.e("Text To Speech", "ERROR");
         }
     }
 
@@ -97,7 +112,6 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
      */
 
     private void loadProfileInfo() {
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         String savedProfFields = sharedPref.getString("ProfileFields", null);
         if (null == savedProfFields) {
             profArray.add(new ProfileElement("Name", "", 0));
@@ -132,7 +146,6 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
             }
             if (valid) {
                 // Save Call to Log
-                SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 String savedCallLog = sharedPref.getString("CallLog", null);
                 if (savedCallLog == null) {
@@ -201,5 +214,20 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
     public void displayExceptionMessage(String msg)
     {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void setTextSizes() {
+        Button callButton = (Button) findViewById(R.id.callButton);
+        Button text2VoiceButton = (Button) findViewById(R.id.testVoiceButton);
+        EditText phoneNumber = (EditText) findViewById(R.id.phoneNumberEditText);
+
+        int titleSize = sharedPref.getInt("TitleFontSize", 0);
+        int subtitleSize = sharedPref.getInt("SubtitleFontSize", 0);
+        bodySize = sharedPref.getInt("BodyFontSize", 0);
+        fontChange = sharedPref.getInt("FontSizeChange", 0);
+
+        callButton.setTextSize(titleSize + fontChange);
+        text2VoiceButton.setTextSize(subtitleSize + fontChange);
+        phoneNumber.setTextSize(subtitleSize + fontChange);
     }
 }
