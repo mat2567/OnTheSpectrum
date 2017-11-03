@@ -166,13 +166,15 @@ public class SettingsActivity extends AppCompatActivity {
             switch(view.getId()) {
                 case R.id.smallRadio:
                     fontChange = -2;
+                    theme = R.style.Theme4;
                     break;
                 case R.id.mediumRadio:
                     fontChange = 0;
+                    theme = R.style.Theme5;
                     break;
                 case R.id.largeRadio:
                     fontChange = 4;
-                    theme = R.style.Theme1;
+                    theme = R.style.Theme6;
                     break;
             }
 

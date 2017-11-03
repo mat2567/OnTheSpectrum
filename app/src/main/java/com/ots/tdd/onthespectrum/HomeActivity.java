@@ -50,6 +50,21 @@ public class HomeActivity extends AppCompatActivity {
                 case R.style.Theme1:
                     colorHomeButtons = R.color.theme1Home;
                     break;
+                case R.style.Theme2:
+                    colorHomeButtons = R.color.theme2Home;
+                    break;
+                case R.style.Theme3:
+                    colorHomeButtons = R.color.theme3Home;
+                    break;
+                case R.style.Theme4:
+                    colorHomeButtons = R.color.theme4Home;
+                    break;
+                case R.style.Theme5:
+                    colorHomeButtons = R.color.theme5Home;
+                    break;
+                case R.style.Theme6:
+                    colorHomeButtons = R.color.theme6Home;
+                    break;
             }
         }
         setTheme(theme);
@@ -153,5 +168,9 @@ public class HomeActivity extends AppCompatActivity {
         settingsButton.setTextSize(bodySize + 2 + fontChange);
 
         emergencyButton.setBackgroundColor(getResources().getColor(colorHomeButtons));
+        profileButton.setBackgroundColor(getResources().getColor(colorHomeButtons));
+        editEmergencyButton.setBackgroundColor(getResources().getColor(colorHomeButtons));
+        settingsButton.setBackgroundColor(getResources().getColor(colorHomeButtons));
+
     }
 }
