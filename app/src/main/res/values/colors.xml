@@ -3,7 +3,13 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303f9f</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="turqoise">#A0E0D0</color>
+    <color name="colorHome">#A0E0D0</color>
+
+    <color name="theme1Primary">#202c39</color>
+    <color name="theme1PrimaryDark">#1c2631</color>
+    <color name="theme1Accent">#f39e68</color>
+    <color name="theme1Home">#c7cb85</color>
+
 
     <color name="color1">#00E0E0</color>
     <color name="color2">#F0E0D0</color>

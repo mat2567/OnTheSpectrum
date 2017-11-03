@@ -1,12 +1,19 @@
 package com.ots.tdd.onthespectrum;
 
+import android.app.ActionBar;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -21,16 +28,38 @@ public class HomeActivity extends AppCompatActivity {
     int subtitleSize;
     int bodySize;
 
+    SharedPreferences sharedPref;
+
+    int colorHomeButtons;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        int theme = sharedPref.getInt("colorTheme", 0);
+        if (theme == 0) {
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putInt("colorTheme", R.style.AppTheme);
+            colorHomeButtons = R.color.colorHome;
+            editor.commit();
+        } else {
+            switch (theme) {
+                case R.style.AppTheme:
+                    colorHomeButtons = R.color.colorHome;
+                    break;
+                case R.style.Theme1:
+                    colorHomeButtons = R.color.theme1Home;
+                    break;
+            }
+        }
+        setTheme(theme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         String prevPassword = sharedPref.getString("Lock", null);
         if (null == prevPassword) {
-            SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sp.edit();
+            SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("Lock", "");
             editor.commit();
             SettingsActivity.isLocked = false;
@@ -47,14 +76,13 @@ public class HomeActivity extends AppCompatActivity {
         // Potential fix: https://stackoverflow.com/questions/24596494/android-app-crashes-on-startup-in-emulator
         /*ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);*/
-        setTextSizes();
+        setTextSizesAndColors();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-
-        setTextSizes();
+        this.recreate();
     }
 
     public void moveToCallScreen(View v) {
@@ -82,13 +110,12 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intentTestVoice);
     }
 
-    private void setTextSizes() {
+    private void setTextSizesAndColors() {
         emergencyButton = (Button) findViewById(R.id.emergencyButton);
         profileButton = (Button) findViewById(R.id.profileButton);
         editEmergencyButton = (Button) findViewById(R.id.editEmergencyButton);
         settingsButton = (Button) findViewById(R.id.settingsButton);
 
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         titleSize = sharedPref.getInt("TitleFontSize", 0);
         if (titleSize == 0) {
@@ -124,5 +151,7 @@ public class HomeActivity extends AppCompatActivity {
         profileButton.setTextSize(bodySize + 2 + fontChange);
         editEmergencyButton.setTextSize(bodySize + 2 + fontChange);
         settingsButton.setTextSize(bodySize + 2 + fontChange);
+
+        emergencyButton.setBackgroundColor(getResources().getColor(colorHomeButtons));
     }
 }

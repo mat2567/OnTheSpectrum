@@ -5,7 +5,14 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!-- <item name="colorHomeButton">@color/turquoise</item> -->
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="Theme1" parent="AppTheme" >
+        <item name="colorPrimary">@color/theme1Primary</item>
+        <item name="colorPrimaryDark">@color/theme1PrimaryDark</item>
+        <item name="colorAccent">@color/theme1Accent</item>
     </style>
 
 </resources>
