@@ -50,6 +50,10 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        int theme = sharedPref.getInt("colorTheme", R.style.AppTheme);
+        setTheme(theme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
       
@@ -63,7 +67,6 @@ public class SettingsActivity extends AppCompatActivity {
         //default is fontChange of 0 unless specified in SharedPreferences
         RadioGroup fontRadios = (RadioGroup) findViewById(R.id.fontSizeChoice);
 
-        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         int fontSharedPref = sharedPref.getInt("FontSizeChange", Integer.MAX_VALUE);
         if (fontSharedPref == Integer.MAX_VALUE) {
             fontChange = 0;
@@ -151,43 +154,36 @@ public class SettingsActivity extends AppCompatActivity {
         editor.putInt("FontSizeChange", fontChange);
         editor.commit();
     }
-
-    public void onOkayPress() {
-        System.out.println("okay pressed");
-
-    }
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-        String fontString = parent.getItemAtPosition(pos).toString();
-
-        int fontSize = Integer.parseInt(fontString);
-        System.out.println(fontSize);
-        TextView a = (TextView) findViewById(R.id.AdjustColorText);
-        a.setTextSize(fontSize);
-        a = (TextView) findViewById(R.id.FontSizeText);
-        a.setTextSize(fontSize);
-    }
                                           
     public void onRadioButtonClicked(View view) {
         // Is the button now checked?t
         boolean checked = ((RadioButton) view).isChecked();
         // Check which radio button was clicked
         if (checked) {
+
+            int theme = R.style.AppTheme;
+
             switch(view.getId()) {
                 case R.id.smallRadio:
                     fontChange = -2;
+                    theme = R.style.Theme4;
                     break;
                 case R.id.mediumRadio:
                     fontChange = 0;
+                    theme = R.style.Theme5;
                     break;
                 case R.id.largeRadio:
                     fontChange = 4;
+                    theme = R.style.Theme6;
                     break;
             }
 
             setTextSizes();
+
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putInt("colorTheme", theme);
+            editor.commit();
+            this.recreate();
         }
 
     }

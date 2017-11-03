@@ -38,8 +38,14 @@ public class EditEmergencyActivity extends AppCompatActivity {
 
     BitmapFactory.Options options;
 
+    SharedPreferences sharedPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        int theme = sharedPref.getInt("colorTheme", R.style.AppTheme);
+        setTheme(theme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_emergency);
         int emergencyNum = Integer.parseInt(getIntent().getStringExtra("emergencyNum"));
@@ -68,7 +74,6 @@ public class EditEmergencyActivity extends AppCompatActivity {
                 emergency.setImage(((BitmapDrawable) emergencyImage.getDrawable()).getBitmap());
             }
 
-            SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
 
             //remove original title/image
@@ -88,7 +93,6 @@ public class EditEmergencyActivity extends AppCompatActivity {
                 emergency.setImage(((BitmapDrawable) emergencyImage.getDrawable()).getBitmap());
             }
 
-            SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
 
             //change original title/image
@@ -179,7 +183,6 @@ public class EditEmergencyActivity extends AppCompatActivity {
         Button saveButton = (Button) findViewById(R.id.saveEdit);
         Button cancelButton = (Button) findViewById(R.id.cancelEdit);
 
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         int subtitleSize = sharedPref.getInt("SubtitleFontSize", 0);
         int bodySize = sharedPref.getInt("BodyFontSize", 0);
         int fontChange = sharedPref.getInt("FontSizeChange", 0);
