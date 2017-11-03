@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ots.tdd.onthespectrum.SettingsActivity">
+    tools:context="com.ots.tdd.onthespectrum.SettingsActivity"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
     <Button
         android:id="@+id/button10"
@@ -135,25 +137,35 @@
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="349dp"
+        android:layout_width="276dp"
         android:layout_height="42dp"
         android:layout_marginLeft="0dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="11dp"
         android:ems="10"
+        android:hint="Password"
         android:inputType="textPassword"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@+id/Settings"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lock" />
 
     <Button
-        android:id="@+id/okButton"
-        android:layout_width="37dp"
-        android:layout_height="42dp"
+        android:id="@+id/lockButton"
+        android:layout_width="82dp"
+        android:layout_height="43dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="0dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="0dp"
         android:onClick="onOkayPress()"
         android:text="@string/ok"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.555"
         app:layout_constraintLeft_toRightOf="@+id/password"
-        app:layout_constraintTop_toTopOf="@+id/password" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/password"
+        app:layout_constraintVertical_bias="0.0" />
 
     <RadioGroup
         android:id="@+id/fontSizeChoice"

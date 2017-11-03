@@ -25,7 +25,23 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        
+
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        String prevPassword = sharedPref.getString("Lock", null);
+        if (null == prevPassword) {
+            SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString("Lock", "");
+            editor.commit();
+            SettingsActivity.isLocked = false;
+        } else {
+            if (prevPassword.equals("")) {
+                SettingsActivity.isLocked = false;
+            } else {
+                SettingsActivity.isLocked = true;
+            }
+        }
+
         // Show the action bar and return arrow at the top of the screen
         // TODO: Fix this.
         // Potential fix: https://stackoverflow.com/questions/24596494/android-app-crashes-on-startup-in-emulator

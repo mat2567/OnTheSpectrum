@@ -89,7 +89,7 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                             Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
                             String emergencyTag = (imageButton.getTag()).toString(); //to be passed in
                             // save full message somewhere?
-                            String emergencyMessage = "I am in a " + emergencyTag + " emergency.";
+                            String emergencyMessage = emergencyTag;
                             intent.putExtra("scenario", emergencyMessage);
                             startActivity(intent);
                         }
@@ -118,7 +118,7 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                             Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
                             String emergencyTag = (imageButton.getTag()).toString(); //to be passed in
                             // save full message somewhere?
-                            String emergencyMessage = "I am in a " + emergencyTag + " emergency.";
+                            String emergencyMessage = emergencyTag;
                             intent.putExtra("scenario", emergencyMessage);
                             startActivity(intent);
                         }
