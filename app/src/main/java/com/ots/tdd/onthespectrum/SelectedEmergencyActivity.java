@@ -31,16 +31,17 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
     TextToSpeech ttobj;
     int bodySize;
     int fontChange;
+    String scenarioName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selected_emergency);
 
+        scenarioName = getIntent().getStringExtra("scenario");
+        String scenarioInfo = "I am in a " + scenarioName + " emergency.";
 
         setTextSizes();
-
-        String scenarioInfo = getIntent().getStringExtra("scenario");
 
         ttobj=new TextToSpeech(this, this);
 
