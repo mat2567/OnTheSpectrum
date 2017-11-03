@@ -35,40 +35,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-        int theme = sharedPref.getInt("colorTheme", 0);
-        if (theme == 0) {
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putInt("colorTheme", R.style.AppTheme);
-            colorHomeButtons = R.color.colorHome;
-            editor.commit();
-        } else {
-            switch (theme) {
-                case R.style.AppTheme:
-                    colorHomeButtons = R.color.colorHome;
-                    break;
-                case R.style.Theme1:
-                    colorHomeButtons = R.color.theme1Home;
-                    break;
-                case R.style.Theme2:
-                    colorHomeButtons = R.color.theme2Home;
-                    break;
-                case R.style.Theme3:
-                    colorHomeButtons = R.color.theme3Home;
-                    break;
-                case R.style.Theme4:
-                    colorHomeButtons = R.color.theme4Home;
-                    break;
-                case R.style.Theme5:
-                    colorHomeButtons = R.color.theme5Home;
-                    break;
-                case R.style.Theme6:
-                    colorHomeButtons = R.color.theme6Home;
-                    break;
-            }
-        }
-        setTheme(theme);
-
+        theme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
@@ -123,6 +90,42 @@ public class HomeActivity extends AppCompatActivity {
     public void moveToTestVoiceScreen(View v) {
         Intent intentTestVoice = new Intent(this, TestVoiceActivity.class);
         startActivity(intentTestVoice);
+    }
+
+    private void theme() {
+        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        int theme = sharedPref.getInt("colorTheme", 0);
+        if (theme == 0) {
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putInt("colorTheme", R.style.AppTheme);
+            colorHomeButtons = R.color.colorHome;
+            editor.commit();
+        } else {
+            switch (theme) {
+                case R.style.AppTheme:
+                    colorHomeButtons = R.color.colorHome;
+                    break;
+                case R.style.Theme1:
+                    colorHomeButtons = R.color.theme1Home;
+                    break;
+                case R.style.Theme2:
+                    colorHomeButtons = R.color.theme2Home;
+                    break;
+                case R.style.Theme3:
+                    colorHomeButtons = R.color.theme3Home;
+                    break;
+                case R.style.Theme4:
+                    colorHomeButtons = R.color.theme4Home;
+                    break;
+                case R.style.Theme5:
+                    colorHomeButtons = R.color.theme5Home;
+                    break;
+                case R.style.Theme6:
+                    colorHomeButtons = R.color.theme6Home;
+                    break;
+            }
+        }
+        setTheme(theme);
     }
 
     private void setTextSizesAndColors() {

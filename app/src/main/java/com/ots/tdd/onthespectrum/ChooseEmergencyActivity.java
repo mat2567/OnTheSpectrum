@@ -33,10 +33,13 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        int theme = sharedPref.getInt("colorTheme", R.style.AppTheme);
+        setTheme(theme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emergency_list);
 
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         final int titleSize = sharedPref.getInt("TitleFontSize", 0);
         final int bodySize = sharedPref.getInt("BodyFontSize", 0);
         final int fontChange = sharedPref.getInt("FontSizeChange", 0);

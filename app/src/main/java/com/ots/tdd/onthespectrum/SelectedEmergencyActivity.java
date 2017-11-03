@@ -33,8 +33,14 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
     int fontChange;
     String scenarioName;
 
+    SharedPreferences sharedPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        int theme = sharedPref.getInt("colorTheme", R.style.AppTheme);
+        setTheme(theme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selected_emergency);
 
@@ -87,7 +93,6 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
 
 
     private void loadProfileInfo() {
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         String savedProfFields = sharedPref.getString("ProfileFields", null);
         if (null == savedProfFields) {
             profArray.add(new ProfileElement("Name", "", 0));
@@ -117,7 +122,6 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
             }
             if (valid) {
                 // Save Call to Log
-                SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 String savedCallLog = sharedPref.getString("CallLog", null);
                 if (savedCallLog == null) {
@@ -188,7 +192,6 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         Button text2VoiceButton = (Button) findViewById(R.id.testVoiceButton);
         EditText phoneNumber = (EditText) findViewById(R.id.phoneNumberEditText);
 
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         int titleSize = sharedPref.getInt("TitleFontSize", 0);
         int subtitleSize = sharedPref.getInt("SubtitleFontSize", 0);
         bodySize = sharedPref.getInt("BodyFontSize", 0);

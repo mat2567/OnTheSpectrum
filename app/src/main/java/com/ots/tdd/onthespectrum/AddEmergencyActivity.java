@@ -33,8 +33,14 @@ public class AddEmergencyActivity extends AppCompatActivity {
     int bodySize;
     int fontChange;
 
+    SharedPreferences sharedPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        int theme = sharedPref.getInt("colorTheme", R.style.AppTheme);
+        setTheme(theme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_emergency);
 
@@ -152,7 +158,6 @@ public class AddEmergencyActivity extends AppCompatActivity {
         Button createButton = (Button) findViewById(R.id.saveEdit);
         Button cancelButton = (Button) findViewById(R.id.cancelEdit);
 
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         subtitleSize = sharedPref.getInt("SubtitleFontSize", 0);
         bodySize = sharedPref.getInt("BodyFontSize", 0);
         fontChange = sharedPref.getInt("FontSizeChange", 0);
