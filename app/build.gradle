@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    buildToolsVersion "26.0.0"
     defaultConfig {
         applicationId "com.ots.tdd.onthespectrum"
         minSdkVersion 16
@@ -10,7 +10,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -28,6 +27,4 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-    api files('C:/Ecclesia/Courses/Junior Design/OnTheSpectrum/android-sdk-beta/libs/android-support-v4.jar')
-    api files('C:/Ecclesia/Courses/Junior Design/OnTheSpectrum/android-sdk-beta/libs/plivoendpoint.jar')
 }
