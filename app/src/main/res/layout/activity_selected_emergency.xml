@@ -5,17 +5,23 @@
     android:weightSum="1">
 
     <Button
-        android:id="@+id/button11"
+        android:id="@+id/callButton"
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="0.16"
         android:onClick="initiateCall"
-        android:text="Call" />
+        android:text="Call"
+        android:textSize="30sp" />
 
     <EditText
         android:id="@+id/phoneNumberEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:ems="10"
         android:hint="### ### ####"
         android:inputType="phone" />
@@ -23,19 +29,32 @@
     <Space
         android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_weight="0.08" />
 
     <ScrollView
         android:id="@+id/infoScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
 
     </ScrollView>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="0.02" />
 
     <Button
         android:id="@+id/testVoiceButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_weight="0.16"
         android:onClick="testVoice"
         android:text="Text to Voice" />

@@ -155,7 +155,7 @@ public class AddEmergencyActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         subtitleSize = sharedPref.getInt("SubtitleFontSize", 0);
         bodySize = sharedPref.getInt("BodyFontSize", 0);
-        fontChange = sharedPref.getInt("FontSizeChange", Integer.MAX_VALUE);
+        fontChange = sharedPref.getInt("FontSizeChange", 0);
 
         emergencyTitle.setTextSize(subtitleSize + fontChange);
         createButton.setTextSize(bodySize + fontChange);

@@ -42,10 +42,21 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
         final int fontChange = sharedPref.getInt("FontSizeChange", 0);
 
         TextView title = (TextView) findViewById(R.id.emergencyListTitle);
-        title.setTextSize(titleSize);
+        title.setTextSize(titleSize + fontChange);
 
         Button generalEmergency = (Button) findViewById(R.id.generalEmergency);
-        generalEmergency.setTextSize(bodySize);
+        generalEmergency.setTextSize(bodySize + fontChange);
+        generalEmergency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Intent is what you use to start another activity
+                Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
+                // save full message somewhere?
+                String emergencyMessage = "I am in an emergency.";
+                intent.putExtra("scenario", emergencyMessage);
+                startActivity(intent);
+            }
+        });
 
         GridView gridView = (GridView) findViewById(R.id.listOfEmergenciesGridView);
         gridView.setNumColumns(3);

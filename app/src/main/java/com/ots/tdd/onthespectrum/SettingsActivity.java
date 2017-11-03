@@ -74,7 +74,7 @@ public class SettingsActivity extends AppCompatActivity {
                 ((RadioButton)fontRadios.getChildAt(2)).setChecked(true);
             }
         }
-        setFontSizes();
+        setTextSizes();
 
         //switch stuff for profile lock
         final Switch switched = (Switch) findViewById(R.id.lock);
@@ -186,12 +186,12 @@ public class SettingsActivity extends AppCompatActivity {
                     break;
             }
 
-            setFontSizes();
+            setTextSizes();
         }
 
     }
 
-    private void setFontSizes() {
+    private void setTextSizes() {
         settingsText.setTextSize(titleText + fontChange);
         appearanceText.setTextSize(titleText + fontChange);
 

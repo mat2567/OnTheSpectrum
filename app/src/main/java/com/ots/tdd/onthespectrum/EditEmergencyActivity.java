@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -53,6 +54,8 @@ public class EditEmergencyActivity extends AppCompatActivity {
         emergencyTitle.setText(originalTitle);
         emergencyImage.setBackground( new BitmapDrawable(getResources(), emergency.getImage()) );
         emergencyImage.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
+
+        setTextSizes();
 
     }
 
@@ -169,5 +172,20 @@ public class EditEmergencyActivity extends AppCompatActivity {
         String saltStr = salt.toString();
         return saltStr;
 
+    }
+
+    private void setTextSizes() {
+        emergencyTitle = (EditText) findViewById(R.id.emergencyTitle);
+        Button saveButton = (Button) findViewById(R.id.saveEdit);
+        Button cancelButton = (Button) findViewById(R.id.cancelEdit);
+
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        int subtitleSize = sharedPref.getInt("SubtitleFontSize", 0);
+        int bodySize = sharedPref.getInt("BodyFontSize", 0);
+        int fontChange = sharedPref.getInt("FontSizeChange", 0);
+
+        emergencyTitle.setTextSize(subtitleSize + fontChange);
+        saveButton.setTextSize(bodySize + fontChange);
+        cancelButton.setTextSize(bodySize + fontChange);
     }
 }
