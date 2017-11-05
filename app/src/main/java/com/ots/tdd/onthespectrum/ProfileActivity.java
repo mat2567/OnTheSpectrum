@@ -1,10 +1,13 @@
 package com.ots.tdd.onthespectrum;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -145,38 +148,7 @@ public class ProfileActivity extends AppCompatActivity {
         listV.setAdapter(adapter);
         //this is added in attempt to prevent the edittext from being refreshed
         listV.setItemsCanFocus(true);
-        editInfoType=(EditText)findViewById(R.id.infoType);
-        editUserInfo = (EditText)findViewById(R.id.userInfo);
 
-        alertTextView = (TextView)findViewById(R.id.alert);
-        Button btAdd=(Button)findViewById(R.id.btAdd);
-        btAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!SettingsActivity.isLocked) {
-                    String newType = editInfoType.getText().toString();
-                    String newInfo = editUserInfo.getText().toString();
-
-                    if (!newType.isEmpty() && !newInfo.isEmpty()) {
-                        alertTextView.setTextColor(Color.argb(0, 255, 64, 129));
-                        // add new item to arraylist
-                        itemList.add(new ProfileElement(newType, newInfo, profileElementCounter));
-                        profileElementCounter++;
-                        // notify listview of data changed
-                        adapter.notifyDataSetChanged();
-
-                        // resets the text boxes
-                        editInfoType.setText("");
-                        editUserInfo.setText("");
-                    } else {
-                        alertTextView.setTextColor(Color.argb(255, 255, 64, 129));
-                    }
-                } else {
-                    displayExceptionMessage("Customization is Locked");
-                }
-            }
-
-        });
 
         // Set button listener
         Button callLogButton =(Button)findViewById(R.id.callLogButton);
@@ -292,6 +264,56 @@ public class ProfileActivity extends AppCompatActivity {
     public void displayExceptionMessage(String msg)
     {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public void showPopUp(View v) {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.add_field_dialog);
+
+        dialog.setTitle("Create New Profile Field");
+        dialog.setCancelable(true);
+
+        Button createField = (Button) dialog.findViewById(R.id.createFieldButton);
+        Button cancelField = (Button) dialog.findViewById(R.id.cancelFieldButton);
+
+        createField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText newField = (EditText) dialog.findViewById(R.id.fieldEditText);
+                EditText newInfo = (EditText) dialog.findViewById(R.id.infoEditText);
+                if(newField.getText().toString().isEmpty() || newInfo.getText().toString().isEmpty()){
+                    displayExceptionMessage("Please fill out both text boxes.");
+                } else{
+                    if (!SettingsActivity.isLocked) {
+                        String newFieldString = newField.getText().toString();
+                        String newInfoString = newInfo.getText().toString();
+
+                        // add new item to arraylist
+                        itemList.add(new ProfileElement(newFieldString, newInfoString, profileElementCounter));
+                        profileElementCounter++;
+                        // notify listview of data changed
+                        adapter.notifyDataSetChanged();
+
+                    } else {
+                        displayExceptionMessage("Customization is Locked");
+                    }
+
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        cancelField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+
     }
 }
 
