@@ -1,118 +1,97 @@
 package com.ots.tdd.onthespectrum;
 
 import android.media.AudioManager;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Locale;
 
-import java.util.LinkedHashMap;
-import com.plivo.endpoint.*;
-import com.plivo.*;
 
-public class TestVoiceActivity extends AppCompatActivity implements EventListener{
+// URL To Initiate Call:    https://ots-plivo-connection.herokuapp.com/initiate_call/
+
+public class TestVoiceActivity extends AppCompatActivity{ //implements EventListener{
 
     TextToSpeech ttobj;
-
-    public final static String EXTRA_MESSAGE = "com.plivo.example.MESSAGE";
-
-    // Edit the variables below with your Plivo endpoint username and password
-    public final static String PLIVO_USERNAME = "emorain";
-    public final static String PLIVO_PASSWORD = "12345";
-
-    // Edit the PHONE_NUMBER with the number you want to make the call to
-    public static String PHONE_NUMBER = "14706293412";
-    //private EditText number;
-    private AudioManager myAudioManager;
-    Endpoint endpoint = Endpoint.newInstance(true, this);
-    Outgoing outgoing = new Outgoing(endpoint);
+    HttpURLConnection connection;
+    BufferedReader reader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_voice);
 
-
+        android.content.Context context = this.getApplicationContext();
         //ttobj=new TextToSpeech(this, this);
-        Log.v("PlivoOutbound", "Trying to log in");
-        endpoint.login(PLIVO_USERNAME, PLIVO_PASSWORD);
-        //number = (EditText) findViewById(R.id.number);
+        new callTask().execute("https://ots-plivo-connection.herokuapp.com/initiate_call/");
+
 
     }
 
-    public void callNow(View view) {
-        // Log into plivo cloud
-        outgoing = endpoint.createOutgoingCall();
-        Log.v("PlivoOutbound", "Create outbound call object");
-        //PHONE_NUMBER = number.getText().toString();
-        Log.v("PlivoOutbound", PHONE_NUMBER);
-        outgoing.call(PHONE_NUMBER);
 
+    // Probably should put this call in onResume
+    public class callTask extends AsyncTask<String, String, String> {
+        TextView callStatus = findViewById(R.id.call_status);
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                //Connect to Server
+                URL url = new URL(params[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+                // Receive response from server
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                StringBuffer buffer = new StringBuffer();
+                String line = " ";
+
+                while((line = reader.readLine()) != null) {
+                    buffer.append(line + "\n");
+                }
+                return buffer.toString();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            callStatus.setText(result);
+        }
     }
 
-    @Override
-    public void onLogin() {
 
-    }
-
-    @Override
-    public void onLogout() {
-
-    }
-
-    @Override
-    public void onLoginFailed() {
-
-    }
-
-    @Override
-    public void onIncomingDigitNotification(String s) {
-
-    }
-
-    @Override
-    public void onIncomingCall(Incoming incoming) {
-
-    }
-
-    @Override
-    public void onIncomingCallHangup(Incoming incoming) {
-
-    }
-
-    @Override
-    public void onIncomingCallRejected(Incoming incoming) {
-
-    }
-
-    @Override
-    public void onOutgoingCall(Outgoing outgoing) {
-
-    }
-
-    @Override
-    public void onOutgoingCallAnswered(Outgoing outgoing) {
-
-    }
-
-    @Override
-    public void onOutgoingCallRejected(Outgoing outgoing) {
-
-    }
-
-    @Override
-    public void onOutgoingCallHangup(Outgoing outgoing) {
-
-    }
-
-    @Override
-    public void onOutgoingCallInvalid(Outgoing outgoing) {
-
-    }
 
 //    @Override
 //    public void onInit(int status)

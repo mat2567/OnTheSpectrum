@@ -70,14 +70,13 @@
         app:layout_constraintTop_toBottomOf="@+id/button3" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/callButton"
         android:layout_width="97dp"
         android:layout_height="54dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="0dp"
         android:layout_marginTop="16dp"
         android:background="@color/turqoise"
-        android:onClick="callNow"
         android:text="Test Voice"
         app:layout_constraintHorizontal_bias="0.795"
         app:layout_constraintLeft_toLeftOf="parent"
