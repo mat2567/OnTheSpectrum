@@ -28,7 +28,7 @@ import java.sql.SQLOutput;
 
 import static android.support.constraint.R.id.parent;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity implements OnItemSelectedListener {
     private static final String TAG = "Settings Activity";
     int fontChange;
     boolean locked = false;
@@ -48,6 +48,8 @@ public class SettingsActivity extends AppCompatActivity {
     static boolean isLocked = false;
     String password = "";
 
+    private Spinner spinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
@@ -56,7 +58,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-      
+
         settingsText = (TextView) findViewById(R.id.Settings);
         appearanceText = (TextView) findViewById(R.id.appearance);
         profileLockText = (TextView) findViewById(R.id.profileLockText);
@@ -70,15 +72,15 @@ public class SettingsActivity extends AppCompatActivity {
         int fontSharedPref = sharedPref.getInt("FontSizeChange", Integer.MAX_VALUE);
         if (fontSharedPref == Integer.MAX_VALUE) {
             fontChange = 0;
-            ((RadioButton)fontRadios.getChildAt(1)).setChecked(true);
+            ((RadioButton) fontRadios.getChildAt(1)).setChecked(true);
         } else {
             fontChange = fontSharedPref;
             if (fontChange < 0) {
-                ((RadioButton)fontRadios.getChildAt(0)).setChecked(true);
+                ((RadioButton) fontRadios.getChildAt(0)).setChecked(true);
             } else if (fontChange == 0) {
-                ((RadioButton)fontRadios.getChildAt(1)).setChecked(true);
+                ((RadioButton) fontRadios.getChildAt(1)).setChecked(true);
             } else {
-                ((RadioButton)fontRadios.getChildAt(2)).setChecked(true);
+                ((RadioButton) fontRadios.getChildAt(2)).setChecked(true);
             }
         }
 
@@ -144,46 +146,89 @@ public class SettingsActivity extends AppCompatActivity {
                 lock.setChecked(isLocked);
             }
         });
+
+        //spinner stuff for colors
+        spinner = (Spinner) findViewById(R.id.colorSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.fontSizeAttempt, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        final SettingsActivity currentActivity = this;
+        spinner.post(new Runnable() {
+            public void run() {
+                spinner.setOnItemSelectedListener(currentActivity);
+            }
+        });
     }
+
 
     @Override
-    protected void onPause() {
-        super.onPause();
-
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt("FontSizeChange", fontChange);
-        editor.commit();
+    protected void onResume() {
+        super.onResume();
     }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View selectedItemView, int pos, long id){
+        int theme = R.style.AppTheme;
+        switch (pos)
+        {
+            //case 0 is default
+            case 1:
+                theme = R.style.Theme1;
+                break;
+            case 2:
+                theme = R.style.Theme2;
+                break;
+            case 3:
+                theme = R.style.Theme3;
+                break;
+            case 4:
+                theme = R.style.Theme4;
+                break;
+            case 5:
+                theme = R.style.Theme5;
+                break;
+            case 6:
+                theme = R.style.Theme6;
+                break;
+        }
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("colorTheme", theme);
+        editor.commit();
+
+        recreate();
+    }
+    @Override
+    public void onNothingSelected(AdapterView<?> parent){
+
+    }
+
                                           
     public void onRadioButtonClicked(View view) {
         // Is the button now checked?t
         boolean checked = ((RadioButton) view).isChecked();
         // Check which radio button was clicked
         if (checked) {
-
-            int theme = R.style.AppTheme;
-
             switch(view.getId()) {
                 case R.id.smallRadio:
                     fontChange = -2;
-                    theme = R.style.Theme4;
                     break;
                 case R.id.mediumRadio:
                     fontChange = 0;
-                    theme = R.style.Theme5;
                     break;
                 case R.id.largeRadio:
                     fontChange = 4;
-                    theme = R.style.Theme6;
                     break;
             }
 
-            setTextSizes();
-
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putInt("colorTheme", theme);
+            editor.putInt("FontSizeChange", fontChange);
             editor.commit();
-            this.recreate();
+
+            setTextSizes();
         }
 
     }
