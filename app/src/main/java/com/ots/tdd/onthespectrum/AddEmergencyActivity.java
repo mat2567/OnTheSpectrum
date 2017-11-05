@@ -77,6 +77,15 @@ public class AddEmergencyActivity extends AppCompatActivity {
 
         editor.commit();
 
+        // update scenarioList
+        int curr = 0;
+        int len = ListOfEmergenciesActivity.scenarioList.size();
+        ListOfEmergenciesActivity.scenarioList.add(len - 1, emergency);
+        while (curr < len) {
+            ListOfEmergenciesActivity.scenarioList.get(curr).setEmergencyNumber(curr);
+            curr++;
+        }
+
         // notify gridview of data changed
         ListOfEmergenciesActivity.adapter.notifyDataSetChanged();
         finish();
