@@ -68,9 +68,10 @@ public class ProfileActivity extends AppCompatActivity {
     static HashMap<Integer, ImageView> cancelMap = new HashMap<>();
     static HashMap<Integer, EditText> textMap = new HashMap<>();
 
+    SharedPreferences sharedPref;
 
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         int theme = sharedPref.getInt("colorTheme", R.style.AppTheme);
         setTheme(theme);
 
@@ -81,9 +82,20 @@ public class ProfileActivity extends AppCompatActivity {
             loadInfo();
         }
 
+        final int titleSize = sharedPref.getInt("TitleFontSize", 0);
+        final int bodySize = sharedPref.getInt("BodyFontSize", 0);
+        final int fontChange = sharedPref.getInt("FontSizeChange", 0);
+
+        TextView profileTitle = (TextView) findViewById(R.id.profileTitle);
+        profileTitle.setTextSize(titleSize + fontChange);
+        Button callLog = (Button) findViewById(R.id.callLogButton);
+        callLog.setTextSize(bodySize + fontChange);
+        Button add = (Button) findViewById(R.id.addProfileButton);
+        add.setTextSize(bodySize + fontChange);
+
+
         /*Backs the ListView. Enables TextViews to be added dynamically */
         adapter=new ArrayAdapter<ProfileElement>(this, R.layout.profile_item, itemList) {
-
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -132,11 +144,9 @@ public class ProfileActivity extends AppCompatActivity {
                     userInfo.getBackground().clearColorFilter();
 
 
-
                     editInfo.setVisibility(current.editVis);
                     saveInfo.setVisibility(current.saveVis);
                     cancelInfo.setVisibility(current.cancelVis);
-
 
                     current.profileEdit = editInfo;
                     current.profileSave = saveInfo;
@@ -182,6 +192,9 @@ public class ProfileActivity extends AppCompatActivity {
 
                 infoType.setText(current.infoType);
                 userInfo.setText(current.userInfo);
+
+                infoType.setTextSize(bodySize + 2 + fontChange);
+                userInfo.setTextSize(bodySize + 2 + fontChange);
 
 
                 return convertView;
@@ -425,17 +438,26 @@ public class ProfileActivity extends AppCompatActivity {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.add_field_dialog);
 
+        final int bodySize = sharedPref.getInt("BodyFontSize", 0);
+        final int fontChange = sharedPref.getInt("FontSizeChange", 0);
+
         dialog.setTitle("Create New Profile Field");
         dialog.setCancelable(true);
 
         Button createField = (Button) dialog.findViewById(R.id.createFieldButton);
         Button cancelField = (Button) dialog.findViewById(R.id.cancelFieldButton);
 
+        createField.setTextSize(bodySize + fontChange);
+        cancelField.setTextSize(bodySize + fontChange);
+
+        final EditText newField = (EditText) dialog.findViewById(R.id.fieldEditText);
+        newField.setTextSize(bodySize + 2 + fontChange);
+        final EditText newInfo = (EditText) dialog.findViewById(R.id.infoEditText);
+        newInfo.setTextSize(bodySize + 2 + fontChange);
+
         createField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText newField = (EditText) dialog.findViewById(R.id.fieldEditText);
-                EditText newInfo = (EditText) dialog.findViewById(R.id.infoEditText);
                 if(newField.getText().toString().isEmpty() || newInfo.getText().toString().isEmpty()){
                     displayExceptionMessage("Please fill out both text boxes.");
                 } else{
