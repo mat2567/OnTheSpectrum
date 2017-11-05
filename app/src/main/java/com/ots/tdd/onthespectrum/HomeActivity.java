@@ -115,7 +115,6 @@ public class HomeActivity extends AppCompatActivity {
 //        Intent intentTestVoice = new Intent(this, TestVoiceActivity.class);
 //        startActivity(intentTestVoice);
     }
-
     private void theme() {
         sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         int theme = sharedPref.getInt("colorTheme", 0);
