@@ -6,10 +6,14 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
+    <!--Phone call stuff-->
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!--GET/POST stuff-->
+    <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:allowBackup="true"
@@ -50,7 +54,7 @@
         <activity android:name=".ListOfEmergenciesActivity" />
         <activity android:name=".EditEmergencyActivity" />
         <activity android:name=".AddEmergencyActivity" />
-        <activity android:name=".CallLogActivity"></activity>
+        <activity android:name=".CallLogActivity" />
     </application>
 
 </manifest>
