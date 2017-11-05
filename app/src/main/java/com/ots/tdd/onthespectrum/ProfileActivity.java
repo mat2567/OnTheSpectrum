@@ -205,6 +205,18 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!SettingsActivity.isLocked) {
+            Button addProfileButton =(Button)findViewById(R.id.addProfileButton);
+            addProfileButton.setEnabled(true);
+        } else {
+            Button addProfileButton =(Button)findViewById(R.id.addProfileButton);
+            addProfileButton.setEnabled(false);
+        }
+    }
+
     protected void onPause() {
         super.onPause();
         SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);

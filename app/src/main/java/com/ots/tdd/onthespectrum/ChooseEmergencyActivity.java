@@ -79,61 +79,28 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                 }
 
                 int currEmergencyNumber = current.emergencyNumber;
-                EmergencyElementViewContainer currEEVC = null;
-                currEEVC = EmergencyElementViewContainer.findContainerUsingNumber(currEmergencyNumber);
-                if (currEEVC == null) {
-                    final ImageButton imageButton = (ImageButton) convertView.findViewById(R.id.emergencyImageButton);
-                    imageButton.setBackground( new BitmapDrawable(getResources(), current.getImage()) );
-                    imageButton.setTag(current.getTitle());
-                    imageButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Intent is what you use to start another activity
-                            Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
-                            String emergencyTag = (imageButton.getTag()).toString(); //to be passed in
-                            // save full message somewhere?
-                            String emergencyMessage = emergencyTag;
-                            intent.putExtra("scenario", emergencyMessage);
-                            startActivity(intent);
-                        }
-                    });
-                    imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
 
-                    final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
-                    textView.setText(current.getTitle());
-                    textView.setTextSize(bodySize + fontChange);
-                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 55 + fontChange * 4));
+                final ImageButton imageButton = (ImageButton) convertView.findViewById(R.id.emergencyImageButton);
+                imageButton.setBackground( new BitmapDrawable(getResources(), current.getImage()) );
+                imageButton.setTag(current.getTitle());
+                imageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Intent is what you use to start another activity
+                        Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
+                        String emergencyTag = (imageButton.getTag()).toString(); //to be passed in
+                        // save full message somewhere?
+                        String emergencyMessage = emergencyTag;
+                        intent.putExtra("scenario", emergencyMessage);
+                        startActivity(intent);
+                    }
+                });
+                imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
 
-                    EmergencyElementViewContainer newEmergencyElement = new EmergencyElementViewContainer(
-                            imageButton, textView, current.getEmergencyNumber());
-                    EmergencyElementViewContainer.addEEVCToArray(newEmergencyElement);
-
-
-                } else {
-                    final ImageButton imageButton= (ImageButton) convertView.findViewById(R.id.emergencyImageButton);
-
-                    imageButton.setBackground( new BitmapDrawable(getResources(), current.getImage()) );
-                    imageButton.setTag(current.getTitle());
-                    imageButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Intent is what you use to start another activity
-                            Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
-                            String emergencyTag = (imageButton.getTag()).toString(); //to be passed in
-                            // save full message somewhere?
-                            String emergencyMessage = emergencyTag;
-                            intent.putExtra("scenario", emergencyMessage);
-                            startActivity(intent);
-                        }
-                    });
-                    //imageButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 132));
-                    imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
-
-                    final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
-                    textView.setText(current.getTitle());
-                    textView.setTextSize(bodySize + fontChange);
-                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 55 + fontChange * 4));
-                }
+                final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
+                textView.setText(current.getTitle());
+                textView.setTextSize(bodySize + fontChange);
+                textView.setLayoutParams(new LinearLayout.LayoutParams(350, 55 + fontChange * 4));
 
                 return convertView;
             }
