@@ -23,8 +23,14 @@ public class CallLogActivity extends AppCompatActivity {
 
     int callLogElementCounter = 0;
 
+    SharedPreferences sharedPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        int theme = sharedPref.getInt("colorTheme", R.style.AppTheme);
+        setTheme(theme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call_log);
 
@@ -32,6 +38,12 @@ public class CallLogActivity extends AppCompatActivity {
 //            loadInfo();
 //        }
         loadInfo();
+
+        final int titleSize = sharedPref.getInt("TitleFontSize", 0);
+        final int bodySize = sharedPref.getInt("BodyFontSize", 0);
+        final int fontChange = sharedPref.getInt("FontSizeChange", 0);
+        TextView title = (TextView) findViewById(R.id.callLogTitle);
+        title.setTextSize(titleSize + fontChange);
 
         /*Backs the ListView. Enables TextViews to be added dynamically */
         adapter=new ArrayAdapter<CallLogElement>(this, R.layout.call_log_item, callLogList) {
@@ -49,6 +61,9 @@ public class CallLogActivity extends AppCompatActivity {
                 CallLogElementViewContainer currCLEVC = null;
                 currCLEVC = CallLogElementViewContainer.get(position);
                 if (currCLEVC == null) {
+                    TextView dateLabel = (TextView) convertView.findViewById(R.id.dateLabel);
+                    TextView timeLabel = (TextView) convertView.findViewById(R.id.timeLabel);
+                    TextView emergencyLabel = (TextView) convertView.findViewById(R.id.emergencyLabel);
                     TextView callLogDate = (TextView) convertView.findViewById(R.id.callLogDate);
                     TextView callLogTime = (TextView) convertView.findViewById(R.id.callLogTime);
                     TextView callLogScenario = (TextView) convertView.findViewById(R.id.callLogScenario);
@@ -60,7 +75,17 @@ public class CallLogActivity extends AppCompatActivity {
                     callLogDate.setText(current.getDate());
                     callLogTime.setText(current.getTime());
                     callLogScenario.setText(current.getScenario());
+
+                    dateLabel.setTextSize(bodySize + fontChange);
+                    timeLabel.setTextSize(bodySize + fontChange);
+                    emergencyLabel.setTextSize(bodySize + fontChange);
+                    callLogDate.setTextSize(bodySize + fontChange);
+                    callLogTime.setTextSize(bodySize + fontChange);
+                    callLogScenario.setTextSize(bodySize + fontChange);
                 } else {
+                    TextView dateLabel = (TextView) convertView.findViewById(R.id.dateLabel);
+                    TextView timeLabel = (TextView) convertView.findViewById(R.id.timeLabel);
+                    TextView emergencyLabel = (TextView) convertView.findViewById(R.id.emergencyLabel);
                     TextView callLogDate = (TextView) convertView.findViewById(R.id.callLogDate);
                     TextView callLogTime = (TextView) convertView.findViewById(R.id.callLogTime);
                     TextView callLogScenario = (TextView) convertView.findViewById(R.id.callLogScenario);
@@ -69,6 +94,12 @@ public class CallLogActivity extends AppCompatActivity {
                     callLogTime.setText(CallLogElementViewContainer.getTime(currCLEVC).getText());
                     callLogScenario.setText(CallLogElementViewContainer.getScenario(currCLEVC).getText());
 
+                    dateLabel.setTextSize(bodySize + fontChange);
+                    timeLabel.setTextSize(bodySize + fontChange);
+                    emergencyLabel.setTextSize(bodySize + fontChange);
+                    callLogDate.setTextSize(bodySize + fontChange);
+                    callLogTime.setTextSize(bodySize + fontChange);
+                    callLogScenario.setTextSize(bodySize + fontChange);
                 }
 
                 return convertView;
@@ -81,49 +112,18 @@ public class CallLogActivity extends AppCompatActivity {
 
     protected void onPause() {
         super.onPause();
-        SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        String callLogEntries = "";
-        for (CallLogElement item : callLogList) {
-            callLogEntries += item.getDate() + "~" + item.getTime() + "~" + item.getScenario();
-            callLogEntries += ";;";
-            //editor.putString(item.getTitle(), item.imageMemLocation);
+        if (callLogList != null && callLogList.size() > 0) {
+            SharedPreferences.Editor editor = sharedPref.edit();
+            String callLogEntries = "";
+            for (CallLogElement item : callLogList) {
+                callLogEntries += item.getDate() + "~" + item.getTime() + "~" + item.getScenario();
+                callLogEntries += ";;";
+                //editor.putString(item.getTitle(), item.imageMemLocation);
+            }
+            editor.putString("CallLog", callLogEntries);
+
+            editor.apply();
         }
-        editor.putString("CallLog", callLogEntries);
-
-        editor.apply();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        String callLogEntries = "";
-        for (CallLogElement item : callLogList) {
-            callLogEntries += item.getDate() + "~" + item.getTime() + "~" + item.getScenario();
-            callLogEntries += ";;";
-            //editor.putString(item.getTitle(), item.imageMemLocation);
-        }
-        editor.putString("CallLog", callLogEntries);
-
-        editor.apply();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        String callLogEntries = "";
-        for (CallLogElement item : callLogList) {
-            callLogEntries += item.getDate() + "~" + item.getTime() + "~" + item.getScenario();
-            callLogEntries += ";;";
-            //editor.putString(item.getTitle(), item.imageMemLocation);
-        }
-        editor.putString("CallLog", callLogEntries);
-
-        editor.apply();
     }
 
     @Override
@@ -134,7 +134,6 @@ public class CallLogActivity extends AppCompatActivity {
 
     private void loadInfo() {
         callLogList.clear();
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         String savedCallLog = sharedPref.getString("CallLog", null);
         if (null == savedCallLog) {
             // This is a default list of test logs. Delete later for empty log.
@@ -154,7 +153,6 @@ public class CallLogActivity extends AppCompatActivity {
     }
 
     public void showSharedPreferences(View v) {
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         String savedCallLog = sharedPref.getString("CallLog", null);
 
         /*String testString = savedCallLog + "~~";

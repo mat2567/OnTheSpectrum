@@ -9,10 +9,10 @@
     android:weightSum="1">
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/emergencyListTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Emergency Activity List"
+        android:text="List of Emergencies"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textSize="24sp" />
 
