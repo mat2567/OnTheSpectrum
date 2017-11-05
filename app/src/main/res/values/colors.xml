@@ -3,7 +3,38 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303f9f</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="turqoise">#A0E0D0</color>
+    <color name="colorHome">#A0E0D0</color>
+
+    <color name="theme1Primary">#202c39</color>
+    <color name="theme1PrimaryDark">#1c2631</color>
+    <color name="theme1Accent">#f39e68</color>
+    <color name="theme1Home">#c7cb85</color>
+
+    <color name="theme2Primary">#5d737e</color>
+    <color name="theme2PrimaryDark">#51636c</color>
+    <color name="theme2Accent">#fff18f</color>
+    <color name="theme2Home">#87bba2</color>
+
+    <color name="theme3Primary">#ba4643</color>
+    <color name="theme3PrimaryDark">#ac413f</color>
+    <color name="theme3Accent">#dda448</color>
+    <color name="theme3Home">#8cbcb9</color>
+
+    <color name="theme4Primary">#a63a50</color>
+    <color name="theme4PrimaryDark">#973549</color>
+    <color name="theme4Accent">#ba6e6e</color>
+    <color name="theme4Home">#e0efaa</color>
+
+    <color name="theme5Primary">#2b303a</color>
+    <color name="theme5PrimaryDark">#21252d</color>
+    <color name="theme5Accent">#a7dee5</color>
+    <color name="theme5Home">#d66a59</color>
+
+    <color name="theme6Primary">#313a59</color>
+    <color name="theme6PrimaryDark">#293049</color>
+    <color name="theme6Accent">#efbf5f</color>
+    <color name="theme6Home">#d87f63</color>
+
 
     <color name="color1">#00E0E0</color>
     <color name="color2">#F0E0D0</color>
