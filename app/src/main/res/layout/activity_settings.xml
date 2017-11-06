@@ -44,14 +44,12 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:checked="false"
 
         android:textOff="@string/unlocked"
         android:textOn="@string/Locked"
         android:textSize="18sp"
         app:layout_constraintLeft_toRightOf="@+id/profileLockText"
-        app:layout_constraintTop_toBottomOf="@+id/Settings"
-        tools:checked="false" />
+        app:layout_constraintTop_toBottomOf="@+id/Settings" />
 
     <TextView
         android:id="@+id/FontSizeText"
@@ -77,26 +75,28 @@
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="257dp"
+        android:layout_width="200dp"
         android:layout_height="43dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
-        app:layout_constraintHorizontal_bias="0.116"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@+id/Settings"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/profileLockText"
         app:layout_constraintTop_toBottomOf="@+id/lock" />
 
     <Button
         android:id="@+id/lockButton"
-        android:layout_width="82dp"
-        android:layout_height="43dp"
+        android:layout_width="115dp"
+        android:layout_height="47dp"
         android:layout_marginRight="8dp"
         android:onClick="onOkayPress()"
         android:text="@string/ok"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintLeft_toRightOf="@+id/password"
         app:layout_constraintRight_toRightOf="parent"
@@ -164,13 +164,12 @@
         android:id="@+id/colorSpinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
         android:layout_marginTop="8dp"
         android:spinnerMode="dialog"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/AdjustColorText"
         app:layout_constraintTop_toBottomOf="@+id/AdjustColorText" />
-
 
     <!--android:entries="@string/fontSizeAttempt"-->
 
