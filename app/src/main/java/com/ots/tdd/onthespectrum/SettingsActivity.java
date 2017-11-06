@@ -11,6 +11,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import org.w3c.dom.Text;
 
 import java.sql.SQLOutput;
+import java.util.ArrayList;
 
 import static android.support.constraint.R.id.parent;
 
@@ -49,6 +51,10 @@ public class SettingsActivity extends AppCompatActivity implements OnItemSelecte
     String password = "";
 
     private Spinner spinner;
+
+    private static Integer[] colorSwatches = { R.drawable.swatch_1,
+            R.drawable.swatch_2, R.drawable.swatch_3, R.drawable.swatch_4,
+            R.drawable.swatch_5, R.drawable.swatch_6 };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,11 +155,31 @@ public class SettingsActivity extends AppCompatActivity implements OnItemSelecte
 
         //spinner stuff for colors
         spinner = (Spinner) findViewById(R.id.colorSpinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.fontSizeAttempt, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<Integer> adapter = new ColorSpinner(this, R.layout.spinner_row, colorSwatches);
         spinner.setAdapter(adapter);
 
+        int position = 0;
+        switch (theme) {
+            case R.style.Theme1:
+                position = 0;
+                break;
+            case R.style.Theme2:
+                position = 1;
+                break;
+            case R.style.Theme3:
+                position = 2;
+                break;
+            case R.style.Theme4:
+                position = 3;
+                break;
+            case R.style.Theme5:
+                position = 4;
+                break;
+            case R.style.Theme6:
+                position = 5;
+                break;
+        }
+        spinner.setSelection(position, false);
         final SettingsActivity currentActivity = this;
         spinner.post(new Runnable() {
             public void run() {
@@ -171,26 +197,23 @@ public class SettingsActivity extends AppCompatActivity implements OnItemSelecte
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View selectedItemView, int pos, long id){
-        int theme = R.style.AppTheme;
+        int theme = R.style.Theme1;
         switch (pos)
         {
             //case 0 is default
             case 1:
-                theme = R.style.Theme1;
-                break;
-            case 2:
                 theme = R.style.Theme2;
                 break;
-            case 3:
+            case 2:
                 theme = R.style.Theme3;
                 break;
-            case 4:
+            case 3:
                 theme = R.style.Theme4;
                 break;
-            case 5:
+            case 4:
                 theme = R.style.Theme5;
                 break;
-            case 6:
+            case 5:
                 theme = R.style.Theme6;
                 break;
         }
