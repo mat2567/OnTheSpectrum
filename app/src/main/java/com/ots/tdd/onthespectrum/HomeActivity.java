@@ -97,14 +97,12 @@ public class HomeActivity extends AppCompatActivity {
         int theme = sharedPref.getInt("colorTheme", 0);
         if (theme == 0) {
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putInt("colorTheme", R.style.AppTheme);
-            colorHomeButtons = R.color.colorHome;
+            theme = R.style.Theme1;
+            editor.putInt("colorTheme", theme);
+            colorHomeButtons = R.color.theme1Home;
             editor.commit();
         } else {
             switch (theme) {
-                case R.style.AppTheme:
-                    colorHomeButtons = R.color.colorHome;
-                    break;
                 case R.style.Theme1:
                     colorHomeButtons = R.color.theme1Home;
                     break;
