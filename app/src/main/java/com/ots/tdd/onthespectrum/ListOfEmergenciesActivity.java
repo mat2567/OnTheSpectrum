@@ -65,7 +65,7 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
         if(scenarioList.size() < 1) {
             loadInfo();
 
-            String root = getFilesDir().getAbsolutePath();
+            /*String root = getFilesDir().getAbsolutePath();
             File myDir = new File(root + "/saved_images");
             myDir.mkdirs();
             File file = new File (myDir, "addition.jpg");
@@ -81,7 +81,7 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                 scenarioList.add(new EmergencyElement("", file.getAbsolutePath(), assignNum));
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
         }
 
         adapter=new ArrayAdapter<EmergencyElement>(this, R.layout.emergency_item, scenarioList) {
@@ -96,83 +96,26 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                 }
 
                 int currEmergencyNumber = current.emergencyNumber;
-                EmergencyElementViewContainer currEEVC = null;
-                currEEVC = EmergencyElementViewContainer.findContainerUsingNumber(currEmergencyNumber);
-                if (currEEVC == null) {
-                    final ImageButton imageButton = (ImageButton) convertView.findViewById(R.id.emergencyImageButton);
-                    imageButton.setBackground( new BitmapDrawable(getResources(), current.getImage()) );
-                    imageButton.setTag(current.getEmergencyNumber());
-                    if (currEmergencyNumber == scenarioList.size() - 1) {
-                        imageButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (!SettingsActivity.isLocked) {
-                                    newEmergency(v);
-                                } else {
-                                    displayExceptionMessage("Customization is Locked");
-                                }
-                            }
-                        });
-                    } else {
-                        imageButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (!SettingsActivity.isLocked) {
-                                    showPopUp(Integer.parseInt((imageButton.getTag()).toString()));
-                                } else {
-                                    displayExceptionMessage("Customization is Locked");
-                                }
-                            }
-                        });
+                final ImageButton imageButton = (ImageButton) convertView.findViewById(R.id.emergencyImageButton);
+                imageButton.setBackground( new BitmapDrawable(getResources(), current.getImage()) );
+                imageButton.setTag(current.getEmergencyNumber());
+                imageButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                        if (!SettingsActivity.isLocked) {
+                            showPopUp(Integer.parseInt((imageButton.getTag()).toString()));
+                        } else {
+                            displayExceptionMessage("Customization is Locked");
+                        }
                     }
-                    imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
+                });
 
-                    final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
-                    textView.setText(current.getTitle());
-                    textView.setTextSize(bodySize + fontChange);
-                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 55 + fontChange * 4));
+                imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
 
-                    EmergencyElementViewContainer newEmergencyElement = new EmergencyElementViewContainer(
-                            imageButton, textView, current.getEmergencyNumber());
-                    EmergencyElementViewContainer.addEEVCToArray(newEmergencyElement);
-
-
-                } else {
-                    final ImageButton imageButton= (ImageButton) convertView.findViewById(R.id.emergencyImageButton);
-
-                    imageButton.setBackground( new BitmapDrawable(getResources(), current.getImage()) );
-                    imageButton.setTag(current.getEmergencyNumber());
-                    if (currEmergencyNumber == scenarioList.size() - 1) {
-                        imageButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (!SettingsActivity.isLocked) {
-                                    newEmergency(v);
-                                } else {
-                                    displayExceptionMessage("Customization is Locked");
-                                }
-                            }
-                        });
-                    } else {
-                        imageButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (!SettingsActivity.isLocked) {
-                                    showPopUp(Integer.parseInt((imageButton.getTag()).toString()));
-                                } else {
-                                    displayExceptionMessage("Customization is Locked");
-                                }
-                            }
-                        });
-                    }
-                    //imageButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 132));
-                    imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
-
-                    final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
-                    textView.setText(current.getTitle());
-                    textView.setTextSize(bodySize + fontChange);
-                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 55 + fontChange * 4));
-                }
+                final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
+                textView.setText(current.getTitle());
+                textView.setTextSize(bodySize + fontChange);
+                textView.setLayoutParams(new LinearLayout.LayoutParams(350, 55 + fontChange * 4));
 
                 return convertView;
             }
@@ -367,5 +310,17 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
     public void displayExceptionMessage(String msg)
     {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!SettingsActivity.isLocked) {
+            Button addScenarioButton =(Button)findViewById(R.id.createScenarioButton);
+            addScenarioButton.setEnabled(true);
+        } else {
+            Button addScenarioButton =(Button)findViewById(R.id.createScenarioButton);
+            addScenarioButton.setEnabled(false);
+        }
     }
 }

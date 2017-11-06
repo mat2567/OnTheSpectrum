@@ -1,10 +1,13 @@
 package com.ots.tdd.onthespectrum;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,6 +25,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class ProfileActivity extends AppCompatActivity {
     ArrayAdapter<ProfileElement> adapter;
@@ -29,13 +33,45 @@ public class ProfileActivity extends AppCompatActivity {
     EditText editUserInfo;
     TextView alertTextView;
 
-    int profileElementCounter = 0;
+    TextWatcher textWatcher=new TextWatcher() {
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                                      int after) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            String editingText = s.toString();
+            // displayExceptionMessage("new: " + editingText);
+            if (editingNum >= 0) {
+                itemList.get(editingNum).userInfo = editingText;
+            }
+
+        }
+    };
+
+    static int editingNum = -1;
+
+    static int profileElementCounter = 0;
+
 
     static ArrayList<ProfileElement> itemList = new ArrayList<>();
+    static HashMap<Integer, ImageView> editMap = new HashMap<>();
+    static HashMap<Integer, ImageView> saveMap = new HashMap<>();
+    static HashMap<Integer, ImageView> cancelMap = new HashMap<>();
+    static HashMap<Integer, EditText> textMap = new HashMap<>();
 
+    SharedPreferences sharedPref;
 
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         int theme = sharedPref.getInt("colorTheme", R.style.AppTheme);
         setTheme(theme);
 
@@ -46,13 +82,26 @@ public class ProfileActivity extends AppCompatActivity {
             loadInfo();
         }
 
+        final int titleSize = sharedPref.getInt("TitleFontSize", 0);
+        final int bodySize = sharedPref.getInt("BodyFontSize", 0);
+        final int fontChange = sharedPref.getInt("FontSizeChange", 0);
+
+        TextView profileTitle = (TextView) findViewById(R.id.profileTitle);
+        profileTitle.setTextSize(titleSize + fontChange);
+        Button callLog = (Button) findViewById(R.id.callLogButton);
+        callLog.setTextSize(bodySize + fontChange);
+        Button add = (Button) findViewById(R.id.addProfileButton);
+        add.setTextSize(bodySize + fontChange);
+
+
         /*Backs the ListView. Enables TextViews to be added dynamically */
         adapter=new ArrayAdapter<ProfileElement>(this, R.layout.profile_item, itemList) {
-
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 ProfileElement current = itemList.get(position);
+                current.profileNumber = position;
+                //displayExceptionMessage("got view: " + position);
 
                 // Inflate only once
                 if(convertView == null) {
@@ -60,82 +109,123 @@ public class ProfileActivity extends AppCompatActivity {
                             .inflate(R.layout.profile_item, null, false);
                 }
 
-                int currProfileNumber = current.profileNumber;
-                ProfileElementViewContainer currPEVC = null;
-                currPEVC = ProfileElementViewContainer.findContainerUsingNumber(currProfileNumber);
-                if (currPEVC == null) {
-                    TextView infoType = (TextView) convertView.findViewById(R.id.infoType);
-                    EditText userInfo = (EditText) convertView.findViewById(R.id.userInfo);
-                    ImageView editInfo = (ImageView) convertView.findViewById(R.id.editInfo);
-                    ImageView saveInfo = (ImageView) convertView.findViewById(R.id.saveInfo);
-                    ImageView cancelInfo = (ImageView) convertView.findViewById(R.id.cancelInfo);
-                    ProfileElementViewContainer newProfileElement = new ProfileElementViewContainer(
-                            infoType, userInfo, editInfo, saveInfo, cancelInfo, currProfileNumber);
-                    ProfileElementViewContainer.addPEVCToArray(newProfileElement);
-                    editInfo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (!SettingsActivity.isLocked) {
-                                editInfo(v);
-                            } else {
-                                displayExceptionMessage("Customization is Locked");
-                            }
-                        }
-                    });
-                    saveInfo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            saveInfo(v);
-                        }
-                    });
-                    cancelInfo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            cancelInfo(v);
-                        }
-                    });
-                    //userInfo.setFocusable(false);
-                    //userInfo.setClickable(false);
-                    userInfo.setEnabled(false);
-                    //userInfo.setBackgroundColor(0x0106000d); //R.color.transparent
-                    userInfo.getBackground().clearColorFilter();
+                TextView infoType = (TextView) convertView.findViewById(R.id.infoType);
+                EditText userInfo = (EditText) convertView.findViewById(R.id.userInfo);
+                ImageView editInfo = (ImageView) convertView.findViewById(R.id.editInfo);
+                ImageView saveInfo = (ImageView) convertView.findViewById(R.id.saveInfo);
+                ImageView cancelInfo = (ImageView) convertView.findViewById(R.id.cancelInfo);
 
-                    editInfo.setVisibility(View.VISIBLE);
-                    saveInfo.setVisibility(View.GONE);
-                    cancelInfo.setVisibility(View.GONE);
+//                if (editingNum != -1) {
+//                    if (editingNum != current.profileNumber) {
+//                        userInfo.removeTextChangedListener(textWatcher);
+//                        userInfo.setText(current.userInfo);
+//                        // displayExceptionMessage("Not Editing");
+//                    } else {
+//                        userInfo.setText(current.userInfo);
+//                        userInfo.addTextChangedListener(textWatcher);
+//                        if (editingNum != 0) {
+//                            displayExceptionMessage("Being Edited");
+//                        }
+//                    }
+//                } else {
+//                    userInfo.setText(current.userInfo);
+//                }
 
-                    // if this remains unused, may delete the ProfileTextWatcher class
-                    //userInfo.addTextChangedListener(new ProfileTextWatcher(userInfo));
-
-                    infoType.setText(current.infoType);
-                    userInfo.setText(current.userInfo);
-                } else {
-                    TextView infoType = (TextView) convertView.findViewById(R.id.infoType);
-                    EditText userInfo = (EditText) convertView.findViewById(R.id.userInfo);
-                    ImageView editInfo = (ImageView) convertView.findViewById(R.id.editInfo);
-                    ImageView saveInfo = (ImageView) convertView.findViewById(R.id.saveInfo);
-                    ImageView cancelInfo = (ImageView) convertView.findViewById(R.id.cancelInfo);
-
-                    infoType.setText(ProfileElementViewContainer.getTextView(currPEVC).getText());
-                    userInfo.setText(ProfileElementViewContainer.getEditText(currPEVC).getText());
-                    editInfo.setVisibility(ProfileElementViewContainer.getEdit(currPEVC).getVisibility());
-                    saveInfo.setVisibility(ProfileElementViewContainer.getSave(currPEVC).getVisibility());
-                    cancelInfo.setVisibility(ProfileElementViewContainer.getCancel(currPEVC).getVisibility());
-                    if (ProfileElementViewContainer.getEdit(currPEVC).getVisibility() != View.GONE) {
-                        userInfo.getBackground().clearColorFilter();
-                        //set focusability here
-                        //userInfo.setFocusable(true);
-                        //userInfo.setClickable(true);
-                        userInfo.setEnabled(false);
-                    } else {
-                        //userInfo.setFocusable(false);
-                        //userInfo.setClickable(false);
-                        userInfo.setEnabled(true);
+                userInfo.removeTextChangedListener(textWatcher);
+                userInfo.setText(current.userInfo);
+                if (editingNum != -1) {
+                    if (editingNum == current.profileNumber) {
+                        userInfo.addTextChangedListener(textWatcher);
                     }
-
-
                 }
 
+                /*userInfo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View view, boolean hasFocus) {
+                        if (hasFocus) {
+                            EditText currEditText = (EditText) view;
+                            currEditText.setSelection(currEditText.getText().length());
+                            //Toast.makeText(getApplicationContext(), "Got the focus", Toast.LENGTH_LONG).show();
+                        } else {
+                            //Toast.makeText(getApplicationContext(), "Lost the focus", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });*/
+
+                if (current.profileEdit == null) {
+
+
+
+                    editInfo.setTag(current.profileNumber);
+                    saveInfo.setTag(current.profileNumber);
+                    cancelInfo.setTag(current.profileNumber);
+                    infoType.setText(current.infoType);
+                    editMap.put(current.profileNumber, editInfo);
+                    saveMap.put(current.profileNumber, saveInfo);
+                    cancelMap.put(current.profileNumber, cancelInfo);
+                    textMap.put(current.profileNumber, userInfo);
+
+                    userInfo.setEnabled(current.editTextEnabled);
+
+                    userInfo.getBackground().clearColorFilter();
+
+
+
+
+                    editInfo.setVisibility(current.editVis);
+                    saveInfo.setVisibility(current.saveVis);
+                    cancelInfo.setVisibility(current.cancelVis);
+
+                    current.profileEdit = editInfo;
+                    current.profileSave = saveInfo;
+                    current.profileCancel = cancelInfo;
+                    current.profileTextView = infoType;
+                    current.profileEditText = userInfo;
+                } else {
+
+
+                    editInfo.setTag(current.profileNumber);
+                    saveInfo.setTag(current.profileNumber);
+                    cancelInfo.setTag(current.profileNumber);
+                    infoType.setText(current.infoType);
+
+                    userInfo.setEnabled(current.editTextEnabled);
+
+                    /*if (editingNum == current.profileNumber) {
+                        userInfo.addTextChangedListener(textWatcher);
+                    }*/
+
+
+
+                    userInfo.getBackground().clearColorFilter();
+
+                    editInfo.setVisibility(current.editVis);
+                    saveInfo.setVisibility(current.saveVis);
+                    cancelInfo.setVisibility(current.cancelVis);
+
+                    current.profileEdit = editInfo;
+                    current.profileSave = saveInfo;
+                    current.profileCancel = cancelInfo;
+                    current.profileTextView = infoType;
+                    current.profileEditText = userInfo;
+                    editMap.put(current.profileNumber, editInfo);
+                    saveMap.put(current.profileNumber, saveInfo);
+                    cancelMap.put(current.profileNumber, cancelInfo);
+                    textMap.put(current.profileNumber, userInfo);
+                    adapter.notifyDataSetChanged();
+                }
+
+
+
+                // if this remains unused, may delete the ProfileTextWatcher class
+                //userInfo.addTextChangedListener(new ProfileTextWatcher(userInfo));
+
+                infoType.setText(current.infoType);
+
+                // userInfo.setText(current.userInfo);
+
+                infoType.setTextSize(bodySize + 2 + fontChange);
+                userInfo.setTextSize(bodySize + 2 + fontChange);
 
 
                 return convertView;
@@ -145,38 +235,7 @@ public class ProfileActivity extends AppCompatActivity {
         listV.setAdapter(adapter);
         //this is added in attempt to prevent the edittext from being refreshed
         listV.setItemsCanFocus(true);
-        editInfoType=(EditText)findViewById(R.id.infoType);
-        editUserInfo = (EditText)findViewById(R.id.userInfo);
 
-        alertTextView = (TextView)findViewById(R.id.alert);
-        Button btAdd=(Button)findViewById(R.id.btAdd);
-        btAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!SettingsActivity.isLocked) {
-                    String newType = editInfoType.getText().toString();
-                    String newInfo = editUserInfo.getText().toString();
-
-                    if (!newType.isEmpty() && !newInfo.isEmpty()) {
-                        alertTextView.setTextColor(Color.argb(0, 255, 64, 129));
-                        // add new item to arraylist
-                        itemList.add(new ProfileElement(newType, newInfo, profileElementCounter));
-                        profileElementCounter++;
-                        // notify listview of data changed
-                        adapter.notifyDataSetChanged();
-
-                        // resets the text boxes
-                        editInfoType.setText("");
-                        editUserInfo.setText("");
-                    } else {
-                        alertTextView.setTextColor(Color.argb(255, 255, 64, 129));
-                    }
-                } else {
-                    displayExceptionMessage("Customization is Locked");
-                }
-            }
-
-        });
 
         // Set button listener
         Button callLogButton =(Button)findViewById(R.id.callLogButton);
@@ -188,6 +247,18 @@ public class ProfileActivity extends AppCompatActivity {
 
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!SettingsActivity.isLocked) {
+            Button addProfileButton =(Button)findViewById(R.id.addProfileButton);
+            addProfileButton.setEnabled(true);
+        } else {
+            Button addProfileButton =(Button)findViewById(R.id.addProfileButton);
+            addProfileButton.setEnabled(false);
+        }
     }
 
     protected void onPause() {
@@ -203,66 +274,168 @@ public class ProfileActivity extends AppCompatActivity {
         editor.putString("ProfileFields", fieldNames);
 
         editor.apply();
+
+        if (editingNum != -1) {
+            int profilePos = editingNum;
+            ProfileElement current = itemList.get(profilePos);
+
+            // displayExceptionMessage("Element number: " + profilePos);
+
+            ImageView currEditInfo = editMap.get(profilePos);
+            ImageView currSaveInfo = saveMap.get(profilePos);
+            ImageView currCancelInfo = cancelMap.get(profilePos);
+            EditText currEditText = textMap.get(profilePos);
+
+            currEditText.removeTextChangedListener(textWatcher);
+
+            current.editTextEnabled = false;
+            currEditText.setEnabled(current.editTextEnabled);
+            currEditText.setText(current.previousUserInfo);
+            current.userInfo = current.previousUserInfo;
+            currEditText.setBackgroundColor(0x0106000d); //R.color.transparent
+
+
+            current.editVis = View.VISIBLE;
+            current.saveVis = View.GONE;
+            current.cancelVis = View.GONE;
+
+            currEditInfo.setVisibility(current.editVis);
+            currSaveInfo.setVisibility(current.saveVis);
+            currCancelInfo.setVisibility(current.cancelVis);
+
+            current.profileEdit = currEditInfo;
+            current.profileSave = currSaveInfo;
+            current.profileCancel = currCancelInfo;
+            current.profileEditText = currEditText;
+            adapter.notifyDataSetChanged();
+            editingNum = -1;
+        }
+
     }
 
 
     public void editInfo(View v) {
-        ImageView currEditInfo = (ImageView) v;
-        ProfileElementViewContainer pevc = ProfileElementViewContainer.
-                findContainerUsingEdit(currEditInfo);
-        ImageView currSaveInfo = ProfileElementViewContainer.getSave(pevc);
-        ImageView currCancelInfo = ProfileElementViewContainer.getCancel(pevc);
-        EditText currEditText = ProfileElementViewContainer.getEditText(pevc);
+        if (!SettingsActivity.isLocked) {
 
-        //currEditText.setFocusableInTouchMode(true);
-        //currEditText.setClickable(true);
-        currEditText.setEnabled(true);
-        ProfileElementViewContainer.setPreviousText(pevc, currEditText.getText().toString());
-        currEditText.setBackgroundColor(0x01060000); //R.color.darker_grey
+            if (editingNum != -1) {
+                displayExceptionMessage("Currently Editing an Item");
+            } else {
+                ImageView currEditInfo = (ImageView) v;
 
-        currEditInfo.setVisibility(View.GONE);
-        currSaveInfo.setVisibility(View.VISIBLE);
-        currCancelInfo.setVisibility(View.VISIBLE);
+                int profilePos = Integer.parseInt((currEditInfo.getTag()).toString());
+                ProfileElement current = itemList.get(profilePos);
+
+                editingNum = profilePos;
+
+                // displayExceptionMessage("Element number: " + profilePos);
+
+                ImageView currSaveInfo = saveMap.get(profilePos);
+                ImageView currCancelInfo = cancelMap.get(profilePos);
+                EditText currEditText = textMap.get(profilePos);
+
+                current.editTextEnabled = true;
+                currEditText.setEnabled(current.editTextEnabled);
+                current.previousUserInfo = current.userInfo;
+                currEditText.setBackgroundColor(0x01060000); //R.color.darker_grey
+
+
+                currEditText.addTextChangedListener(textWatcher);
+
+                current.editVis = View.GONE;
+                current.saveVis = View.VISIBLE;
+                current.cancelVis = View.VISIBLE;
+
+                currEditInfo.setVisibility(current.editVis);
+                currSaveInfo.setVisibility(current.saveVis);
+                currCancelInfo.setVisibility(current.cancelVis);
+
+                current.profileEdit = currEditInfo;
+                current.profileSave = currSaveInfo;
+                current.profileCancel = currCancelInfo;
+                current.profileEditText = currEditText;
+                adapter.notifyDataSetChanged();
+            }
+        } else {
+            displayExceptionMessage("Customization is Locked");
+        }
     }
 
     public void saveInfo(View v) {
         ImageView currSaveInfo = (ImageView) v;
-        ProfileElementViewContainer pevc = ProfileElementViewContainer.
-                findContainerUsingSave(currSaveInfo);
-        ImageView currEditInfo = ProfileElementViewContainer.getEdit(pevc);
-        ImageView currCancelInfo = ProfileElementViewContainer.getCancel(pevc);
-        EditText currEditText = ProfileElementViewContainer.getEditText(pevc);
 
-        String field = itemList.get(pevc.profileNumber).infoType;
+        int profilePos = Integer.parseInt((currSaveInfo.getTag()).toString());
+        ProfileElement current = itemList.get(profilePos);
+
+        editingNum = -1;
+
+        // displayExceptionMessage("Element number: " + profilePos);
+
+        ImageView currEditInfo = editMap.get(profilePos);
+        ImageView currCancelInfo = cancelMap.get(profilePos);
+        EditText currEditText = textMap.get(profilePos);
+
+        currEditText.removeTextChangedListener(textWatcher);
+
+        String field = itemList.get(profilePos).infoType;
         String info = currEditText.getText().toString();
-        itemList.set(pevc.profileNumber, new ProfileElement(field, info, pevc.profileNumber));
-        //currEditText.setFocusable(false);
-        //currEditText.setClickable(false);
-        currEditText.setEnabled(false);
+        // Why create a new one?
+        itemList.set(profilePos, new ProfileElement(field, info, profilePos));
+
+        current.editTextEnabled = false;
+        currEditText.setEnabled(current.editTextEnabled);
         currEditText.setBackgroundColor(0x0106000d); //R.color.transparent
 
-        currEditInfo.setVisibility(View.VISIBLE);
-        currSaveInfo.setVisibility(View.GONE);
-        currCancelInfo.setVisibility(View.GONE);
+        current.editVis = View.VISIBLE;
+        current.saveVis = View.GONE;
+        current.cancelVis = View.GONE;
+
+        currEditInfo.setVisibility(current.editVis);
+        currSaveInfo.setVisibility(current.saveVis);
+        currCancelInfo.setVisibility(current.cancelVis);
+
+        current.profileEdit = currEditInfo;
+        current.profileSave = currSaveInfo;
+        current.profileCancel = currCancelInfo;
+        current.profileEditText = currEditText;
+        adapter.notifyDataSetChanged();
     }
 
     public void cancelInfo(View v) {
         ImageView currCancelInfo = (ImageView) v;
-        ProfileElementViewContainer pevc = ProfileElementViewContainer.
-                findContainerUsingCancel(currCancelInfo);
-        ImageView currSaveInfo = ProfileElementViewContainer.getSave(pevc);
-        ImageView currEditInfo = ProfileElementViewContainer.getEdit(pevc);
-        EditText currEditText = ProfileElementViewContainer.getEditText(pevc);
 
-        //currEditText.setFocusable(false);
-        //currEditText.setClickable(false);
-        currEditText.setEnabled(false);
-        currEditText.setText(ProfileElementViewContainer.getPreviousText(pevc));
+        int profilePos = Integer.parseInt((currCancelInfo.getTag()).toString());
+        ProfileElement current = itemList.get(profilePos);
+
+        editingNum = -1;
+
+        // displayExceptionMessage("Element number: " + profilePos);
+
+        ImageView currEditInfo = editMap.get(profilePos);
+        ImageView currSaveInfo = saveMap.get(profilePos);
+        EditText currEditText = textMap.get(profilePos);
+
+        currEditText.removeTextChangedListener(textWatcher);
+
+        current.editTextEnabled = false;
+        currEditText.setEnabled(current.editTextEnabled);
+        currEditText.setText(current.previousUserInfo);
+        current.userInfo = current.previousUserInfo;
         currEditText.setBackgroundColor(0x0106000d); //R.color.transparent
 
-        currEditInfo.setVisibility(View.VISIBLE);
-        currSaveInfo.setVisibility(View.GONE);
-        currCancelInfo.setVisibility(View.GONE);
+        current.editVis = View.VISIBLE;
+        current.saveVis = View.GONE;
+        current.cancelVis = View.GONE;
+
+        currEditInfo.setVisibility(current.editVis);
+        currSaveInfo.setVisibility(current.saveVis);
+        currCancelInfo.setVisibility(current.cancelVis);
+
+        current.profileEdit = currEditInfo;
+        current.profileSave = currSaveInfo;
+        current.profileCancel = currCancelInfo;
+        current.profileEditText = currEditText;
+        adapter.notifyDataSetChanged();
+
     }
 
     private void loadInfo() {
@@ -292,6 +465,65 @@ public class ProfileActivity extends AppCompatActivity {
     public void displayExceptionMessage(String msg)
     {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public void showPopUp(View v) {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.add_field_dialog);
+
+        final int bodySize = sharedPref.getInt("BodyFontSize", 0);
+        final int fontChange = sharedPref.getInt("FontSizeChange", 0);
+
+        dialog.setTitle("Create New Profile Field");
+        dialog.setCancelable(true);
+
+        Button createField = (Button) dialog.findViewById(R.id.createFieldButton);
+        Button cancelField = (Button) dialog.findViewById(R.id.cancelFieldButton);
+
+        createField.setTextSize(bodySize + fontChange);
+        cancelField.setTextSize(bodySize + fontChange);
+
+        final EditText newField = (EditText) dialog.findViewById(R.id.fieldEditText);
+        newField.setTextSize(bodySize + 2 + fontChange);
+        final EditText newInfo = (EditText) dialog.findViewById(R.id.infoEditText);
+        newInfo.setTextSize(bodySize + 2 + fontChange);
+
+        createField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(newField.getText().toString().isEmpty() || newInfo.getText().toString().isEmpty()){
+                    displayExceptionMessage("Please fill out both text boxes.");
+                } else{
+                    if (!SettingsActivity.isLocked) {
+                        String newFieldString = newField.getText().toString();
+                        String newInfoString = newInfo.getText().toString();
+
+                        // add new item to arraylist
+                        itemList.add(new ProfileElement(newFieldString, newInfoString, profileElementCounter));
+                        profileElementCounter++;
+                        // notify listview of data changed
+                        adapter.notifyDataSetChanged();
+
+                    } else {
+                        displayExceptionMessage("Customization is Locked");
+                    }
+
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        cancelField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+
     }
 }
 

@@ -44,11 +44,12 @@ public class AddEmergencyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_emergency);
 
-        EmergencyElement addEmergency = ListOfEmergenciesActivity.scenarioList.get(ListOfEmergenciesActivity.scenarioList.size() - 1);
+        // To have a placeholder image, uncomment these lines and retrieve it
+        // EmergencyElement addEmergency = ListOfEmergenciesActivity.scenarioList.get(ListOfEmergenciesActivity.scenarioList.size() - 1);
         emergencyTitle = (EditText) findViewById(R.id.emergencyTitle);
         emergencyImage = (ImageButton) findViewById(R.id.emergencyImage);
 
-        emergencyImage.setBackground( new BitmapDrawable(getResources(), addEmergency.getImage()) );
+        // emergencyImage.setBackground( new BitmapDrawable(getResources(), addEmergency.getImage()) );
         emergencyImage.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
 
         setTextSizes();
@@ -58,28 +59,45 @@ public class AddEmergencyActivity extends AppCompatActivity {
         String title = emergencyTitle.getText().toString();
         EmergencyElement emergency = new EmergencyElement(title,
                 currentImage,
-                ListOfEmergenciesActivity.scenarioList.size() - 1);
-        emergency.setTitle(title);
-        if ((BitmapDrawable)emergencyImage.getDrawable() != null){
-            emergency.setImage(((BitmapDrawable) emergencyImage.getDrawable()).getBitmap());
+                ListOfEmergenciesActivity.scenarioList.size());
+        if (title.isEmpty()) {
+            displayExceptionMessage("Please provide a title");
+        } else {
+            emergency.setTitle(title);
+            if ((BitmapDrawable)emergencyImage.getDrawable() != null){
+                emergency.setImage(((BitmapDrawable) emergencyImage.getDrawable()).getBitmap());
+                SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+
+                //change ScenarioNames
+                String allScenarios = sharedPref.getString("ScenarioNames", null);
+                allScenarios.concat(title);
+                editor.putString("ScenarioNames", allScenarios);
+
+                //add new title/image
+                editor.putString(title, currentImage);
+
+                editor.commit();
+
+                // update scenarioList
+                int curr = 0;
+                int len = ListOfEmergenciesActivity.scenarioList.size();
+                ListOfEmergenciesActivity.scenarioList.add(len, emergency);
+                while (curr < len) {
+                    ListOfEmergenciesActivity.scenarioList.get(curr).setEmergencyNumber(curr);
+                    curr++;
+                }
+
+                // notify gridview of data changed
+                ListOfEmergenciesActivity.adapter.notifyDataSetChanged();
+                finish();
+            } else {
+                displayExceptionMessage("Please provide an image");
+            }
         }
 
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
 
-        //change ScenarioNames
-        String allScenarios = sharedPref.getString("ScenarioNames", null);
-        allScenarios.concat(title);
-        editor.putString("ScenarioNames", allScenarios);
 
-        //add new title/image
-        editor.putString(title, currentImage);
-
-        editor.commit();
-
-        // notify gridview of data changed
-        ListOfEmergenciesActivity.adapter.notifyDataSetChanged();
-        finish();
     }
 
     public void cancelChanges(View v) {
@@ -165,5 +183,10 @@ public class AddEmergencyActivity extends AppCompatActivity {
         emergencyTitle.setTextSize(subtitleSize + fontChange);
         createButton.setTextSize(bodySize + fontChange);
         cancelButton.setTextSize(bodySize + fontChange);
+    }
+
+    public void displayExceptionMessage(String msg)
+    {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }
