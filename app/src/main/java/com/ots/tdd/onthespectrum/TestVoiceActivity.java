@@ -28,22 +28,52 @@ public class TestVoiceActivity extends AppCompatActivity implements TextToSpeech
         ttobj=new TextToSpeech(this, this);
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="https://ots-v1.herokuapp.com/text-to-speech/";
+//        String url ="https://ots-v1.herokuapp.com/text-to-speech/";
+//
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        Log.d("GET", response);
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.d("Volley", "Error: " + error.getMessage());
+//            }
+//        });
+//        queue.add(stringRequest);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+        String url = "https://api.plivo.com/v1/Account/MANJVHYJU2YZA1MDQ2ZW/Call/";
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>()
+                {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("GET", response);
+                        // response
+                        Log.d("Response", response);
                     }
-                }, new Response.ErrorListener() {
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        ) {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Volley", "Error: " + error.getMessage());
+            protected Map<String, String> getParams()
+            {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("from", "14706293412");
+                params.put("to", "16784670532");
+                params.put("url", "https://s3.amazonaws.com/static.plivo.com/answer.xml");
+                return params;
             }
-        });
-        queue.add(stringRequest);
-
+        };
+        queue.add(postRequest);
 
         //start POST
 //        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
