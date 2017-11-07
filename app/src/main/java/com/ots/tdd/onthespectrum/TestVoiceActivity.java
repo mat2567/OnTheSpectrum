@@ -12,7 +12,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 
 public class TestVoiceActivity extends AppCompatActivity implements TextToSpeech.OnInitListener{
@@ -32,15 +34,69 @@ public class TestVoiceActivity extends AppCompatActivity implements TextToSpeech
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("Volley", response);
+                        Log.d("GET", response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("Volley", "nope: " + error.getMessage());
+                Log.d("Volley", "Error: " + error.getMessage());
             }
         });
         queue.add(stringRequest);
+
+
+        //start POST
+//        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+//                new Response.Listener<String>()
+//                {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        // response
+//                        Log.d("POST", response);
+//                    }
+//                },
+//                new Response.ErrorListener()
+//                {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        // error
+//                        Log.d("Error:", error.getMessage());
+//                    }
+//                }
+//        ) {
+//            @Override
+//            protected Map<String, String> getParams()
+//            {
+//                Map<String, String>  params = new HashMap<String, String>();
+////                params.put("name", "Arsh");
+////                params.put("domain", "https://ots-v1.herokuapp.com/text-to-speech/");
+//                String script = "import plivo, plivoxml\n" +
+//                        "\n" +
+//                        "auth_id = \"MANJI1ZGQYOWQ3NTU4MW\"\n" +
+//                        "auth_token = \"NmU2YThiMmZiM2FlNDM1MDFkMTQ2NTAyMDJmNDdh\"\n" +
+//                        "\n" +
+//                        "p = plivo.RestAPI(auth_id, auth_token)\n" +
+//                        "\n" +
+//                        "params = { #ecclesia = 4706293412\n" +
+//                        "    'to': '16784670532',    # The phone numer to which the call will be placed\n" +
+//                        "    'from' : '1111111111', # The phone number to be used as the caller id\n" +
+//                        "\n" +
+//                        "    'answer_url' : \"https://ots-v1.herokuapp.com/text-to-speech/\",\n" +
+//                        "    'answer_method' : \"GET\", # The method used to call the answer_url\n" +
+//                        "}\n" +
+//                        "\n" +
+//                        "response = p.make_call(params)\n" +
+//                        "print str(response)\n";
+//                //heroku requires certain file and like  requirements file,
+////                String script = "hi";
+//                params.put("Script",script);
+//                params.put("name", "Arsh");
+//
+//                return params;
+//            }
+//        };
+//        queue.add(postRequest);
+//        Log.d("volley", "done");
     }
 
     @Override
