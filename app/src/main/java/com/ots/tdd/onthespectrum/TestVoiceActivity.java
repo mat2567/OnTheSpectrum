@@ -31,8 +31,9 @@ public class TestVoiceActivity extends AppCompatActivity implements TextToSpeech
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_voice);
 
+        setContentView(R.layout.activity_test_voice);
+        Log.d("TestVoiceActivity", "here");
         ttobj=new TextToSpeech(this, this);
         android.content.Context context = this.getApplicationContext();
 
@@ -44,21 +45,21 @@ public class TestVoiceActivity extends AppCompatActivity implements TextToSpeech
                     .environmentHost("clientapi.sinch.com")
                     .build();
 
-        sinchClient.addSinchClientListener(new SinchClientListener() {
-            public void onClientStarted(SinchClient client) { }
-            public void onClientStopped(SinchClient client) { }
-            public void onClientFailed(SinchClient client, SinchError error) { }
-            public void onRegistrationCredentialsRequired(SinchClient client, ClientRegistration registrationCallback) { }
-            public void onLogMessage(int level, String area, String message) { }
-        });
+//        sinchClient.addSinchClientListener(new SinchClientListener() {
+//            public void onClientStarted(SinchClient client) { }
+//            public void onClientStopped(SinchClient client) { }
+//            public void onClientFailed(SinchClient client, SinchError error) { }
+//            public void onRegistrationCredentialsRequired(SinchClient client, ClientRegistration registrationCallback) { }
+//            public void onLogMessage(int level, String area, String message) { }
+//        });
+//
+//        sinchClient.setSupportCalling(true);
+//        sinchClient.start();
+//
+//        CallClient callClient = sinchClient.getCallClient();
+//        callClient.addCallClientListener(new SinchCallClientListener());
 
-        sinchClient.setSupportCalling(true);
-        sinchClient.start();
-
-        CallClient callClient = sinchClient.getCallClient();
-        callClient.addCallClientListener(new SinchCallClientListener());
-
-        call = callClient.getCall("+16784670532");
+//        call = callClient.getCall("+16784670532");
 //        call = callClient.callPhoneNumber("+16784670532");
 
 //        call.addCallListener(new SinchCallListener());
@@ -106,37 +107,37 @@ public class TestVoiceActivity extends AppCompatActivity implements TextToSpeech
         super.onDestroy();
     }
 
-    private class SinchCallListener implements CallListener {
-        @Override
-        public void onCallEnded(Call endedCall) {
-            call = null;
-            callState = "";
-            Toast.makeText(TestVoiceActivity.this, "Ended", Toast.LENGTH_SHORT).show();
-        }
+//    private class SinchCallListener implements CallListener {
+//        @Override
+//        public void onCallEnded(Call endedCall) {
+//            call = null;
+//            callState = "";
+//            Toast.makeText(TestVoiceActivity.this, "Ended", Toast.LENGTH_SHORT).show();
+//        }
+//
+//        @Override
+//        public void onCallEstablished(Call establishedCall) {
+//            callState = "connected";
+//            Toast.makeText(TestVoiceActivity.this, "Established", Toast.LENGTH_SHORT).show();
+//        }
+//
+//        @Override
+//        public void onCallProgressing(Call progressingCall) {
+//            Toast.makeText(TestVoiceActivity.this, "Ringing", Toast.LENGTH_SHORT).show();
+//            callState = "ringing";
+//        }
+//
+//        @Override
+//        public void onShouldSendPushNotification(Call call, List<PushPair> pushPairs) {}
+//    }
 
-        @Override
-        public void onCallEstablished(Call establishedCall) {
-            callState = "connected";
-            Toast.makeText(TestVoiceActivity.this, "Established", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onCallProgressing(Call progressingCall) {
-            Toast.makeText(TestVoiceActivity.this, "Ringing", Toast.LENGTH_SHORT).show();
-            callState = "ringing";
-        }
-
-        @Override
-        public void onShouldSendPushNotification(Call call, List<PushPair> pushPairs) {}
-    }
-
-    private class SinchCallClientListener implements CallClientListener {
-        @Override
-        public void onIncomingCall(CallClient callClient, Call incomingCall) {
-            call = incomingCall;
-            call.answer();
-            call.addCallListener(new SinchCallListener());
-        }
-
-    }
+//    private class SinchCallClientListener implements CallClientListener {
+//        @Override
+//        public void onIncomingCall(CallClient callClient, Call incomingCall) {
+//            call = incomingCall;
+//            call.answer();
+//            call.addCallListener(new SinchCallListener());
+//        }
+//
+//    }
 }
