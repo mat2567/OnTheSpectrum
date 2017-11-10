@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ots.tdd.onthespectrum.SettingsActivity"
     android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    tools:context="com.ots.tdd.onthespectrum.SettingsActivity">
 
     <TextView
         android:id="@+id/Settings"
@@ -171,8 +171,31 @@
         app:layout_constraintStart_toStartOf="@+id/AdjustColorText"
         app:layout_constraintTop_toBottomOf="@+id/AdjustColorText" />
 
-    <!--android:entries="@string/fontSizeAttempt"-->
+    <Button
+        android:id="@+id/resetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onReset"
+        android:text="Reset Application"
+        app:layout_constraintBottom_toTopOf="@+id/textView4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="8dp"
+        android:text="Clears the profile, custom emergencies, and settings."
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!--android:entries="@string/fontSizeAttempt"-->
 
 
 </android.support.constraint.ConstraintLayout>

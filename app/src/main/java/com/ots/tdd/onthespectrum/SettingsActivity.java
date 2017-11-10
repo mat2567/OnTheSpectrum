@@ -51,6 +51,7 @@ public class SettingsActivity extends AppCompatActivity implements OnItemSelecte
     String password = "";
 
     private Spinner spinner;
+    private RadioGroup radioGroup;
 
     private static Integer[] colorSwatches = { R.drawable.swatch_1,
             R.drawable.swatch_2, R.drawable.swatch_3, R.drawable.swatch_4,
@@ -257,7 +258,6 @@ public class SettingsActivity extends AppCompatActivity implements OnItemSelecte
     }
 
     private void setTextSizes() {
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         int titleSize = sharedPref.getInt("TitleFontSize", 0);
         int subtitleSize = sharedPref.getInt("SubtitleFontSize", 0);
         int bodySize = sharedPref.getInt("BodyFontSize", 0);
@@ -292,5 +292,24 @@ public class SettingsActivity extends AppCompatActivity implements OnItemSelecte
     public void displayExceptionMessage(String msg)
     {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public void onReset(View view) {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.clear();
+
+        editor.putBoolean("RefreshProfile", true);
+        editor.putBoolean("RefreshList", true);
+
+        editor.putInt("colorTheme", R.style.Theme1);
+        editor.putInt("TitleFontSize", 30);
+        editor.putInt("SubtitleFontSize", 18);
+        editor.putInt("BodyFontSize", 16);
+        editor.putInt("FontSizeChange", 0);
+
+        editor.commit();
+
+        finish();
+        startActivity(getIntent());
     }
 }

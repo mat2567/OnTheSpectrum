@@ -62,26 +62,13 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
         gridView.setNumColumns(3);
         gridView.setVerticalSpacing(50);
 
+        if (sharedPref.getBoolean("RefreshList", false)) {
+            scenarioList.clear();
+            sharedPref.edit().putBoolean("RefreshList", false);
+        }
+
         if(scenarioList.size() < 1) {
             loadInfo();
-
-            /*String root = getFilesDir().getAbsolutePath();
-            File myDir = new File(root + "/saved_images");
-            myDir.mkdirs();
-            File file = new File (myDir, "addition.jpg");
-            int assignNum = scenarioList.size();
-            if (file.exists ()) file.delete ();
-            try {
-                FileOutputStream out = new FileOutputStream(file);
-                Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.addition);
-                img.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                out.flush();
-                out.close();
-
-                scenarioList.add(new EmergencyElement("", file.getAbsolutePath(), assignNum));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
         }
 
         adapter=new ArrayAdapter<EmergencyElement>(this, R.layout.emergency_item, scenarioList) {
@@ -144,6 +131,12 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         String savedScenarios = sharedPref.getString("ScenarioNames", null);
         if (null == savedScenarios) {
+            SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            String scenarioNames = "";
+            String title;
+            String path;
+
             int assignCount = 0;
             String root = getFilesDir().getAbsolutePath();
             File myDir = new File(root + "/saved_images");
@@ -158,8 +151,13 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("Break In", file.getAbsolutePath(), assignCount));
+                title = "Break In";
+                path = file.getAbsolutePath();
+                scenarioList.add(new EmergencyElement(title, path, assignCount));
                 assignCount++;
+
+                scenarioNames += title + ";;";
+                editor.putString(title, path);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -173,8 +171,13 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("Choking", file.getAbsolutePath(), assignCount));
+                title = "Choking";
+                path = file.getAbsolutePath();
+                scenarioList.add(new EmergencyElement(title, path, assignCount));
                 assignCount++;
+
+                scenarioNames += title + ";;";
+                editor.putString(title, path);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -188,8 +191,13 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("Fire", file.getAbsolutePath(), assignCount));
+                title = "Fire";
+                path = file.getAbsolutePath();
+                scenarioList.add(new EmergencyElement(title, path, assignCount));
                 assignCount++;
+
+                scenarioNames += title + ";;";
+                editor.putString(title, path);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -203,8 +211,13 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("Injury", file.getAbsolutePath(), assignCount));
+                title = "Injury";
+                path = file.getAbsolutePath();
+                scenarioList.add(new EmergencyElement(title, path, assignCount));
                 assignCount++;
+
+                scenarioNames += title + ";;";
+                editor.putString(title, path);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -218,8 +231,13 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("Lost", file.getAbsolutePath(), assignCount));
+                title = "Lost";
+                path = file.getAbsolutePath();
+                scenarioList.add(new EmergencyElement(title, path, assignCount));
                 assignCount++;
+
+                scenarioNames += title + ";;";
+                editor.putString(title, path);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -233,12 +251,20 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("In Pain", file.getAbsolutePath(), assignCount));
+                title = "Pain";
+                path = file.getAbsolutePath();
+                scenarioList.add(new EmergencyElement(title, path, assignCount));
                 assignCount++;
+
+                scenarioNames += title + ";;";
+                editor.putString(title, path);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             emergencyElementCounter = assignCount;
+
+            editor.putString("ScenarioNames", scenarioNames);
+            editor.commit();
         } else {
             String[] scenarioNames = savedScenarios.split(";;");
             for (int i = 0; i < scenarioNames.length; i++) {
