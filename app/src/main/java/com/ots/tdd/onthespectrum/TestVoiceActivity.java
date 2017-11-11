@@ -28,6 +28,7 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
     TextToSpeech ttobj;
     HttpURLConnection connection;
     BufferedReader reader;
+    String endpointURL = "https://ots-plivo-connection.herokuapp.com/initiate_call/" + SelectedEmergencyActivity.toSpeak;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
 
         android.content.Context context = this.getApplicationContext();
         //ttobj=new TextToSpeech(this, this);
-        new callTask().execute("https://ots-plivo-connection.herokuapp.com/initiate_call/");
+        new callTask().execute(endpointURL);
 
 
     }

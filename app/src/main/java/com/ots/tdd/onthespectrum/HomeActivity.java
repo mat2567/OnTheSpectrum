@@ -20,7 +20,7 @@ import android.widget.TextView;
 public class HomeActivity extends AppCompatActivity {
 
 
-    Button mCallButton; // 'm' indicates that this stands for member data. This implies that it will have a global reference.
+    Button mTestCallButton; // 'm' indicates that this stands for member data. This implies that it will have a global reference.
 
     Button emergencyButton;
     Button profileButton;
@@ -43,8 +43,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        mCallButton = findViewById(R.id.callButton);
-        mCallButton.setOnClickListener(new View.OnClickListener() {
+        mTestCallButton = findViewById(R.id.testCallButton);
+        mTestCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 initiateCall(view);
@@ -81,12 +81,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void initiateCall(View view) {
-//        // Log into plivo cloud
-//        outgoing = endpoint.createOutgoingCall();
-//        Log.v("PlivoOutbound", "Create outbound call object");
-//        //PHONE_NUMBER = number.getText().toString();
-//        Log.v("PlivoOutbound", PHONE_NUMBER);
-//        outgoing.call(PHONE_NUMBER);
         Intent callIntent = new Intent(HomeActivity.this, TestVoiceActivity.class);
         startActivity(callIntent);
     }

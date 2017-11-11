@@ -27,11 +27,12 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
     ScrollView infoScrollView;
     ArrayList<ProfileElement> profArray = new ArrayList<>();
     String telNum = "6784670532"; //4706293412
-    String toSpeak = "Hello.";
+    public static String toSpeak = "Hello.";
     TextToSpeech ttobj;
     int bodySize;
     int fontChange;
     String scenarioName;
+    Button mCallButton;
 
 
 
@@ -77,7 +78,13 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         infoTextView.setTextSize(bodySize + fontChange);
         infoTextView.setTextColor(Color.BLACK);
         infoScrollView.addView(infoTextView);
-
+        mCallButton = findViewById(R.id.callButton);
+        mCallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                initiateCall(view);
+            }
+        });
     }
 
 
@@ -131,82 +138,88 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
 
     /**
      * Initiates call to 911 and records call information to device
-     * @param  v  View
+     * @param  view  View
      * @see android.view.View
      */
-    public void initiateCall(View v) {
-
-        EditText txtPhn = (EditText)findViewById(R.id.phoneNumberEditText);
-        telNum = txtPhn.getText().toString();
-        if (telNum.length() == 10) {
-            boolean valid = true;
-            for (int i = 0; i < 10; i++) {
-                if(!Character.isDigit(telNum.charAt(i))) {
-                    valid = false;
-                }
-            }
-            if (valid) {
-                // Save Call to Log
-                SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                String savedCallLog = sharedPref.getString("CallLog", null);
-                if (savedCallLog == null) {
-                    savedCallLog = "";
-                }
-
-                //String timezone = TimeZone.getDefault().getDisplayName();
-                //String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
-                Calendar rightNow = Calendar.getInstance();
-                int minute = rightNow.get(Calendar.MINUTE);
-                int hour = rightNow.get(Calendar.HOUR);
-                String isAM = "AM";
-                if (hour >= 12) {
-                    hour -= 12;
-                    isAM = "PM";
-                }
-                if (hour == 0) {
-                    hour = 12;
-                }
-                String currTime = "";
-                if (hour < 10) {
-                    currTime += "0";
-                }
-                currTime = currTime + hour + ":";
-                if (minute < 10) {
-                    currTime += "0";
-                }
-                currTime = currTime + minute + " " + isAM + " (" + rightNow.getTimeZone().getDisplayName() + ")";
-                //int month = rightNow.get(Calendar.MONTH);
-                int day = rightNow.get(Calendar.DAY_OF_MONTH);
-                String month = rightNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US);
-                String currDate = month + " " + day + ", " + rightNow.get(Calendar.YEAR);
-
-                // add scenario to list of call logs
-                //savedCallLog += currDate + "||" + currTime + "||" + scenarioInfo + ";;";
-                savedCallLog += currDate + "~" + currTime + "~" + scenarioName + ";;";
-                editor.putString("CallLog", savedCallLog);
-
-                editor.commit();;
-
-                CallLogActivity.callLogList.add(new CallLogElement(currDate, currTime, scenarioName));
-
-                // End of adding call to log
-
-                Intent intentOngoingCall = new Intent(this, OngoingCallActivity.class);
-                intentOngoingCall.putExtra("TELEPHONE_NUMBER", telNum);
-                intentOngoingCall.putExtra("TO_SPEAK", toSpeak);
-                startActivity(intentOngoingCall);
-            } else {
-                String errorMessage = "Invalid phone number (not digit): " + telNum;
-                displayExceptionMessage(errorMessage);
-            }
-        } else {
-            String errorMessage = "Invalid phone number (too short): " + telNum + ": " + telNum.length();
-            displayExceptionMessage(errorMessage);
-        }
-
-
+    public void initiateCall(View view) {
+        Intent callIntent = new Intent(SelectedEmergencyActivity.this, TestVoiceActivity.class);
+        startActivity(callIntent);
     }
+
+
+//    public void initiateCall(View v) {
+//
+//        EditText txtPhn = (EditText)findViewById(R.id.phoneNumberEditText);
+//        telNum = txtPhn.getText().toString();
+//        if (telNum.length() == 10) {
+//            boolean valid = true;
+//            for (int i = 0; i < 10; i++) {
+//                if(!Character.isDigit(telNum.charAt(i))) {
+//                    valid = false;
+//                }
+//            }
+//            if (valid) {
+//                // Save Call to Log
+//                SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+//                SharedPreferences.Editor editor = sharedPref.edit();
+//                String savedCallLog = sharedPref.getString("CallLog", null);
+//                if (savedCallLog == null) {
+//                    savedCallLog = "";
+//                }
+//
+//                //String timezone = TimeZone.getDefault().getDisplayName();
+//                //String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+//                Calendar rightNow = Calendar.getInstance();
+//                int minute = rightNow.get(Calendar.MINUTE);
+//                int hour = rightNow.get(Calendar.HOUR);
+//                String isAM = "AM";
+//                if (hour >= 12) {
+//                    hour -= 12;
+//                    isAM = "PM";
+//                }
+//                if (hour == 0) {
+//                    hour = 12;
+//                }
+//                String currTime = "";
+//                if (hour < 10) {
+//                    currTime += "0";
+//                }
+//                currTime = currTime + hour + ":";
+//                if (minute < 10) {
+//                    currTime += "0";
+//                }
+//                currTime = currTime + minute + " " + isAM + " (" + rightNow.getTimeZone().getDisplayName() + ")";
+//                //int month = rightNow.get(Calendar.MONTH);
+//                int day = rightNow.get(Calendar.DAY_OF_MONTH);
+//                String month = rightNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US);
+//                String currDate = month + " " + day + ", " + rightNow.get(Calendar.YEAR);
+//
+//                // add scenario to list of call logs
+//                //savedCallLog += currDate + "||" + currTime + "||" + scenarioInfo + ";;";
+//                savedCallLog += currDate + "~" + currTime + "~" + scenarioName + ";;";
+//                editor.putString("CallLog", savedCallLog);
+//
+//                editor.commit();;
+//
+//                CallLogActivity.callLogList.add(new CallLogElement(currDate, currTime, scenarioName));
+//
+//                // End of adding call to log
+//
+//                Intent intentOngoingCall = new Intent(this, OngoingCallActivity.class);
+//                intentOngoingCall.putExtra("TELEPHONE_NUMBER", telNum);
+//                intentOngoingCall.putExtra("TO_SPEAK", toSpeak);
+//                startActivity(intentOngoingCall);
+//            } else {
+//                String errorMessage = "Invalid phone number (not digit): " + telNum;
+//                displayExceptionMessage(errorMessage);
+//            }
+//        } else {
+//            String errorMessage = "Invalid phone number (too short): " + telNum + ": " + telNum.length();
+//            displayExceptionMessage(errorMessage);
+//        }
+//
+//
+//    }
 
 
     /**
