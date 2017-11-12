@@ -33,31 +33,31 @@ public class OngoingCallActivity extends AppCompatActivity {
         telNum = getIntent().getStringExtra("TELEPHONE_NUMBER");
         //telNum = "6784670532";
         toSpeak = getIntent().getStringExtra("TO_SPEAK");
-        try {
-
-            try {
-                // number is something like "tel:8886667777"
-                if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.CALL_PHONE)
-                        != PackageManager.PERMISSION_GRANTED) {
-
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.CALL_PHONE},
-                            MY_PERMISSIONS_REQUEST_CALL_PHONE);
-                }
-
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + telNum));
-                Log.i("prior to new activity", "lets see");
-                startActivity(callIntent);
-            } catch (SecurityException securityException) {
-                Log.e("Calling a Phone Number", "Call failed", securityException);
-                displayExceptionMessage(securityException.getMessage());
-            }
-        } catch (ActivityNotFoundException activityException) {
-            Log.e("Calling a Phone Number", "Call failed", activityException);
-            displayExceptionMessage(activityException.getMessage());
-        }
+//        try {
+//
+//            try {
+//                // number is something like "tel:8886667777"
+//                if (ContextCompat.checkSelfPermission(this,
+//                        Manifest.permission.CALL_PHONE)
+//                        != PackageManager.PERMISSION_GRANTED) {
+//
+//                    ActivityCompat.requestPermissions(this,
+//                            new String[]{Manifest.permission.CALL_PHONE},
+//                            MY_PERMISSIONS_REQUEST_CALL_PHONE);
+//                }
+//
+//                Intent callIntent = new Intent(Intent.ACTION_CALL);
+//                callIntent.setData(Uri.parse("tel:" + telNum));
+//                Log.i("prior to new activity", "lets see");
+//                startActivity(callIntent);
+//            } catch (SecurityException securityException) {
+//                Log.e("Calling a Phone Number", "Call failed", securityException);
+//                displayExceptionMessage(securityException.getMessage());
+//            }
+//        } catch (ActivityNotFoundException activityException) {
+//            Log.e("Calling a Phone Number", "Call failed", activityException);
+//            displayExceptionMessage(activityException.getMessage());
+//        }
     }
 
     public void displayExceptionMessage(String msg)

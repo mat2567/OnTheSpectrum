@@ -25,6 +25,10 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Random;
 
+/**
+ *This class handles editing the edit emergency list page.
+ */
+
 public class EditEmergencyActivity extends AppCompatActivity {
 
     public EmergencyElement emergency;
@@ -64,6 +68,12 @@ public class EditEmergencyActivity extends AppCompatActivity {
         setTextSizes();
 
     }
+
+    /**
+     * Saves any changes that have been made to the edit screen
+     * when the save button has been clicked
+     * @param v
+     */
 
     public void saveChanges(View v) {
         String title = emergencyTitle.getText().toString();
@@ -105,10 +115,18 @@ public class EditEmergencyActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Cancels changes to the edit page when the cancel button has been selected.
+     * @param v
+     */
     public void cancelChanges(View v) {
         finish();
     }
 
+    /**
+     * Allows user to change images when editing an emergency
+     * @param v
+     */
     public void changeImage(View v) {
         toastMessage("Changing Image");
 

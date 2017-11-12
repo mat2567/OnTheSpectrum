@@ -49,7 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
         @Override
         public void afterTextChanged(Editable s) {
             String editingText = s.toString();
-            // displayExceptionMessage("editing");
+            // displayExceptionMessage("new: " + editingText);
             if (editingNum >= 0) {
                 itemList.get(editingNum).userInfo = editingText;
             }
@@ -68,9 +68,10 @@ public class ProfileActivity extends AppCompatActivity {
     static HashMap<Integer, ImageView> cancelMap = new HashMap<>();
     static HashMap<Integer, EditText> textMap = new HashMap<>();
 
+    SharedPreferences sharedPref;
 
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         int theme = sharedPref.getInt("colorTheme", R.style.AppTheme);
         setTheme(theme);
 
@@ -81,9 +82,20 @@ public class ProfileActivity extends AppCompatActivity {
             loadInfo();
         }
 
+        final int titleSize = sharedPref.getInt("TitleFontSize", 0);
+        final int bodySize = sharedPref.getInt("BodyFontSize", 0);
+        final int fontChange = sharedPref.getInt("FontSizeChange", 0);
+
+        TextView profileTitle = (TextView) findViewById(R.id.profileTitle);
+        profileTitle.setTextSize(titleSize + fontChange);
+        Button callLog = (Button) findViewById(R.id.callLogButton);
+        callLog.setTextSize(bodySize + fontChange);
+        Button add = (Button) findViewById(R.id.addProfileButton);
+        add.setTextSize(bodySize + fontChange);
+
+
         /*Backs the ListView. Enables TextViews to be added dynamically */
         adapter=new ArrayAdapter<ProfileElement>(this, R.layout.profile_item, itemList) {
-
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -103,6 +115,30 @@ public class ProfileActivity extends AppCompatActivity {
                 ImageView saveInfo = (ImageView) convertView.findViewById(R.id.saveInfo);
                 ImageView cancelInfo = (ImageView) convertView.findViewById(R.id.cancelInfo);
 
+//                if (editingNum != -1) {
+//                    if (editingNum != current.profileNumber) {
+//                        userInfo.removeTextChangedListener(textWatcher);
+//                        userInfo.setText(current.userInfo);
+//                        // displayExceptionMessage("Not Editing");
+//                    } else {
+//                        userInfo.setText(current.userInfo);
+//                        userInfo.addTextChangedListener(textWatcher);
+//                        if (editingNum != 0) {
+//                            displayExceptionMessage("Being Edited");
+//                        }
+//                    }
+//                } else {
+//                    userInfo.setText(current.userInfo);
+//                }
+
+                userInfo.removeTextChangedListener(textWatcher);
+                userInfo.setText(current.userInfo);
+                if (editingNum != -1) {
+                    if (editingNum == current.profileNumber) {
+                        userInfo.addTextChangedListener(textWatcher);
+                    }
+                }
+
                 /*userInfo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View view, boolean hasFocus) {
@@ -117,11 +153,13 @@ public class ProfileActivity extends AppCompatActivity {
                 });*/
 
                 if (current.profileEdit == null) {
+
+
+
                     editInfo.setTag(current.profileNumber);
                     saveInfo.setTag(current.profileNumber);
                     cancelInfo.setTag(current.profileNumber);
                     infoType.setText(current.infoType);
-                    userInfo.setText(current.userInfo);
                     editMap.put(current.profileNumber, editInfo);
                     saveMap.put(current.profileNumber, saveInfo);
                     cancelMap.put(current.profileNumber, cancelInfo);
@@ -133,10 +171,10 @@ public class ProfileActivity extends AppCompatActivity {
 
 
 
+
                     editInfo.setVisibility(current.editVis);
                     saveInfo.setVisibility(current.saveVis);
                     cancelInfo.setVisibility(current.cancelVis);
-
 
                     current.profileEdit = editInfo;
                     current.profileSave = saveInfo;
@@ -144,17 +182,19 @@ public class ProfileActivity extends AppCompatActivity {
                     current.profileTextView = infoType;
                     current.profileEditText = userInfo;
                 } else {
+
+
                     editInfo.setTag(current.profileNumber);
                     saveInfo.setTag(current.profileNumber);
                     cancelInfo.setTag(current.profileNumber);
                     infoType.setText(current.infoType);
-                    userInfo.setText(current.userInfo); // might need to watch for refreshes
 
                     userInfo.setEnabled(current.editTextEnabled);
 
                     /*if (editingNum == current.profileNumber) {
                         userInfo.addTextChangedListener(textWatcher);
                     }*/
+
 
 
                     userInfo.getBackground().clearColorFilter();
@@ -181,7 +221,11 @@ public class ProfileActivity extends AppCompatActivity {
                 //userInfo.addTextChangedListener(new ProfileTextWatcher(userInfo));
 
                 infoType.setText(current.infoType);
-                userInfo.setText(current.userInfo);
+
+                // userInfo.setText(current.userInfo);
+
+                infoType.setTextSize(bodySize + 2 + fontChange);
+                userInfo.setTextSize(bodySize + 2 + fontChange);
 
 
                 return convertView;
@@ -235,19 +279,21 @@ public class ProfileActivity extends AppCompatActivity {
             int profilePos = editingNum;
             ProfileElement current = itemList.get(profilePos);
 
-            displayExceptionMessage("Element number: " + profilePos);
+            // displayExceptionMessage("Element number: " + profilePos);
 
             ImageView currEditInfo = editMap.get(profilePos);
             ImageView currSaveInfo = saveMap.get(profilePos);
             ImageView currCancelInfo = cancelMap.get(profilePos);
             EditText currEditText = textMap.get(profilePos);
 
+            currEditText.removeTextChangedListener(textWatcher);
+
             current.editTextEnabled = false;
             currEditText.setEnabled(current.editTextEnabled);
             currEditText.setText(current.previousUserInfo);
+            current.userInfo = current.previousUserInfo;
             currEditText.setBackgroundColor(0x0106000d); //R.color.transparent
 
-            currEditText.removeTextChangedListener(textWatcher);
 
             current.editVis = View.VISIBLE;
             current.saveVis = View.GONE;
@@ -281,7 +327,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                 editingNum = profilePos;
 
-                displayExceptionMessage("Element number: " + profilePos);
+                // displayExceptionMessage("Element number: " + profilePos);
 
                 ImageView currSaveInfo = saveMap.get(profilePos);
                 ImageView currCancelInfo = cancelMap.get(profilePos);
@@ -322,7 +368,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         editingNum = -1;
 
-        displayExceptionMessage("Element number: " + profilePos);
+        // displayExceptionMessage("Element number: " + profilePos);
 
         ImageView currEditInfo = editMap.get(profilePos);
         ImageView currCancelInfo = cancelMap.get(profilePos);
@@ -362,7 +408,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         editingNum = -1;
 
-        displayExceptionMessage("Element number: " + profilePos);
+        // displayExceptionMessage("Element number: " + profilePos);
 
         ImageView currEditInfo = editMap.get(profilePos);
         ImageView currSaveInfo = saveMap.get(profilePos);
@@ -373,6 +419,7 @@ public class ProfileActivity extends AppCompatActivity {
         current.editTextEnabled = false;
         currEditText.setEnabled(current.editTextEnabled);
         currEditText.setText(current.previousUserInfo);
+        current.userInfo = current.previousUserInfo;
         currEditText.setBackgroundColor(0x0106000d); //R.color.transparent
 
         current.editVis = View.VISIBLE;
@@ -425,17 +472,26 @@ public class ProfileActivity extends AppCompatActivity {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.add_field_dialog);
 
+        final int bodySize = sharedPref.getInt("BodyFontSize", 0);
+        final int fontChange = sharedPref.getInt("FontSizeChange", 0);
+
         dialog.setTitle("Create New Profile Field");
         dialog.setCancelable(true);
 
         Button createField = (Button) dialog.findViewById(R.id.createFieldButton);
         Button cancelField = (Button) dialog.findViewById(R.id.cancelFieldButton);
 
+        createField.setTextSize(bodySize + fontChange);
+        cancelField.setTextSize(bodySize + fontChange);
+
+        final EditText newField = (EditText) dialog.findViewById(R.id.fieldEditText);
+        newField.setTextSize(bodySize + 2 + fontChange);
+        final EditText newInfo = (EditText) dialog.findViewById(R.id.infoEditText);
+        newInfo.setTextSize(bodySize + 2 + fontChange);
+
         createField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText newField = (EditText) dialog.findViewById(R.id.fieldEditText);
-                EditText newInfo = (EditText) dialog.findViewById(R.id.infoEditText);
                 if(newField.getText().toString().isEmpty() || newInfo.getText().toString().isEmpty()){
                     displayExceptionMessage("Please fill out both text boxes.");
                 } else{
