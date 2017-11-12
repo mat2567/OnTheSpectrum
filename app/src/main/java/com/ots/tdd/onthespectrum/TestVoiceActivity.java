@@ -28,23 +28,25 @@ public class TestVoiceActivity extends AppCompatActivity implements TextToSpeech
         ttobj=new TextToSpeech(this, this);
 
         RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "https://api.plivo.com/v1/Account/MANJVHYJU2YZA1MDQ2ZW/Call/";
+
 //        String url ="https://ots-v1.herokuapp.com/text-to-speech/";
 //
-//        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        Log.d("GET", response);
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.d("Volley", "Error: " + error.getMessage());
-//            }
-//        });
-//        queue.add(stringRequest);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("GET", response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Volley", "Error: " + error.getMessage());
+            }
+        });
+        queue.add(stringRequest);
 
-        String url = "https://api.plivo.com/v1/Account/MANJVHYJU2YZA1MDQ2ZW/Call/";
+//        String url = "https://api.plivo.com/v1/Account/MANJVHYJU2YZA1MDQ2ZW/Call/";
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>()
                 {
