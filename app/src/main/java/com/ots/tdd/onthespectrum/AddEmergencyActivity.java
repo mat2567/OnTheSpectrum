@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +28,7 @@ public class AddEmergencyActivity extends AppCompatActivity {
     public EditText emergencyTitle;
     public ImageButton emergencyImage;
     private String currentImage;
+    private Button browseButton;
 
     private static int RESULT_LOAD_IMAGE = 1;
 
@@ -48,9 +51,21 @@ public class AddEmergencyActivity extends AppCompatActivity {
         // EmergencyElement addEmergency = ListOfEmergenciesActivity.scenarioList.get(ListOfEmergenciesActivity.scenarioList.size() - 1);
         emergencyTitle = (EditText) findViewById(R.id.emergencyTitle);
         emergencyImage = (ImageButton) findViewById(R.id.emergencyImage);
+        browseButton = (Button) findViewById(R.id.browseButton);
 
         // emergencyImage.setBackground( new BitmapDrawable(getResources(), addEmergency.getImage()) );
-        emergencyImage.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+
+        LinearLayout.LayoutParams llParamsRect = new LinearLayout.LayoutParams(width*3/4, width/8);
+        llParamsRect.gravity = Gravity.CENTER_HORIZONTAL;
+        browseButton.setLayoutParams(llParamsRect);
+
+        LinearLayout.LayoutParams llParamsSquare = new LinearLayout.LayoutParams(width*3/4, width*3/4);
+        llParamsSquare.gravity = Gravity.CENTER_HORIZONTAL;
+        emergencyImage.setLayoutParams(llParamsSquare);
 
         setTextSizes();
     }
@@ -181,6 +196,7 @@ public class AddEmergencyActivity extends AppCompatActivity {
         fontChange = sharedPref.getInt("FontSizeChange", 0);
 
         emergencyTitle.setTextSize(subtitleSize + fontChange);
+        browseButton.setTextSize(bodySize + fontChange);
         createButton.setTextSize(bodySize + fontChange);
         cancelButton.setTextSize(bodySize + fontChange);
     }
