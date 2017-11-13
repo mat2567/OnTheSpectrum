@@ -6,7 +6,7 @@ auth_token = "NmU2YThiMmZiM2FlNDM1MDFkMTQ2NTAyMDJmNDdh"
 p = plivo.RestAPI(auth_id, auth_token)
 
 params = {
-    'to': '14706293412',    # The phone numer to which the call will be placed
+    'to': '16784670532',    # The phone numer to which the call will be placed 14706293412
     'from' : '1111111111', # The phone number to be used as the caller id
 
     # answer_url is the URL invoked by Plivo when the outbound call is answered
