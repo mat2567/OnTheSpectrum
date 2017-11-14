@@ -5,8 +5,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -185,10 +187,11 @@ public class HomeActivity extends AppCompatActivity {
         editEmergencyButton.setTextSize(bodySize + 2 + fontChange);
         settingsButton.setTextSize(bodySize + 2 + fontChange);
 
-        emergencyButton.setBackgroundColor(getResources().getColor(colorHomeButtons));
-        profileButton.setBackgroundColor(getResources().getColor(colorHomeButtons));
-        editEmergencyButton.setBackgroundColor(getResources().getColor(colorHomeButtons));
-        settingsButton.setBackgroundColor(getResources().getColor(colorHomeButtons));
+        int color = ContextCompat.getColor(getApplicationContext(), colorHomeButtons);
+        emergencyButton.setBackgroundColor(color);
+        profileButton.setBackgroundColor(color);
+        editEmergencyButton.setBackgroundColor(color);
+        settingsButton.setBackgroundColor(color);
 
     }
 }

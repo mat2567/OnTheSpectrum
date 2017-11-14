@@ -1,1 +1,1 @@
-include ':app', ':sinch-android-rtc'
+include ':app'
