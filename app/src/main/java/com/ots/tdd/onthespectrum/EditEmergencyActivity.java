@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +39,7 @@ public class EditEmergencyActivity extends AppCompatActivity {
     private String originalTitle;
     private String originalImage;
     private String currentImage;
+    private Button browseButton;
 
     private static int RESULT_LOAD_IMAGE = 1;
 
@@ -56,6 +59,7 @@ public class EditEmergencyActivity extends AppCompatActivity {
         emergency = ListOfEmergenciesActivity.scenarioList.get(emergencyNum);
         emergencyTitle = (EditText) findViewById(R.id.emergencyTitle);
         emergencyImage = (ImageButton) findViewById(R.id.emergencyImage);
+        browseButton = (Button) findViewById(R.id.browseButton);
 
         originalTitle = emergency.getTitle();
         originalImage = emergency.getImageMemLocation();
@@ -63,8 +67,18 @@ public class EditEmergencyActivity extends AppCompatActivity {
 
         emergencyTitle.setText(originalTitle);
         emergencyImage.setBackground( new BitmapDrawable(getResources(), emergency.getImage()) );
-        emergencyImage.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+
+        LinearLayout.LayoutParams llParamsRect = new LinearLayout.LayoutParams(width*3/4, width/8);
+        llParamsRect.gravity = Gravity.CENTER_HORIZONTAL;
+        browseButton.setLayoutParams(llParamsRect);
+
+        LinearLayout.LayoutParams llParamsSquare = new LinearLayout.LayoutParams(width*3/4, width*3/4);
+        llParamsSquare.gravity = Gravity.CENTER_HORIZONTAL;
+        emergencyImage.setLayoutParams(llParamsSquare);
         setTextSizes();
 
     }
@@ -205,7 +219,8 @@ public class EditEmergencyActivity extends AppCompatActivity {
         int bodySize = sharedPref.getInt("BodyFontSize", 0);
         int fontChange = sharedPref.getInt("FontSizeChange", 0);
 
-        emergencyTitle.setTextSize(subtitleSize + fontChange);
+        emergencyTitle.setTextSize(subtitleSize + 2 + fontChange);
+        browseButton.setTextSize(bodySize + fontChange);
         saveButton.setTextSize(bodySize + fontChange);
         cancelButton.setTextSize(bodySize + fontChange);
     }

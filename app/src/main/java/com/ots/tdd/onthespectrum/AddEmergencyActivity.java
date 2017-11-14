@@ -214,7 +214,7 @@ public class AddEmergencyActivity extends AppCompatActivity {
         bodySize = sharedPref.getInt("BodyFontSize", 0);
         fontChange = sharedPref.getInt("FontSizeChange", 0);
 
-        emergencyTitle.setTextSize(subtitleSize + fontChange);
+        emergencyTitle.setTextSize(subtitleSize + 2 + fontChange);
         browseButton.setTextSize(bodySize + fontChange);
         createButton.setTextSize(bodySize + fontChange);
         cancelButton.setTextSize(bodySize + fontChange);

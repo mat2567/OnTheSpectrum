@@ -58,6 +58,9 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
         TextView title = (TextView) findViewById(R.id.listForEditingTitle);
         title.setTextSize(titleSize + fontChange);
 
+        Button addButton = (Button) findViewById(R.id.createScenarioButton);
+        addButton.setTextSize(bodySize + fontChange);
+
         GridView gridView = (GridView) findViewById(R.id.listOfEmergenciesGridView);
         gridView.setNumColumns(3);
         gridView.setVerticalSpacing(50);
