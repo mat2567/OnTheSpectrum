@@ -5,18 +5,24 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
+import android.view.Window;
 import android.widget.TextView;
 
 
 public class HomeActivity extends AppCompatActivity {
+
+
+    Button mTestCallButton; // 'm' indicates that this stands for member data. This implies that it will have a global reference.
 
     Button emergencyButton;
     Button profileButton;
@@ -39,6 +45,15 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        mTestCallButton = findViewById(R.id.testCallButton);
+        mTestCallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                initiateCall(view);
+            }
+        });
+
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         String prevPassword = sharedPref.getString("Lock", null);
         if (null == prevPassword) {
             SharedPreferences.Editor editor = sharedPref.edit();
@@ -67,6 +82,11 @@ public class HomeActivity extends AppCompatActivity {
         this.recreate();
     }
 
+    public void initiateCall(View view) {
+        Intent callIntent = new Intent(HomeActivity.this, TestVoiceActivity.class);
+        startActivity(callIntent);
+    }
+
     public void moveToCallScreen(View v) {
         Intent intentCall = new Intent(this, ChooseEmergencyActivity.class);
         startActivity(intentCall);
@@ -88,10 +108,9 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void moveToTestVoiceScreen(View v) {
-        Intent intentTestVoice = new Intent(this, TestVoiceActivity.class);
-        startActivity(intentTestVoice);
+//        Intent intentTestVoice = new Intent(this, TestVoiceActivity.class);
+//        startActivity(intentTestVoice);
     }
-
     private void theme() {
         sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         int theme = sharedPref.getInt("colorTheme", 0);
@@ -168,10 +187,11 @@ public class HomeActivity extends AppCompatActivity {
         editEmergencyButton.setTextSize(bodySize + 2 + fontChange);
         settingsButton.setTextSize(bodySize + 2 + fontChange);
 
-        emergencyButton.setBackgroundColor(getResources().getColor(colorHomeButtons));
-        profileButton.setBackgroundColor(getResources().getColor(colorHomeButtons));
-        editEmergencyButton.setBackgroundColor(getResources().getColor(colorHomeButtons));
-        settingsButton.setBackgroundColor(getResources().getColor(colorHomeButtons));
+        int color = ContextCompat.getColor(getApplicationContext(), colorHomeButtons);
+        emergencyButton.setBackgroundColor(color);
+        profileButton.setBackgroundColor(color);
+        editEmergencyButton.setBackgroundColor(color);
+        settingsButton.setBackgroundColor(color);
 
     }
 }

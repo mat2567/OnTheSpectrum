@@ -23,6 +23,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Random;
 
+/**
+ * This class adds emergencies to the emergeny activity list.
+ * This activity is started when the add button is clicked on the edit emergency page.
+ */
+
+
 public class AddEmergencyActivity extends AppCompatActivity {
 
     public EditText emergencyTitle;
@@ -70,6 +76,11 @@ public class AddEmergencyActivity extends AppCompatActivity {
         setTextSizes();
     }
 
+    /**
+     * Saves any changes that have been made to the edit screen
+     * when the save button has been clicked
+     * @param v
+     */
     public void saveChanges(View v) {
         String title = emergencyTitle.getText().toString();
         EmergencyElement emergency = new EmergencyElement(title,
@@ -115,10 +126,18 @@ public class AddEmergencyActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Cancels changes to the edit page when the cancel button has been selected.
+     * @param v
+     */
     public void cancelChanges(View v) {
         finish();
     }
 
+    /**
+     * Allows user to change images when editing an emergency
+     * @param v
+     */
     public void changeImage(View v) {
         toastMessage("Changing Image");
 
