@@ -78,6 +78,11 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        if (sharedPref.getBoolean("RefreshProfile", false)) {
+            itemList.clear();
+            sharedPref.edit().putBoolean("RefreshProfile", false);
+        }
+
         if (itemList.isEmpty()) {
             loadInfo();
         }
@@ -522,8 +527,6 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         dialog.show();
-
-
     }
 }
 
