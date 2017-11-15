@@ -15,8 +15,10 @@ public class ProfileElement {
     ImageView profileEdit = null;
     ImageView profileSave = null;
     ImageView profileCancel = null;
+    ImageView profileDelete = null;
 
     int editVis = View.VISIBLE;
+    int deleteVis = View.VISIBLE;
     int saveVis = View.GONE;
     int cancelVis = View.GONE;
     boolean editTextEnabled = false;

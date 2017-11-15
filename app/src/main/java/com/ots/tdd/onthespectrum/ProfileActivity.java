@@ -66,6 +66,7 @@ public class ProfileActivity extends AppCompatActivity {
     static HashMap<Integer, ImageView> editMap = new HashMap<>();
     static HashMap<Integer, ImageView> saveMap = new HashMap<>();
     static HashMap<Integer, ImageView> cancelMap = new HashMap<>();
+    static HashMap<Integer, ImageView> deleteMap = new HashMap<>();
     static HashMap<Integer, EditText> textMap = new HashMap<>();
 
     SharedPreferences sharedPref;
@@ -119,22 +120,9 @@ public class ProfileActivity extends AppCompatActivity {
                 ImageView editInfo = (ImageView) convertView.findViewById(R.id.editInfo);
                 ImageView saveInfo = (ImageView) convertView.findViewById(R.id.saveInfo);
                 ImageView cancelInfo = (ImageView) convertView.findViewById(R.id.cancelInfo);
+                ImageView deleteInfo = (ImageView) convertView.findViewById(R.id.deleteInfo);
 
-//                if (editingNum != -1) {
-//                    if (editingNum != current.profileNumber) {
-//                        userInfo.removeTextChangedListener(textWatcher);
-//                        userInfo.setText(current.userInfo);
-//                        // displayExceptionMessage("Not Editing");
-//                    } else {
-//                        userInfo.setText(current.userInfo);
-//                        userInfo.addTextChangedListener(textWatcher);
-//                        if (editingNum != 0) {
-//                            displayExceptionMessage("Being Edited");
-//                        }
-//                    }
-//                } else {
-//                    userInfo.setText(current.userInfo);
-//                }
+                userInfo.setBackgroundColor(0x0106000d); //R.color.transparent
 
                 userInfo.removeTextChangedListener(textWatcher);
                 userInfo.setText(current.userInfo);
@@ -144,46 +132,31 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 }
 
-                /*userInfo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View view, boolean hasFocus) {
-                        if (hasFocus) {
-                            EditText currEditText = (EditText) view;
-                            currEditText.setSelection(currEditText.getText().length());
-                            //Toast.makeText(getApplicationContext(), "Got the focus", Toast.LENGTH_LONG).show();
-                        } else {
-                            //Toast.makeText(getApplicationContext(), "Lost the focus", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });*/
-
                 if (current.profileEdit == null) {
-
-
-
                     editInfo.setTag(current.profileNumber);
                     saveInfo.setTag(current.profileNumber);
                     cancelInfo.setTag(current.profileNumber);
+                    deleteInfo.setTag(current.profileNumber);
                     infoType.setText(current.infoType);
                     editMap.put(current.profileNumber, editInfo);
                     saveMap.put(current.profileNumber, saveInfo);
                     cancelMap.put(current.profileNumber, cancelInfo);
+                    deleteMap.put(current.profileNumber, deleteInfo);
                     textMap.put(current.profileNumber, userInfo);
 
                     userInfo.setEnabled(current.editTextEnabled);
 
                     userInfo.getBackground().clearColorFilter();
 
-
-
-
                     editInfo.setVisibility(current.editVis);
                     saveInfo.setVisibility(current.saveVis);
                     cancelInfo.setVisibility(current.cancelVis);
+                    deleteInfo.setVisibility(current.deleteVis);
 
                     current.profileEdit = editInfo;
                     current.profileSave = saveInfo;
                     current.profileCancel = cancelInfo;
+                    current.profileDelete = deleteInfo;
                     current.profileTextView = infoType;
                     current.profileEditText = userInfo;
                 } else {
@@ -192,42 +165,33 @@ public class ProfileActivity extends AppCompatActivity {
                     editInfo.setTag(current.profileNumber);
                     saveInfo.setTag(current.profileNumber);
                     cancelInfo.setTag(current.profileNumber);
+                    deleteInfo.setTag(current.profileNumber);
                     infoType.setText(current.infoType);
 
                     userInfo.setEnabled(current.editTextEnabled);
-
-                    /*if (editingNum == current.profileNumber) {
-                        userInfo.addTextChangedListener(textWatcher);
-                    }*/
-
-
 
                     userInfo.getBackground().clearColorFilter();
 
                     editInfo.setVisibility(current.editVis);
                     saveInfo.setVisibility(current.saveVis);
                     cancelInfo.setVisibility(current.cancelVis);
+                    deleteInfo.setVisibility(current.deleteVis);
 
                     current.profileEdit = editInfo;
                     current.profileSave = saveInfo;
                     current.profileCancel = cancelInfo;
+                    current.profileDelete = deleteInfo;
                     current.profileTextView = infoType;
                     current.profileEditText = userInfo;
                     editMap.put(current.profileNumber, editInfo);
                     saveMap.put(current.profileNumber, saveInfo);
                     cancelMap.put(current.profileNumber, cancelInfo);
+                    deleteMap.put(current.profileNumber, deleteInfo);
                     textMap.put(current.profileNumber, userInfo);
                     adapter.notifyDataSetChanged();
                 }
 
-
-
-                // if this remains unused, may delete the ProfileTextWatcher class
-                //userInfo.addTextChangedListener(new ProfileTextWatcher(userInfo));
-
                 infoType.setText(current.infoType);
-
-                // userInfo.setText(current.userInfo);
 
                 infoType.setTextSize(bodySize + 2 + fontChange);
                 userInfo.setTextSize(bodySize + 2 + fontChange);
@@ -289,6 +253,7 @@ public class ProfileActivity extends AppCompatActivity {
             ImageView currEditInfo = editMap.get(profilePos);
             ImageView currSaveInfo = saveMap.get(profilePos);
             ImageView currCancelInfo = cancelMap.get(profilePos);
+            ImageView currDeleteInfo = deleteMap.get(profilePos);
             EditText currEditText = textMap.get(profilePos);
 
             currEditText.removeTextChangedListener(textWatcher);
@@ -301,16 +266,19 @@ public class ProfileActivity extends AppCompatActivity {
 
 
             current.editVis = View.VISIBLE;
+            current.deleteVis = View.VISIBLE;
             current.saveVis = View.GONE;
             current.cancelVis = View.GONE;
 
             currEditInfo.setVisibility(current.editVis);
             currSaveInfo.setVisibility(current.saveVis);
             currCancelInfo.setVisibility(current.cancelVis);
+            currDeleteInfo.setVisibility(current.deleteVis);
 
             current.profileEdit = currEditInfo;
             current.profileSave = currSaveInfo;
             current.profileCancel = currCancelInfo;
+            current.profileDelete = currDeleteInfo;
             current.profileEditText = currEditText;
             adapter.notifyDataSetChanged();
             editingNum = -1;
@@ -336,27 +304,32 @@ public class ProfileActivity extends AppCompatActivity {
 
                 ImageView currSaveInfo = saveMap.get(profilePos);
                 ImageView currCancelInfo = cancelMap.get(profilePos);
+                ImageView currDeleteInfo = deleteMap.get(profilePos);
                 EditText currEditText = textMap.get(profilePos);
 
                 current.editTextEnabled = true;
                 currEditText.setEnabled(current.editTextEnabled);
                 current.previousUserInfo = current.userInfo;
-                currEditText.setBackgroundColor(0x01060000); //R.color.darker_grey
+                //currEditText.setBackgroundColor(0x01060000); //R.color.darker_grey
+                //currEditText.setBackgroundColor(0x00E0E000); //R.color.darker_grey
 
 
                 currEditText.addTextChangedListener(textWatcher);
 
                 current.editVis = View.GONE;
+                current.deleteVis = View.GONE;
                 current.saveVis = View.VISIBLE;
                 current.cancelVis = View.VISIBLE;
 
                 currEditInfo.setVisibility(current.editVis);
                 currSaveInfo.setVisibility(current.saveVis);
                 currCancelInfo.setVisibility(current.cancelVis);
+                currDeleteInfo.setVisibility(current.deleteVis);
 
                 current.profileEdit = currEditInfo;
                 current.profileSave = currSaveInfo;
                 current.profileCancel = currCancelInfo;
+                current.profileDelete = currDeleteInfo;
                 current.profileEditText = currEditText;
                 adapter.notifyDataSetChanged();
             }
@@ -377,6 +350,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         ImageView currEditInfo = editMap.get(profilePos);
         ImageView currCancelInfo = cancelMap.get(profilePos);
+        ImageView currDeleteInfo = deleteMap.get(profilePos);
         EditText currEditText = textMap.get(profilePos);
 
         currEditText.removeTextChangedListener(textWatcher);
@@ -391,16 +365,19 @@ public class ProfileActivity extends AppCompatActivity {
         currEditText.setBackgroundColor(0x0106000d); //R.color.transparent
 
         current.editVis = View.VISIBLE;
+        current.deleteVis = View.VISIBLE;
         current.saveVis = View.GONE;
         current.cancelVis = View.GONE;
 
         currEditInfo.setVisibility(current.editVis);
         currSaveInfo.setVisibility(current.saveVis);
         currCancelInfo.setVisibility(current.cancelVis);
+        currDeleteInfo.setVisibility(current.deleteVis);
 
         current.profileEdit = currEditInfo;
         current.profileSave = currSaveInfo;
         current.profileCancel = currCancelInfo;
+        current.profileDelete = currDeleteInfo;
         current.profileEditText = currEditText;
         adapter.notifyDataSetChanged();
     }
@@ -417,6 +394,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         ImageView currEditInfo = editMap.get(profilePos);
         ImageView currSaveInfo = saveMap.get(profilePos);
+        ImageView currDeleteInfo = deleteMap.get(profilePos);
         EditText currEditText = textMap.get(profilePos);
 
         currEditText.removeTextChangedListener(textWatcher);
@@ -428,20 +406,43 @@ public class ProfileActivity extends AppCompatActivity {
         currEditText.setBackgroundColor(0x0106000d); //R.color.transparent
 
         current.editVis = View.VISIBLE;
+        current.deleteVis = View.VISIBLE;
         current.saveVis = View.GONE;
         current.cancelVis = View.GONE;
 
         currEditInfo.setVisibility(current.editVis);
         currSaveInfo.setVisibility(current.saveVis);
         currCancelInfo.setVisibility(current.cancelVis);
+        currDeleteInfo.setVisibility(current.deleteVis);
 
         current.profileEdit = currEditInfo;
         current.profileSave = currSaveInfo;
         current.profileCancel = currCancelInfo;
+        current.profileDelete = currDeleteInfo;
         current.profileEditText = currEditText;
         adapter.notifyDataSetChanged();
 
     }
+
+
+    public void deleteInfo(View v) {
+        if (!SettingsActivity.isLocked) {
+
+            if (editingNum != -1) {
+                displayExceptionMessage("Currently Editing an Item");
+            } else {
+                ImageView currDeleteInfo = (ImageView) v;
+
+                int profilePos = Integer.parseInt((currDeleteInfo.getTag()).toString());
+
+                deletePopUp(profilePos);
+            }
+        } else {
+            displayExceptionMessage("Customization is Locked");
+        }
+
+    }
+
 
     private void loadInfo() {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
@@ -454,9 +455,18 @@ public class ProfileActivity extends AppCompatActivity {
             itemList.add(new ProfileElement("Home Address", "", 4));
         } else {
             String[] fields = savedProfFields.split(";;");
-            for (int i = 0; i < fields.length; i++) {
-                String info = sharedPref.getString(fields[i], "");
-                itemList.add(new ProfileElement(fields[i], info, i));
+            // displayExceptionMessage("Size: " + fields.length);
+            if (fields.length < 1 || sharedPref.getString(fields[0], "") == null || sharedPref.getString(fields[0], "").equals("")) {
+                itemList.add(new ProfileElement("Name", "", 0));
+                itemList.add(new ProfileElement("Gender", "", 1));
+                itemList.add(new ProfileElement("Age", "", 2));
+                itemList.add(new ProfileElement("Phone Number", "", 3));
+                itemList.add(new ProfileElement("Home Address", "", 4));
+            } else {
+                for (int i = 0; i < fields.length; i++) {
+                    String info = sharedPref.getString(fields[i], "");
+                    itemList.add(new ProfileElement(fields[i], info, i));
+                }
             }
         }
         profileElementCounter = itemList.size();
@@ -527,6 +537,75 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         dialog.show();
+    }
+
+    private void deletePopUp(int itemIndex) {
+
+        final int index = itemIndex;
+
+        ProfileElement currentElement = itemList.get(itemIndex);
+        AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
+        helpBuilder.setTitle("Do you want to delete " + currentElement.infoType + "?");
+        //helpBuilder.setMessage("This is a Simple Pop Up");
+        helpBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                ProfileElement current = itemList.get(index);
+                // displayExceptionMessage("Element number: " + profilePos);
+
+                ImageView currEditInfo = editMap.get(index);
+                ImageView currSaveInfo = saveMap.get(index);
+                ImageView currCancelInfo = cancelMap.get(index);
+                ImageView currDeleteInfo = deleteMap.get(index);
+                EditText currEditText = textMap.get(index);
+
+                current.profileEdit = currEditInfo;
+                current.profileSave = currSaveInfo;
+                current.profileCancel = currCancelInfo;
+                current.profileDelete = currDeleteInfo;
+                current.profileEditText = currEditText;
+                adapter.notifyDataSetChanged();
+
+                int currInd = index;
+                ProfileElement removed = itemList.remove(index);
+                int len = itemList.size();
+                while (currInd < len) {
+                    ProfileElement currElem = itemList.get(currInd);
+                    int prevInd = currElem.profileNumber;
+                    currElem.profileNumber = currInd;
+
+                    editMap.put(currInd, editMap.get(prevInd));
+                    editMap.get(currInd).setTag(currInd);
+                    saveMap.put(currInd, saveMap.get(prevInd));
+                    saveMap.get(currInd).setTag(currInd);
+                    cancelMap.put(currInd, cancelMap.get(prevInd));
+                    cancelMap.get(currInd).setTag(currInd);
+                    deleteMap.put(currInd, deleteMap.get(prevInd));
+                    deleteMap.get(currInd).setTag(currInd);
+
+
+                    currInd++;
+                }
+
+                profileElementCounter = profileElementCounter - 1;
+
+                // notify gridview of data changed
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        helpBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                dialog.dismiss();
+            }
+        });
+
+        // Remember, create doesn't show the dialog
+        AlertDialog helpDialog = helpBuilder.create();
+        helpDialog.show();
+
+//        helpDialog.getButton(Dialog.BUTTON_NEGATIVE).setTextSize(bodySize + fontChange);
+//        helpDialog.getButton(Dialog.BUTTON_POSITIVE).setTextSize(bodySize + fontChange);
     }
 }
 
