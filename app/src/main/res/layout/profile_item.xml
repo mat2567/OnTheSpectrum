@@ -74,6 +74,14 @@
             android:layout_weight="1"
             android:onClick="cancelInfo"
             app:srcCompat="@drawable/ic_close" />
+
+        <ImageView
+            android:id="@+id/deleteInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="deleteInfo"
+            app:srcCompat="@drawable/ic_delete" />
     </LinearLayout>
 
 </LinearLayout>
