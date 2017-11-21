@@ -290,7 +290,7 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
 
         editor.commit();;
 
-        CallLogActivity.callLogList.add(new CallLogElement(currDate, currTime, scenarioName));
+        //CallLogActivity.callLogList.add(new CallLogElement(currDate, currTime, scenarioName));
 
         // End of adding call to log
 

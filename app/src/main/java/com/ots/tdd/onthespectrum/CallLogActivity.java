@@ -64,48 +64,26 @@ public class CallLogActivity extends AppCompatActivity {
                             .inflate(R.layout.call_log_item, null, false);
                 }
 
-                CallLogElementViewContainer currCLEVC = null;
-                currCLEVC = CallLogElementViewContainer.get(position);
-                if (currCLEVC == null) {
-                    TextView dateLabel = (TextView) convertView.findViewById(R.id.dateLabel);
-                    TextView timeLabel = (TextView) convertView.findViewById(R.id.timeLabel);
-                    TextView emergencyLabel = (TextView) convertView.findViewById(R.id.emergencyLabel);
-                    TextView callLogDate = (TextView) convertView.findViewById(R.id.callLogDate);
-                    TextView callLogTime = (TextView) convertView.findViewById(R.id.callLogTime);
-                    TextView callLogScenario = (TextView) convertView.findViewById(R.id.callLogScenario);
+                TextView dateLabel = (TextView) convertView.findViewById(R.id.dateLabel);
+                TextView timeLabel = (TextView) convertView.findViewById(R.id.timeLabel);
+                TextView emergencyLabel = (TextView) convertView.findViewById(R.id.emergencyLabel);
+                TextView callLogDate = (TextView) convertView.findViewById(R.id.callLogDate);
+                TextView callLogTime = (TextView) convertView.findViewById(R.id.callLogTime);
+                TextView callLogScenario = (TextView) convertView.findViewById(R.id.callLogScenario);
 
-                    CallLogElementViewContainer newCallLogElement = new CallLogElementViewContainer(
-                            callLogDate, callLogTime, callLogScenario);
-                    CallLogElementViewContainer.addCLEVCToArray(newCallLogElement);
+                dateLabel.setTextSize(bodySize + fontChange);
+                timeLabel.setTextSize(bodySize + fontChange);
+                emergencyLabel.setTextSize(bodySize + fontChange);
+                callLogDate.setTextSize(bodySize + fontChange);
+                callLogTime.setTextSize(bodySize + fontChange);
+                callLogScenario.setTextSize(bodySize + fontChange);
+
+                if (current != null) {
 
                     callLogDate.setText(current.getDate());
                     callLogTime.setText(current.getTime());
                     callLogScenario.setText(current.getScenario());
 
-                    dateLabel.setTextSize(bodySize + fontChange);
-                    timeLabel.setTextSize(bodySize + fontChange);
-                    emergencyLabel.setTextSize(bodySize + fontChange);
-                    callLogDate.setTextSize(bodySize + fontChange);
-                    callLogTime.setTextSize(bodySize + fontChange);
-                    callLogScenario.setTextSize(bodySize + fontChange);
-                } else {
-                    TextView dateLabel = (TextView) convertView.findViewById(R.id.dateLabel);
-                    TextView timeLabel = (TextView) convertView.findViewById(R.id.timeLabel);
-                    TextView emergencyLabel = (TextView) convertView.findViewById(R.id.emergencyLabel);
-                    TextView callLogDate = (TextView) convertView.findViewById(R.id.callLogDate);
-                    TextView callLogTime = (TextView) convertView.findViewById(R.id.callLogTime);
-                    TextView callLogScenario = (TextView) convertView.findViewById(R.id.callLogScenario);
-
-                    callLogDate.setText(CallLogElementViewContainer.getDate(currCLEVC).getText());
-                    callLogTime.setText(CallLogElementViewContainer.getTime(currCLEVC).getText());
-                    callLogScenario.setText(CallLogElementViewContainer.getScenario(currCLEVC).getText());
-
-                    dateLabel.setTextSize(bodySize + fontChange);
-                    timeLabel.setTextSize(bodySize + fontChange);
-                    emergencyLabel.setTextSize(bodySize + fontChange);
-                    callLogDate.setTextSize(bodySize + fontChange);
-                    callLogTime.setTextSize(bodySize + fontChange);
-                    callLogScenario.setTextSize(bodySize + fontChange);
                 }
 
                 return convertView;
