@@ -142,8 +142,9 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
      * @see android.view.View
      */
     public void initiateCall(View view) {
-        Intent callIntent = new Intent(SelectedEmergencyActivity.this, TestVoiceActivity.class);
-        startActivity(callIntent);
+        saveLog();
+        /*Intent callIntent = new Intent(SelectedEmergencyActivity.this, TestVoiceActivity.class);
+        startActivity(callIntent);*/
     }
 
 
@@ -244,5 +245,58 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         callButton.setTextSize(titleSize + fontChange);
         text2VoiceButton.setTextSize(subtitleSize + fontChange);
         phoneNumber.setTextSize(subtitleSize + fontChange);
+    }
+
+    public void saveLog() {
+        // Save Call to Log
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        String savedCallLog = sharedPref.getString("CallLog", null);
+        if (savedCallLog == null) {
+            savedCallLog = "";
+        }
+
+        //String timezone = TimeZone.getDefault().getDisplayName();
+        //String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+        Calendar rightNow = Calendar.getInstance();
+        int minute = rightNow.get(Calendar.MINUTE);
+        int hour = rightNow.get(Calendar.HOUR);
+        String isAM = "AM";
+        if (hour >= 12) {
+            hour -= 12;
+            isAM = "PM";
+        }
+        if (hour == 0) {
+            hour = 12;
+        }
+        String currTime = "";
+        if (hour < 10) {
+            currTime += "0";
+        }
+        currTime = currTime + hour + ":";
+        if (minute < 10) {
+            currTime += "0";
+        }
+        currTime = currTime + minute + " " + isAM + " (" + rightNow.getTimeZone().getDisplayName() + ")";
+        //int month = rightNow.get(Calendar.MONTH);
+        int day = rightNow.get(Calendar.DAY_OF_MONTH);
+        String month = rightNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US);
+        String currDate = month + " " + day + ", " + rightNow.get(Calendar.YEAR);
+
+        // add scenario to list of call logs
+        //savedCallLog += currDate + "||" + currTime + "||" + scenarioInfo + ";;";
+        savedCallLog = currDate + "~" + currTime + "~" + scenarioName + ";;" + savedCallLog;
+        editor.putString("CallLog", savedCallLog);
+
+        editor.commit();;
+
+        CallLogActivity.callLogList.add(new CallLogElement(currDate, currTime, scenarioName));
+
+        // End of adding call to log
+
+        Intent intentOngoingCall = new Intent(this, OngoingCallActivity.class);
+        intentOngoingCall.putExtra("TELEPHONE_NUMBER", telNum);
+        intentOngoingCall.putExtra("TO_SPEAK", toSpeak);
+        startActivity(intentOngoingCall);
     }
 }
