@@ -37,9 +37,9 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
         setContentView(R.layout.activity_test_voice);
 
         // Uncomment for calling functionality
-        /*android.content.Context context = this.getApplicationContext();
+        android.content.Context context = this.getApplicationContext();
         //ttobj=new TextToSpeech(this, this);
-        new callTask().execute(endpointURL);*/
+        new callTask().execute(endpointURL);
 
 
     }

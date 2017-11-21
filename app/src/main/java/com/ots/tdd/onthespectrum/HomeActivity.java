@@ -124,21 +124,36 @@ public class HomeActivity extends AppCompatActivity {
             switch (theme) {
                 case R.style.Theme1:
                     colorHomeButtons = R.color.theme1Home;
+                    theme = R.style.Theme1;
                     break;
                 case R.style.Theme2:
                     colorHomeButtons = R.color.theme2Home;
+                    theme = R.style.Theme2;
                     break;
                 case R.style.Theme3:
                     colorHomeButtons = R.color.theme3Home;
+                    theme = R.style.Theme3;
                     break;
                 case R.style.Theme4:
                     colorHomeButtons = R.color.theme4Home;
+                    theme = R.style.Theme4;
                     break;
                 case R.style.Theme5:
                     colorHomeButtons = R.color.theme5Home;
+                    theme = R.style.Theme5;
                     break;
                 case R.style.Theme6:
                     colorHomeButtons = R.color.theme6Home;
+                    theme = R.style.Theme6;
+                    break;
+                default:
+                    // Handles case where theme has not yet been saved (null case)
+                    colorHomeButtons = R.color.theme1Home;
+                    theme = R.style.Theme1;
+                    SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putInt("colorTheme", theme);
+                    editor.commit();
                     break;
             }
         }
@@ -187,11 +202,14 @@ public class HomeActivity extends AppCompatActivity {
         editEmergencyButton.setTextSize(bodySize + 2 + fontChange);
         settingsButton.setTextSize(bodySize + 2 + fontChange);
 
+        // Causes an error:
+        // unable to start activity componentinfo android.content.res.resources$notfoundexception
         int color = ContextCompat.getColor(getApplicationContext(), colorHomeButtons);
         emergencyButton.setBackgroundColor(color);
         profileButton.setBackgroundColor(color);
         editEmergencyButton.setBackgroundColor(color);
         settingsButton.setBackgroundColor(color);
+
 
     }
 }
