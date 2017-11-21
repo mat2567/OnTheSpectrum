@@ -7,7 +7,7 @@
     <Button
         android:id="@+id/callButton"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="190dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
@@ -15,16 +15,6 @@
         android:onClick="initiateCall"
         android:text="Call"
         android:textSize="30sp" />
-
-    <EditText
-        android:id="@+id/phoneNumberEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:ems="10"
-        android:hint="### ### ####"
-        android:inputType="phone" />
 
     <Space
         android:layout_width="match_parent"
@@ -57,6 +47,6 @@
         android:layout_marginRight="10dp"
         android:layout_weight="0.16"
         android:onClick="testVoice"
-        android:text="Text to Voice" />
+        android:text="Test Voice" />
 
 </LinearLayout>
