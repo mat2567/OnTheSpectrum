@@ -1,5 +1,6 @@
 package com.ots.tdd.onthespectrum;
 
+import android.content.Intent;
 import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -35,9 +36,10 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_voice);
 
-        android.content.Context context = this.getApplicationContext();
+        // Uncomment for calling functionality
+        /*android.content.Context context = this.getApplicationContext();
         //ttobj=new TextToSpeech(this, this);
-        new callTask().execute(endpointURL);
+        new callTask().execute(endpointURL);*/
 
 
     }
@@ -117,4 +119,20 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
 //        }
 //        super.onDestroy();
 //    }
+
+    public void returnToHome(View v) {
+        // Return to home screen
+        /*Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);*/
+        finish();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 }

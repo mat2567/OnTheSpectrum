@@ -45,13 +45,13 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        mTestCallButton = findViewById(R.id.testCallButton);
+        /*mTestCallButton = findViewById(R.id.testCallButton);
         mTestCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 initiateCall(view);
             }
-        });
+        });*/
 
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         String prevPassword = sharedPref.getString("Lock", null);

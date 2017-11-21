@@ -55,7 +55,7 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                 // Intent is what you use to start another activity
                 Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
                 // save full message somewhere?
-                String emergencyMessage = "I am in an emergency.";
+                String emergencyMessage = "General";
                 intent.putExtra("scenario", emergencyMessage);
                 startActivity(intent);
             }

@@ -143,8 +143,8 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
      */
     public void initiateCall(View view) {
         saveLog();
-        /*Intent callIntent = new Intent(SelectedEmergencyActivity.this, TestVoiceActivity.class);
-        startActivity(callIntent);*/
+        Intent callIntent = new Intent(SelectedEmergencyActivity.this, TestVoiceActivity.class);
+        startActivity(callIntent);
     }
 
 
@@ -235,7 +235,7 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
     private void setTextSizes() {
         Button callButton = (Button) findViewById(R.id.callButton);
         Button text2VoiceButton = (Button) findViewById(R.id.testVoiceButton);
-        EditText phoneNumber = (EditText) findViewById(R.id.phoneNumberEditText);
+        //EditText phoneNumber = (EditText) findViewById(R.id.phoneNumberEditText);
 
         int titleSize = sharedPref.getInt("TitleFontSize", 0);
         int subtitleSize = sharedPref.getInt("SubtitleFontSize", 0);
@@ -244,7 +244,7 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
 
         callButton.setTextSize(titleSize + fontChange);
         text2VoiceButton.setTextSize(subtitleSize + fontChange);
-        phoneNumber.setTextSize(subtitleSize + fontChange);
+        //phoneNumber.setTextSize(subtitleSize + fontChange);
     }
 
     public void saveLog() {

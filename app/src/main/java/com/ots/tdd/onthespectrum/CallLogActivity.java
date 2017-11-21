@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -135,6 +136,13 @@ public class CallLogActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         adapter.notifyDataSetChanged();
+        if (!SettingsActivity.isLocked) {
+            Button addProfileButton =(Button)findViewById(R.id.clearCallLogButton);
+            addProfileButton.setEnabled(true);
+        } else {
+            Button addProfileButton =(Button)findViewById(R.id.clearCallLogButton);
+            addProfileButton.setEnabled(false);
+        }
     }
 
     private void loadInfo() {
