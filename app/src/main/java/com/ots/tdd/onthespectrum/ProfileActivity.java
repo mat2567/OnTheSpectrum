@@ -453,6 +453,7 @@ public class ProfileActivity extends AppCompatActivity {
             itemList.add(new ProfileElement("Age", "", 2));
             itemList.add(new ProfileElement("Phone Number", "", 3));
             itemList.add(new ProfileElement("Home Address", "", 4));
+            itemList.add(new ProfileElement("Caretaker Phone Number", "", 5));
         } else {
             String[] fields = savedProfFields.split(";;");
             // displayExceptionMessage("Size: " + fields.length);
@@ -462,6 +463,7 @@ public class ProfileActivity extends AppCompatActivity {
                 itemList.add(new ProfileElement("Age", "", 2));
                 itemList.add(new ProfileElement("Phone Number", "", 3));
                 itemList.add(new ProfileElement("Home Address", "", 4));
+                itemList.add(new ProfileElement("Caretaker Phone Number", "", 5));
             } else {
                 for (int i = 0; i < fields.length; i++) {
                     String info = sharedPref.getString(fields[i], "");
