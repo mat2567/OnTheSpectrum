@@ -39,5 +39,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     //Shoudln't need to manually add this as a jar. Support for v4 has been added above as the second 'compile' line
     //    api files('C:/Ecclesia/Courses/Junior Design/OnTheSpectrum/android-sdk-beta/libs/android-support-v4.jar')
-    api project(':sinch-android-rtc')
+    //api project(':sinch-android-rtc')
 }
