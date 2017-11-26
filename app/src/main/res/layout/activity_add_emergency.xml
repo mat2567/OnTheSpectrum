@@ -12,21 +12,28 @@
         android:id="@+id/emergencyTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="20dp"
         android:hint="Emergency Name"
-        android:inputType="textPersonName" />
+        android:inputType="textCapWords" />
 
     <Button
-        android:id="@+id/button14"
+        android:id="@+id/browseButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="changeImage"
-        android:text="Button" />
+        android:text="Browse Images"
+        android:textAlignment="center" />
 
     <ImageButton
         android:id="@+id/emergencyImage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:elevation="0dp"
         android:onClick="changeImage" />
 
     <LinearLayout

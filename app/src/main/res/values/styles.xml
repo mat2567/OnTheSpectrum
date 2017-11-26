@@ -8,4 +8,40 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Theme1" parent="AppTheme" >
+        <item name="colorPrimary">@color/theme1Primary</item>
+        <item name="colorPrimaryDark">@color/theme1PrimaryDark</item>
+        <item name="colorAccent">@color/theme1Accent</item>
+    </style>
+
+    <style name="Theme2" parent="AppTheme">
+        <item name="colorPrimary">@color/theme2Primary</item>
+        <item name="colorPrimaryDark">@color/theme2PrimaryDark</item>
+        <item name="colorAccent">@color/theme2Accent</item>
+    </style>
+
+    <style name="Theme3" parent="AppTheme">
+        <item name="colorPrimary">@color/theme3Primary</item>
+        <item name="colorPrimaryDark">@color/theme3PrimaryDark</item>
+        <item name="colorAccent">@color/theme3Accent</item>
+    </style>
+
+    <style name="Theme4" parent="AppTheme">
+        <item name="colorPrimary">@color/theme4Primary</item>
+        <item name="colorPrimaryDark">@color/theme4PrimaryDark</item>
+        <item name="colorAccent">@color/theme4Accent</item>
+    </style>
+
+    <style name="Theme5" parent="AppTheme">
+        <item name="colorPrimary">@color/theme5Primary</item>
+        <item name="colorPrimaryDark">@color/theme5PrimaryDark</item>
+        <item name="colorAccent">@color/theme5Accent</item>
+    </style>
+
+    <style name="Theme6" parent="AppTheme">
+        <item name="colorPrimary">@color/theme6Primary</item>
+        <item name="colorPrimaryDark">@color/theme6PrimaryDark</item>
+        <item name="colorAccent">@color/theme6Accent</item>
+    </style>
+
 </resources>

@@ -2,6 +2,7 @@ package com.ots.tdd.onthespectrum;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -9,61 +10,134 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Random;
+
+/**
+ * This class adds emergencies to the emergeny activity list.
+ * This activity is started when the add button is clicked on the edit emergency page.
+ */
+
+
 public class AddEmergencyActivity extends AppCompatActivity {
 
     public EditText emergencyTitle;
     public ImageButton emergencyImage;
+    private String currentImage;
+    private Button browseButton;
 
     private static int RESULT_LOAD_IMAGE = 1;
 
+    int subtitleSize;
+    int bodySize;
+    int fontChange;
+
+    SharedPreferences sharedPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        int theme = sharedPref.getInt("colorTheme", R.style.AppTheme);
+        setTheme(theme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_emergency);
 
-        EmergencyElement addEmergency = ListOfEmergenciesActivity.scenarioList.get(ListOfEmergenciesActivity.scenarioList.size() - 1);
+        // To have a placeholder image, uncomment these lines and retrieve it
+        // EmergencyElement addEmergency = ListOfEmergenciesActivity.scenarioList.get(ListOfEmergenciesActivity.scenarioList.size() - 1);
         emergencyTitle = (EditText) findViewById(R.id.emergencyTitle);
         emergencyImage = (ImageButton) findViewById(R.id.emergencyImage);
+        browseButton = (Button) findViewById(R.id.browseButton);
 
-        emergencyImage.setBackground( new BitmapDrawable(getResources(), addEmergency.getImage()) );
-        emergencyImage.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
+        // emergencyImage.setBackground( new BitmapDrawable(getResources(), addEmergency.getImage()) );
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+
+        LinearLayout.LayoutParams llParamsRect = new LinearLayout.LayoutParams(width*3/4, width/8);
+        llParamsRect.gravity = Gravity.CENTER_HORIZONTAL;
+        browseButton.setLayoutParams(llParamsRect);
+
+        LinearLayout.LayoutParams llParamsSquare = new LinearLayout.LayoutParams(width*3/4, width*3/4);
+        llParamsSquare.gravity = Gravity.CENTER_HORIZONTAL;
+        emergencyImage.setLayoutParams(llParamsSquare);
+
+        setTextSizes();
     }
 
+    /**
+     * Saves any changes that have been made to the edit screen
+     * when the save button has been clicked
+     * @param v
+     */
     public void saveChanges(View v) {
-        EmergencyElement emergency = new EmergencyElement(emergencyTitle.getText().toString(),
-                null,
-                ListOfEmergenciesActivity.scenarioList.size() - 1);
-        //emergency.setTitle(emergencyTitle.getText().toString());
-        //emergency.setImage(((BitmapDrawable)emergencyImage.getBackground()).getBitmap());
-        //emergency.setImage(((BitmapDrawable)emergencyImage.getDrawable()).getBitmap());
-        if (((BitmapDrawable)emergencyImage.getDrawable()) != null) {
-            emergency.setImage(((BitmapDrawable)emergencyImage.getDrawable()).getBitmap());
+        String title = emergencyTitle.getText().toString();
+        EmergencyElement emergency = new EmergencyElement(title,
+                currentImage,
+                ListOfEmergenciesActivity.scenarioList.size());
+        if (title.isEmpty()) {
+            displayExceptionMessage("Please provide a title");
         } else {
-            //toastMessage("Null Image");
+            emergency.setTitle(title);
+            if ((BitmapDrawable)emergencyImage.getDrawable() != null){
+                emergency.setImage(((BitmapDrawable) emergencyImage.getDrawable()).getBitmap());
+                SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+
+                //change ScenarioNames
+                String allScenarios = sharedPref.getString("ScenarioNames", null);
+                allScenarios.concat(title);
+                editor.putString("ScenarioNames", allScenarios);
+
+                //add new title/image
+                editor.putString(title, currentImage);
+
+                editor.commit();
+
+                // update scenarioList
+                int curr = 0;
+                int len = ListOfEmergenciesActivity.scenarioList.size();
+                ListOfEmergenciesActivity.scenarioList.add(len, emergency);
+                while (curr < len) {
+                    ListOfEmergenciesActivity.scenarioList.get(curr).setEmergencyNumber(curr);
+                    curr++;
+                }
+
+                // notify gridview of data changed
+                ListOfEmergenciesActivity.adapter.notifyDataSetChanged();
+                finish();
+            } else {
+                displayExceptionMessage("Please provide an image");
+            }
         }
 
 
-        if (((BitmapDrawable)emergencyImage.getDrawable()) != null) {
-            ListOfEmergenciesActivity.scenarioList.add(ListOfEmergenciesActivity.scenarioList.size() - 1, emergency);
-            ListOfEmergenciesActivity.scenarioList.get(ListOfEmergenciesActivity.scenarioList.size() - 1).setEmergencyNumber(ListOfEmergenciesActivity.scenarioList.size() - 1);
 
-            // notify gridview of data changed
-            ListOfEmergenciesActivity.adapter.notifyDataSetChanged();
-        }
-
-        finish();
     }
 
+    /**
+     * Cancels changes to the edit page when the cancel button has been selected.
+     * @param v
+     */
     public void cancelChanges(View v) {
         finish();
     }
 
+    /**
+     * Allows user to change images when editing an emergency
+     * @param v
+     */
     public void changeImage(View v) {
         toastMessage("Changing Image");
 
@@ -87,6 +161,21 @@ public class AddEmergencyActivity extends AppCompatActivity {
                 Bitmap selectedImg = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
                 // Load the selected image into a preview
                 emergencyImage.setImageBitmap(selectedImg);
+
+                // Save the image into app data
+                String root = getFilesDir().getAbsolutePath();
+                File myDir = new File(root + "/saved_images");
+                File file = new File (myDir, getSaltString());
+                if (file.exists ()) file.delete ();
+                try {
+                    FileOutputStream out = new FileOutputStream(file);
+                    selectedImg.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                    out.flush();
+                    out.close();
+                    currentImage = file.getAbsolutePath();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } catch (Exception e) {
                 toastMessage("Choose a different image");
             }
@@ -102,5 +191,37 @@ public class AddEmergencyActivity extends AppCompatActivity {
         int duration = Toast.LENGTH_SHORT;
 
         Toast.makeText(context, text, duration).show();
+    }
+
+    protected String getSaltString() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 10) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
+
+    }
+
+    private void setTextSizes() {
+        Button createButton = (Button) findViewById(R.id.saveEdit);
+        Button cancelButton = (Button) findViewById(R.id.cancelEdit);
+
+        subtitleSize = sharedPref.getInt("SubtitleFontSize", 0);
+        bodySize = sharedPref.getInt("BodyFontSize", 0);
+        fontChange = sharedPref.getInt("FontSizeChange", 0);
+
+        emergencyTitle.setTextSize(subtitleSize + 2 + fontChange);
+        browseButton.setTextSize(bodySize + fontChange);
+        createButton.setTextSize(bodySize + fontChange);
+        cancelButton.setTextSize(bodySize + fontChange);
+    }
+
+    public void displayExceptionMessage(String msg)
+    {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

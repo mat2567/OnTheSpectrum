@@ -4,27 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     tools:context="com.ots.tdd.onthespectrum.SettingsActivity">
-
-    <Button
-        android:id="@+id/button10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/color6"
-        app:layout_constraintLeft_toRightOf="@+id/button9"
-        app:layout_constraintTop_toBottomOf="@+id/button7" />
-
-    <Button
-        android:id="@+id/button9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@color/color5"
-        app:layout_constraintTop_toBottomOf="@+id/button6"
-        app:layout_constraintLeft_toRightOf="@+id/button8"
-        android:layout_marginLeft="16dp" />
 
     <TextView
         android:id="@+id/Settings"
@@ -32,141 +14,188 @@
         android:layout_height="wrap_content"
         android:text="@string/Settings"
         android:textSize="30sp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintHorizontal_bias="0.058"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.0" />
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1" />
 
 
     <TextView
         android:id="@+id/appearance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="20dp"
         android:text="@string/Appearance"
         android:textSize="30sp"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.071"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1"
-        app:layout_constraintTop_toBottomOf="@+id/lock" />
+        tools:layout_constraintTop_creator="1" />
 
     <Switch
         android:id="@+id/lock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
-        android:checked="false"
-        android:text="@string/ProfLock"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+
         android:textOff="@string/unlocked"
         android:textOn="@string/Locked"
-
-        android:textSize="12sp"
-        app:layout_constraintLeft_toLeftOf="@+id/Settings"
-        app:layout_constraintTop_toBottomOf="@+id/Settings"
-        tools:checked="false"
-        android:layout_marginLeft="0dp" />
+        android:textSize="18sp"
+        app:layout_constraintLeft_toRightOf="@+id/profileLockText"
+        app:layout_constraintTop_toBottomOf="@+id/Settings" />
 
     <TextView
         android:id="@+id/FontSizeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="15dp"
         android:text="@string/FontSize"
-        app:layout_constraintTop_toBottomOf="@+id/appearance"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="@+id/appearance" />
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="@+id/appearance"
+        app:layout_constraintTop_toBottomOf="@+id/colorSpinner" />
 
     <TextView
         android:id="@+id/AdjustColorText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/AdjustColor"
-        app:layout_constraintTop_toBottomOf="@+id/FontSizeText"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="@+id/appearance" />
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="1dp"
-        app:layout_constraintLeft_toRightOf="@+id/FontSizeText"
-        app:layout_constraintTop_toTopOf="@+id/FontSizeText" />
-
-    <Button
-        android:id="@+id/button6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/color2"
-        app:layout_constraintLeft_toRightOf="@+id/button5"
-        app:layout_constraintTop_toBottomOf="@+id/AdjustColorText" />
-
-    <Button
-        android:id="@+id/button7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/color3"
-        app:layout_constraintLeft_toRightOf="@+id/button6"
-        app:layout_constraintTop_toBottomOf="@+id/AdjustColorText" />
-
-    <Button
-        android:id="@+id/button8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:background="@color/color4"
-        app:layout_constraintTop_toBottomOf="@+id/button5"
-        android:layout_marginLeft="24dp"
-        app:layout_constraintLeft_toLeftOf="@+id/AdjustColorText" />
-
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:background="@color/color1"
-        app:layout_constraintTop_toBottomOf="@+id/AdjustColorText"
-        android:layout_marginLeft="24dp"
-        app:layout_constraintLeft_toLeftOf="@+id/AdjustColorText" />
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="@+id/appearance"
+        app:layout_constraintTop_toBottomOf="@+id/appearance" />
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="349dp"
-        android:layout_height="42dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="11dp"
+        android:layout_width="200dp"
+        android:layout_height="43dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="Password"
         android:inputType="textPassword"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@+id/Settings"
-        app:layout_constraintTop_toBottomOf="@+id/lock"
-        tools:layout_editor_absoluteY="84dp" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/profileLockText"
+        app:layout_constraintTop_toBottomOf="@+id/lock" />
 
     <Button
-        android:id="@+id/okButton"
-        android:layout_width="37dp"
-        android:layout_height="42dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
+        android:id="@+id/lockButton"
+        android:layout_width="115dp"
+        android:layout_height="47dp"
+        android:layout_marginRight="8dp"
         android:onClick="onOkayPress()"
         android:text="@string/ok"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintLeft_toRightOf="@+id/password"
-        app:layout_constraintTop_toTopOf="@+id/password" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/password"
+        app:layout_constraintVertical_bias="0.0" />
 
+    <RadioGroup
+        android:id="@+id/fontSizeChoice"
+        android:layout_width="343dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/FontSizeText"
+        app:layout_constraintTop_toBottomOf="@+id/FontSizeText">
+
+        <RadioButton
+            android:id="@+id/smallRadio"
+            android:layout_width="105dp"
+            android:layout_height="31dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:checked="false"
+            android:onClick="onRadioButtonClicked"
+            android:text="Small"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="@+id/FontSizeText"
+            app:layout_constraintTop_toBottomOf="@+id/FontSizeText" />
+
+        <RadioButton
+            android:id="@+id/mediumRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:onClick="onRadioButtonClicked"
+            android:text="Medium"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="@+id/smallRadio"
+            app:layout_constraintTop_toBottomOf="@+id/smallRadio" />
+
+        <RadioButton
+            android:id="@+id/largeRadio"
+            android:layout_width="103dp"
+            android:layout_height="31dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:onClick="onRadioButtonClicked"
+            android:text="Large"
+            android:textSize="24sp"
+            app:layout_constraintLeft_toLeftOf="@+id/mediumRadio"
+            app:layout_constraintTop_toBottomOf="@+id/mediumRadio" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/profileLockText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="8dp"
+        android:text="Profile Lock"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Settings" />
+
+    <Spinner
+        android:id="@+id/colorSpinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="8dp"
+        android:spinnerMode="dialog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/AdjustColorText"
+        app:layout_constraintTop_toBottomOf="@+id/AdjustColorText" />
+
+    <Button
+        android:id="@+id/resetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onReset"
+        android:text="Reset Application"
+        app:layout_constraintBottom_toTopOf="@+id/textView4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="8dp"
+        android:text="Clears the profile, custom emergencies, and settings."
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!--android:entries="@string/fontSizeAttempt"-->
-
 
 
 </android.support.constraint.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.ots.tdd.onthespectrum;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,35 +38,40 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
 
     int emergencyElementCounter = 0;
 
+    int titleSize;
+    int bodySize;
+    int fontChange;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        int theme = sharedPref.getInt("colorTheme", R.style.AppTheme);
+        setTheme(theme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_emergencies);
+
+        titleSize = sharedPref.getInt("TitleFontSize", 0);
+        bodySize = sharedPref.getInt("BodyFontSize", 0);
+        fontChange = sharedPref.getInt("FontSizeChange", 0);
+
+        TextView title = (TextView) findViewById(R.id.listForEditingTitle);
+        title.setTextSize(titleSize + fontChange);
+
+        Button addButton = (Button) findViewById(R.id.createScenarioButton);
+        addButton.setTextSize(bodySize + fontChange);
 
         GridView gridView = (GridView) findViewById(R.id.listOfEmergenciesGridView);
         gridView.setNumColumns(3);
         gridView.setVerticalSpacing(50);
 
+        if (sharedPref.getBoolean("RefreshList", false)) {
+            scenarioList.clear();
+            sharedPref.edit().putBoolean("RefreshList", false);
+        }
+
         if(scenarioList.size() < 1) {
             loadInfo();
-
-            String root = getFilesDir().getAbsolutePath();
-            File myDir = new File(root + "/saved_images");
-            myDir.mkdirs();
-            File file = new File (myDir, "addition.jpg");
-            int assignNum = scenarioList.size();
-            if (file.exists ()) file.delete ();
-            try {
-                FileOutputStream out = new FileOutputStream(file);
-                Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.addition);
-                img.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                out.flush();
-                out.close();
-
-                scenarioList.add(new EmergencyElement("", file.getAbsolutePath(), assignNum));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
 
         adapter=new ArrayAdapter<EmergencyElement>(this, R.layout.emergency_item, scenarioList) {
@@ -79,65 +86,26 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                 }
 
                 int currEmergencyNumber = current.emergencyNumber;
-                EmergencyElementViewContainer currEEVC = null;
-                currEEVC = EmergencyElementViewContainer.findContainerUsingNumber(currEmergencyNumber);
-                if (currEEVC == null) {
-                    final ImageButton imageButton = (ImageButton) convertView.findViewById(R.id.emergencyImageButton);
-                    imageButton.setBackground( new BitmapDrawable(getResources(), current.getImage()) );
-                    imageButton.setTag(current.getEmergencyNumber());
-                    if (currEmergencyNumber == scenarioList.size() - 1) {
-                        imageButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                newEmergency(v);
-                            }
-                        });
-                    } else {
-                        imageButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                showPopUp(Integer.parseInt((imageButton.getTag()).toString()));
-                            }
-                        });
+                final ImageButton imageButton = (ImageButton) convertView.findViewById(R.id.emergencyImageButton);
+                imageButton.setBackground( new BitmapDrawable(getResources(), current.getImage()) );
+                imageButton.setTag(current.getEmergencyNumber());
+                imageButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                        if (!SettingsActivity.isLocked) {
+                            showPopUp(Integer.parseInt((imageButton.getTag()).toString()));
+                        } else {
+                            displayExceptionMessage("Customization is Locked");
+                        }
                     }
-                    imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
+                });
 
-                    final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
-                    textView.setText(current.getTitle());
-                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 45));
+                imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
 
-                    EmergencyElementViewContainer newEmergencyElement = new EmergencyElementViewContainer(
-                            imageButton, textView, current.getEmergencyNumber());
-                    EmergencyElementViewContainer.addEEVCToArray(newEmergencyElement);
-
-
-                } else {
-                    final ImageButton imageButton= (ImageButton) convertView.findViewById(R.id.emergencyImageButton);
-
-                    imageButton.setBackground( new BitmapDrawable(getResources(), current.getImage()) );
-                    imageButton.setTag(current.getEmergencyNumber());
-                    if (currEmergencyNumber == scenarioList.size() - 1) {
-                        imageButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                newEmergency(v);
-                            }
-                        });
-                    } else {
-                        imageButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                showPopUp(Integer.parseInt((imageButton.getTag()).toString()));
-                            }
-                        });
-                    }
-                    //imageButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 132));
-                    imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
-
-                    final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
-                    textView.setText(current.getTitle());
-                    textView.setLayoutParams(new LinearLayout.LayoutParams(350, 45));
-                }
+                final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
+                textView.setText(current.getTitle());
+                textView.setTextSize(bodySize + fontChange);
+                textView.setLayoutParams(new LinearLayout.LayoutParams(350, 55 + fontChange * 4));
 
                 return convertView;
             }
@@ -146,11 +114,32 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
         gridView.setAdapter(adapter);
 
     }
+  
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        String scenarioNames = "";
+        for (EmergencyElement item : scenarioList) {
+            scenarioNames += item.getTitle();
+            scenarioNames += ";;";
+            editor.putString(item.getTitle(), item.imageMemLocation);
+        }
+        editor.putString("ScenarioNames", scenarioNames);
+
+        editor.apply();
+    }
 
     private void loadInfo() {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
         String savedScenarios = sharedPref.getString("ScenarioNames", null);
         if (null == savedScenarios) {
+            SharedPreferences sp = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            String scenarioNames = "";
+            String title;
+            String path;
+
             int assignCount = 0;
             String root = getFilesDir().getAbsolutePath();
             File myDir = new File(root + "/saved_images");
@@ -165,8 +154,13 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("Break In", file.getAbsolutePath(), assignCount));
+                title = "Break In";
+                path = file.getAbsolutePath();
+                scenarioList.add(new EmergencyElement(title, path, assignCount));
                 assignCount++;
+
+                scenarioNames += title + ";;";
+                editor.putString(title, path);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -180,8 +174,13 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("Choking", file.getAbsolutePath(), assignCount));
+                title = "Choking";
+                path = file.getAbsolutePath();
+                scenarioList.add(new EmergencyElement(title, path, assignCount));
                 assignCount++;
+
+                scenarioNames += title + ";;";
+                editor.putString(title, path);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -195,8 +194,13 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("Fire", file.getAbsolutePath(), assignCount));
+                title = "Fire";
+                path = file.getAbsolutePath();
+                scenarioList.add(new EmergencyElement(title, path, assignCount));
                 assignCount++;
+
+                scenarioNames += title + ";;";
+                editor.putString(title, path);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -210,8 +214,13 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("Injury", file.getAbsolutePath(), assignCount));
+                title = "Injury";
+                path = file.getAbsolutePath();
+                scenarioList.add(new EmergencyElement(title, path, assignCount));
                 assignCount++;
+
+                scenarioNames += title + ";;";
+                editor.putString(title, path);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -225,8 +234,13 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("Lost", file.getAbsolutePath(), assignCount));
+                title = "Lost";
+                path = file.getAbsolutePath();
+                scenarioList.add(new EmergencyElement(title, path, assignCount));
                 assignCount++;
+
+                scenarioNames += title + ";;";
+                editor.putString(title, path);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -240,12 +254,20 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
                 out.flush();
                 out.close();
 
-                scenarioList.add(new EmergencyElement("In Pain", file.getAbsolutePath(), assignCount));
+                title = "Pain";
+                path = file.getAbsolutePath();
+                scenarioList.add(new EmergencyElement(title, path, assignCount));
                 assignCount++;
+
+                scenarioNames += title + ";;";
+                editor.putString(title, path);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             emergencyElementCounter = assignCount;
+
+            editor.putString("ScenarioNames", scenarioNames);
+            editor.commit();
         } else {
             String[] scenarioNames = savedScenarios.split(";;");
             for (int i = 0; i < scenarioNames.length; i++) {
@@ -278,11 +300,24 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int whichButton) {
                 int curr = index;
                 int len = scenarioList.size() - 1;
-                scenarioList.remove(index);
+                EmergencyElement removed = scenarioList.remove(index);
                 while (curr < len) {
                     scenarioList.get(curr).setEmergencyNumber(curr);
                     curr++;
                 }
+
+                SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                //remove scenario
+                editor.remove(removed.getTitle());
+
+                //remove scenario from list of scenario names
+                String allScenarios = sharedPref.getString("ScenarioNames", null);
+                allScenarios = allScenarios.replace((removed.getTitle() + ";;"), "");
+                editor.putString("ScenarioNames", allScenarios);
+
+                editor.commit();
+
                 // notify gridview of data changed
                 adapter.notifyDataSetChanged();
             }
@@ -292,10 +327,29 @@ public class ListOfEmergenciesActivity extends AppCompatActivity {
         AlertDialog helpDialog = helpBuilder.create();
         helpDialog.show();
 
+        helpDialog.getButton(Dialog.BUTTON_NEGATIVE).setTextSize(bodySize + fontChange);
+        helpDialog.getButton(Dialog.BUTTON_POSITIVE).setTextSize(bodySize + fontChange);
     }
 
     public void newEmergency(View v) {
         Intent intent = new Intent(ListOfEmergenciesActivity.this, AddEmergencyActivity.class);
         startActivity(intent);
+    }
+
+    public void displayExceptionMessage(String msg)
+    {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!SettingsActivity.isLocked) {
+            Button addScenarioButton =(Button)findViewById(R.id.createScenarioButton);
+            addScenarioButton.setEnabled(true);
+        } else {
+            Button addScenarioButton =(Button)findViewById(R.id.createScenarioButton);
+            addScenarioButton.setEnabled(false);
+        }
     }
 }

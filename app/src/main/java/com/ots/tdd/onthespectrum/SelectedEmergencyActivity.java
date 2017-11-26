@@ -3,6 +3,7 @@ package com.ots.tdd.onthespectrum;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
@@ -10,27 +11,51 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class SelectedEmergencyActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
     ScrollView infoScrollView;
     ArrayList<ProfileElement> profArray = new ArrayList<>();
     String telNum = "6784670532"; //4706293412
-    String toSpeak = "Hello.";
+    public static String toSpeak = "Hello.";
     TextToSpeech ttobj;
+    int bodySize;
+    int fontChange;
+    String scenarioName;
+    Button mCallButton;
+
+
+
+    /**
+     * Loads the emergency information stored on the device and formats them for display on the screen.
+     * @param  savedInstanceState Bundle
+     * @see android.app.Activity
+     */
+    SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        int theme = sharedPref.getInt("colorTheme", R.style.AppTheme);
+        setTheme(theme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selected_emergency);
-        String scenarioInfo = getIntent().getStringExtra("scenario");
+
+        scenarioName = getIntent().getStringExtra("scenario");
+        String scenarioInfo = "I am in a " + scenarioName + " emergency.";
+
+        setTextSizes();
 
         ttobj=new TextToSpeech(this, this);
 
@@ -40,7 +65,7 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         String profInfo = "";
         for (ProfileElement profElem : profArray) {
             if (profElem.userInfo != "") {
-                profInfo += "My " + profElem.infoType + " is " + profElem.userInfo + ". ";
+                profInfo += "\nMy " + profElem.infoType + " is " + profElem.userInfo + ". ";
             }
         }
 
@@ -50,8 +75,19 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         infoScrollView = (ScrollView) findViewById(R.id.infoScrollView);
         TextView infoTextView = new TextView(this);
         infoTextView.setText(infoText);
+        infoTextView.setTextSize(bodySize + fontChange);
+        infoTextView.setTextColor(Color.BLACK);
         infoScrollView.addView(infoTextView);
+        mCallButton = findViewById(R.id.callButton);
+        mCallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                initiateCall(view);
+            }
+        });
     }
+
+
 
     @Override
     public void onInit(int status)
@@ -63,14 +99,24 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         }
         else if (status == TextToSpeech.ERROR)
         {
-            Log.e("Text To Speach", "ERROR");
+            Log.e("Text To Speech", "ERROR");
         }
     }
 
+
+    /**
+     * Developer method to test the Android Text-to-Speech
+     * @param  v  View
+     * @see android.view.View
+     */
     public void testVoice(View v) {
         ttobj.speak(toSpeak, 0, null);
     }
 
+
+    /**
+     * Loads the emergency information stored on the device and adds them to a private array.
+     */
 
     private void loadProfileInfo() {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
@@ -90,36 +136,167 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         }
     }
 
-    public void initiateCall(View v) {
-
-        EditText txtPhn = (EditText)findViewById(R.id.phoneNumberEditText);
-        telNum = txtPhn.getText().toString();
-        if (telNum.length() == 10) {
-            boolean valid = true;
-            for (int i = 0; i < 10; i++) {
-                if(!Character.isDigit(telNum.charAt(i))) {
-                    valid = false;
-                }
-            }
-            if (valid) {
-                Intent intentOngoingCall = new Intent(this, OngoingCallActivity.class);
-                intentOngoingCall.putExtra("TELEPHONE_NUMBER", telNum);
-                intentOngoingCall.putExtra("TO_SPEAK", toSpeak);
-                startActivity(intentOngoingCall);
-            } else {
-                String errorMessage = "Invalid phone number (not digit): " + telNum;
-                displayExceptionMessage(errorMessage);
-            }
-        } else {
-            String errorMessage = "Invalid phone number (too short): " + telNum + ": " + telNum.length();
-            displayExceptionMessage(errorMessage);
-        }
-
-
+    /**
+     * Initiates call to 911 and records call information to device
+     * @param  view  View
+     * @see android.view.View
+     */
+    public void initiateCall(View view) {
+        saveLog();
+        Intent callIntent = new Intent(SelectedEmergencyActivity.this, TestVoiceActivity.class);
+        startActivity(callIntent);
     }
 
+
+//    public void initiateCall(View v) {
+//
+//        EditText txtPhn = (EditText)findViewById(R.id.phoneNumberEditText);
+//        telNum = txtPhn.getText().toString();
+//        if (telNum.length() == 10) {
+//            boolean valid = true;
+//            for (int i = 0; i < 10; i++) {
+//                if(!Character.isDigit(telNum.charAt(i))) {
+//                    valid = false;
+//                }
+//            }
+//            if (valid) {
+//                // Save Call to Log
+//                SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+//                SharedPreferences.Editor editor = sharedPref.edit();
+//                String savedCallLog = sharedPref.getString("CallLog", null);
+//                if (savedCallLog == null) {
+//                    savedCallLog = "";
+//                }
+//
+//                //String timezone = TimeZone.getDefault().getDisplayName();
+//                //String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+//                Calendar rightNow = Calendar.getInstance();
+//                int minute = rightNow.get(Calendar.MINUTE);
+//                int hour = rightNow.get(Calendar.HOUR);
+//                String isAM = "AM";
+//                if (hour >= 12) {
+//                    hour -= 12;
+//                    isAM = "PM";
+//                }
+//                if (hour == 0) {
+//                    hour = 12;
+//                }
+//                String currTime = "";
+//                if (hour < 10) {
+//                    currTime += "0";
+//                }
+//                currTime = currTime + hour + ":";
+//                if (minute < 10) {
+//                    currTime += "0";
+//                }
+//                currTime = currTime + minute + " " + isAM + " (" + rightNow.getTimeZone().getDisplayName() + ")";
+//                //int month = rightNow.get(Calendar.MONTH);
+//                int day = rightNow.get(Calendar.DAY_OF_MONTH);
+//                String month = rightNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US);
+//                String currDate = month + " " + day + ", " + rightNow.get(Calendar.YEAR);
+//
+//                // add scenario to list of call logs
+//                //savedCallLog += currDate + "||" + currTime + "||" + scenarioInfo + ";;";
+//                savedCallLog += currDate + "~" + currTime + "~" + scenarioName + ";;";
+//                editor.putString("CallLog", savedCallLog);
+//
+//                editor.commit();;
+//
+//                CallLogActivity.callLogList.add(new CallLogElement(currDate, currTime, scenarioName));
+//
+//                // End of adding call to log
+//
+//                Intent intentOngoingCall = new Intent(this, OngoingCallActivity.class);
+//                intentOngoingCall.putExtra("TELEPHONE_NUMBER", telNum);
+//                intentOngoingCall.putExtra("TO_SPEAK", toSpeak);
+//                startActivity(intentOngoingCall);
+//            } else {
+//                String errorMessage = "Invalid phone number (not digit): " + telNum;
+//                displayExceptionMessage(errorMessage);
+//            }
+//        } else {
+//            String errorMessage = "Invalid phone number (too short): " + telNum + ": " + telNum.length();
+//            displayExceptionMessage(errorMessage);
+//        }
+//
+//
+//    }
+
+
+    /**
+     *  Display Error
+     * @param  msg String
+     */
     public void displayExceptionMessage(String msg)
     {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void setTextSizes() {
+        Button callButton = (Button) findViewById(R.id.callButton);
+        Button text2VoiceButton = (Button) findViewById(R.id.testVoiceButton);
+        //EditText phoneNumber = (EditText) findViewById(R.id.phoneNumberEditText);
+
+        int titleSize = sharedPref.getInt("TitleFontSize", 0);
+        int subtitleSize = sharedPref.getInt("SubtitleFontSize", 0);
+        bodySize = sharedPref.getInt("BodyFontSize", 0);
+        fontChange = sharedPref.getInt("FontSizeChange", 0);
+
+        callButton.setTextSize(titleSize + fontChange);
+        text2VoiceButton.setTextSize(subtitleSize + fontChange);
+        //phoneNumber.setTextSize(subtitleSize + fontChange);
+    }
+
+    public void saveLog() {
+        // Save Call to Log
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        String savedCallLog = sharedPref.getString("CallLog", null);
+        if (savedCallLog == null) {
+            savedCallLog = "";
+        }
+
+        //String timezone = TimeZone.getDefault().getDisplayName();
+        //String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+        Calendar rightNow = Calendar.getInstance();
+        int minute = rightNow.get(Calendar.MINUTE);
+        int hour = rightNow.get(Calendar.HOUR);
+        String isAM = "AM";
+        if (hour >= 12) {
+            hour -= 12;
+            isAM = "PM";
+        }
+        if (hour == 0) {
+            hour = 12;
+        }
+        String currTime = "";
+        if (hour < 10) {
+            currTime += "0";
+        }
+        currTime = currTime + hour + ":";
+        if (minute < 10) {
+            currTime += "0";
+        }
+        currTime = currTime + minute + " " + isAM + " (" + rightNow.getTimeZone().getDisplayName() + ")";
+        //int month = rightNow.get(Calendar.MONTH);
+        int day = rightNow.get(Calendar.DAY_OF_MONTH);
+        String month = rightNow.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US);
+        String currDate = month + " " + day + ", " + rightNow.get(Calendar.YEAR);
+
+        // add scenario to list of call logs
+        //savedCallLog += currDate + "||" + currTime + "||" + scenarioInfo + ";;";
+        savedCallLog = currDate + "~" + currTime + "~" + scenarioName + ";;" + savedCallLog;
+        editor.putString("CallLog", savedCallLog);
+
+        editor.commit();;
+
+        //CallLogActivity.callLogList.add(new CallLogElement(currDate, currTime, scenarioName));
+
+        // End of adding call to log
+
+        Intent intentOngoingCall = new Intent(this, OngoingCallActivity.class);
+        intentOngoingCall.putExtra("TELEPHONE_NUMBER", telNum);
+        intentOngoingCall.putExtra("TO_SPEAK", toSpeak);
+        startActivity(intentOngoingCall);
     }
 }
