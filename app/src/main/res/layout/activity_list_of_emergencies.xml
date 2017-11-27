@@ -11,13 +11,13 @@
         android:id="@+id/listForEditingTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
         android:text="Editing List of Emergencies"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textSize="24sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="15dp" />
 
     <Button
         android:id="@+id/createScenarioButton"
@@ -26,14 +26,14 @@
         android:onClick="newEmergency"
         android:text="Add" />
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
     <GridView
         android:id="@+id/listOfEmergenciesGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="7dp"
-        android:layout_marginTop="8dp"
         tools:layout_editor_absoluteY="76dp" />
 
 </LinearLayout>
