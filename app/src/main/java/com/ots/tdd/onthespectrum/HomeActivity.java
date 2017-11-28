@@ -106,8 +106,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void moveToTestVoiceScreen(View v) {
-//        Intent intentTestVoice = new Intent(this, TestVoiceActivity.class);
-//        startActivity(intentTestVoice);
+        Intent intentTestVoice = new Intent(this, TestVoiceActivity.class);
+        startActivity(intentTestVoice);
     }
     private void theme() {
         sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);

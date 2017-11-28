@@ -1,15 +1,18 @@
 package com.ots.tdd.onthespectrum;
 
-import android.media.AudioManager;
+import android.Manifest;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.telephony.SmsManager;
 import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
-
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,8 +21,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Locale;
-
 
 // URL To Initiate Call:    https://ots-plivo-connection.herokuapp.com/initiate_call/
 
@@ -36,10 +37,43 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
         setContentView(R.layout.activity_test_voice);
 
         android.content.Context context = this.getApplicationContext();
-        //ttobj=new TextToSpeech(this, this);
-        new callTask().execute(endpointURL);
+//        ttobj=new TextToSpeech(this, this);
+//        new callTask().execute(endpointURL);
+
+//        if (checkSelfPermission(this.getApplicationContext(), "SEND_SMS") == PackageManager.PERMISSION_GRANTED)) {
+//            Log.d("arsh");
+//        }
+
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.SEND_SMS},1);
+
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.SEND_SMS);
+        while(permissionCheck == PackageManager.PERMISSION_DENIED) {
+            permissionCheck = ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.SEND_SMS);
+        }
+        if(permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            SmsManager smsManager = SmsManager.getDefault();
+//            PendingIntent pi = PendingIntent.getActivity(this, 0,
+//                    new Intent(this, SMS.class), 0);
+            smsManager.sendTextMessage("6784670532",
+                    null,"hello Arsh", null,null);
+        }
+
+        //delete later
+//        String[] strings = new String[1];
+//        strings[0] = Manifest.permission.SEND_SMS;
+//        ActivityCompat.requestPermissions(this, strings,1);
+//        SmsManager smsManager = SmsManager.getDefault();
+//        smsManager.sendTextMessage("6784670532",null,"heyyy ;)", null,null);
 
 
+//        Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+//        sendIntent.putExtra("sms_body", "default content");
+//        sendIntent.setType("vnd.android-dir/mms-sms");
+//        Log.d("hi", "Arsh " + permissionCheck);
+//        startActivity(sendIntent);
     }
 
 
