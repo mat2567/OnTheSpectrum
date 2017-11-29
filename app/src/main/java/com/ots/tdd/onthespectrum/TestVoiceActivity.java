@@ -44,6 +44,7 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
 //            Log.d("arsh");
 //        }
 
+        //attempt one
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.SEND_SMS},1);
 
@@ -60,6 +61,21 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
             smsManager.sendTextMessage("6784670532",
                     null,"hello Arsh", null,null);
         }
+        //end of attempt one
+
+//        if (ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.SEND_SMS)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    Manifest.permission.SEND_SMS)) {
+//            } else {
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.permission.SEND_SMS},
+//                        0);
+//            }
+//        }
+
+
 
         //delete later
 //        String[] strings = new String[1];
