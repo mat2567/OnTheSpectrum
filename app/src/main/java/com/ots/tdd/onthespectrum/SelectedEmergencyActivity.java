@@ -74,7 +74,7 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
                         //includes spaces to force numbers to be read one at a time
                         caretakerPhoneSpaces += profElem.userInfo.charAt(i) + " ";
                     }
-                    caretakerPhoneSpaces +=  "to answer any questions about me.";
+                    caretakerPhoneSpaces +=  "to answer any questions about me  ";
 
                     caretakerPhone = "\nMy caretaker can be reached at " + profElem.userInfo + " to answer any questions about me.";
                 } else {
@@ -84,9 +84,9 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         }
 
         String infoText = "What will be said on your call:\n\nHello. " + appInfo + scenarioInfo + " " + profInfo + caretakerPhone;
-        infoText += "\nI am located at " + location + ".";
+        infoText += "\nI am located at the GPS coordinates: " + location + ".";
         toSpeak = "Hello. " + appInfo + scenarioInfo + " " + profInfo + caretakerPhoneSpaces;
-        toSpeak += "\nI am located at " + location + ".";
+        toSpeak += "\nI am located at the GPS coordinates " + location + ".";
 
         infoScrollView = (ScrollView) findViewById(R.id.infoScrollView);
         TextView infoTextView = new TextView(this);
