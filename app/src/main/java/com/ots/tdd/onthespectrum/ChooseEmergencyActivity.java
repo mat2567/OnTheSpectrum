@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -116,6 +118,13 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
             }
         }
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+
+        final LinearLayout.LayoutParams llParamsImage = new LinearLayout.LayoutParams((width-100)/3, (width-100)/3);
+        llParamsImage.gravity = Gravity.CENTER_HORIZONTAL;
+
         adapter=new ArrayAdapter<EmergencyElement>(this, R.layout.emergency_item, scenarioList) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -145,7 +154,7 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
-                imageButton.setLayoutParams(new LinearLayout.LayoutParams(350, 350)); //currently hardcoded, change later
+                imageButton.setLayoutParams(llParamsImage); //currently hardcoded, change later
 
                 final TextView textView = (TextView) convertView.findViewById(R.id.emergencyTitle);
                 textView.setText(current.getTitle());

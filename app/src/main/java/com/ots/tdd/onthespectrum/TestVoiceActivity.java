@@ -29,14 +29,13 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
     TextToSpeech ttobj;
     HttpURLConnection connection;
     BufferedReader reader;
-    String endpointURL = "https://ots-plivo-connection.herokuapp.com/initiate_call/" + SelectedEmergencyActivity.toSpeak;
+    String endpointURL = "https://request-plivo-connection.herokuapp.com//initiate_call/" + SelectedEmergencyActivity.toSpeak;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_voice);
 
-        // Uncomment for calling functionality
         android.content.Context context = this.getApplicationContext();
         //ttobj=new TextToSpeech(this, this);
         new callTask().execute(endpointURL);
@@ -90,7 +89,7 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            callStatus.setText(result);
+            callStatus.setText("The message was successfully sent.");
         }
     }
 
