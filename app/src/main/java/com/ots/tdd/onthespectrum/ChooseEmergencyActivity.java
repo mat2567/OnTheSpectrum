@@ -41,6 +41,7 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
     int emergencyElementCounter = 0;
 
     private FusedLocationProviderClient mFusedLocationClient;
+    String lastLocation = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,40 +74,6 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                 String emergencyMessage = "General";
                 intent.putExtra("scenario", emergencyMessage);
 
-                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) { // coarse permission is granted
-                    // Todo
-
-                    mFusedLocationClient.getLastLocation()
-                            .addOnSuccessListener(getParent(), new OnSuccessListener<Location>() {
-                                @Override
-                                public void onSuccess(Location location) {
-                                    // Got last known location. In some rare situations this can be null.
-                                    if (location != null) {
-                                        // Logic to handle location object
-
-                                        String strLatitude = location.convert(Math.abs(location.getLatitude()), location.FORMAT_DEGREES);
-                                        strLatitude += location.getLatitude() >= 0 ? " N" : " S";
-                                        String strLongitude = location.convert(Math.abs(location.getLongitude()), location.FORMAT_DEGREES);
-                                        strLongitude += location.getLongitude() >= 0 ? " E" : " W";
-
-                                        intent.putExtra("latitude", strLatitude);
-                                        intent.putExtra("longitude", strLongitude);
-                                    }
-                                }
-                            });
-
-
-                } else { // permission is not granted, request for permission
-
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_COARSE_LOCATION)) { // show some info to user why you want this permission
-                        Toast.makeText(getApplicationContext(), "Allow Location Permission to use this functionality.", Toast.LENGTH_SHORT).show();
-                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 123 /*LOCATION_PERMISSION_REQUEST_CODE*/);
-                    } else {
-                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 123 /*LOCATION_PERMISSION_REQUEST_CODE*/);
-
-                    }
-                }
-
                 startActivity(intent);
             }
         });
@@ -116,6 +83,38 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
         gridView.setVerticalSpacing(50);
 
         loadInfo();
+
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) { // coarse permission is granted
+            // Todo
+
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                // Logic to handle location object
+
+                                lastLocation += location.convert(Math.abs(location.getLatitude()), location.FORMAT_DEGREES);
+                                lastLocation += location.getLatitude() >= 0 ? " N " : " S ";
+                                lastLocation += location.convert(Math.abs(location.getLongitude()), location.FORMAT_DEGREES);
+                                lastLocation += location.getLongitude() >= 0 ? " E" : " W";
+
+                            }
+                        }
+                    });
+
+
+        } else { // permission is not granted, request for permission
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_COARSE_LOCATION)) { // show some info to user why you want this permission
+                Toast.makeText(getApplicationContext(), "Allow Location Permission to use this functionality.", Toast.LENGTH_SHORT).show();
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 123 /*LOCATION_PERMISSION_REQUEST_CODE*/);
+            } else {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 123 /*LOCATION_PERMISSION_REQUEST_CODE*/);
+
+            }
+        }
 
         adapter=new ArrayAdapter<EmergencyElement>(this, R.layout.emergency_item, scenarioList) {
             @Override
@@ -142,35 +141,7 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                         // save full message somewhere?
                         String emergencyMessage = emergencyTag;
                         intent.putExtra("scenario", emergencyMessage);
-
-                        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) { // coarse permission is granted
-                            // Todo
-
-                            mFusedLocationClient.getLastLocation()
-                                    .addOnSuccessListener(getParent(), new OnSuccessListener<Location>() {
-                                        @Override
-                                        public void onSuccess(Location location) {
-                                            // Got last known location. In some rare situations this can be null.
-                                            if (location != null) {
-                                                // Logic to handle location object
-                                                intent.putExtra("latitude", location.getLatitude());
-                                                intent.putExtra("longitude", location.getLongitude());
-                                            }
-                                        }
-                                    });
-
-
-                        } else { // permission is not granted, request for permission
-
-                            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_COARSE_LOCATION)) { // show some info to user why you want this permission
-                                Toast.makeText(getApplicationContext(), "Allow Location Permission to use this functionality.", Toast.LENGTH_SHORT).show();
-                                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 123 /*LOCATION_PERMISSION_REQUEST_CODE*/);
-                            } else {
-                                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 123 /*LOCATION_PERMISSION_REQUEST_CODE*/);
-
-                            }
-                        }
-
+                        intent.putExtra("location", lastLocation);
                         startActivity(intent);
                     }
                 });

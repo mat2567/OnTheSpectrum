@@ -53,8 +53,7 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         setContentView(R.layout.activity_selected_emergency);
 
         scenarioName = getIntent().getStringExtra("scenario");
-        String latitude = getIntent().getStringExtra("latitude");
-        String longitude = getIntent().getStringExtra("longitude");
+        String location = getIntent().getStringExtra("location");
         String scenarioInfo = "I am in a " + scenarioName + " emergency.";
 
         setTextSizes();
@@ -72,8 +71,9 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         }
 
         String infoText = "What will be said on your call:\n\nHello. " + appInfo + scenarioInfo + " " + profInfo;
+        infoText += "\nI am located at " + location + ".";
         toSpeak = "Hello. " + appInfo + scenarioInfo + " " + profInfo;
-        toSpeak += "\nI am located at " + latitude + "degrees and " + longitude + "degrees.";
+        toSpeak += "\nI am located at " + location + ".";
 
         infoScrollView = (ScrollView) findViewById(R.id.infoScrollView);
         TextView infoTextView = new TextView(this);
