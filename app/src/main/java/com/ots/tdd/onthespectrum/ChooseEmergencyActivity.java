@@ -1,14 +1,18 @@
 package com.ots.tdd.onthespectrum;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
+import android.location.Location;
 import android.os.Bundle;
-import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -20,6 +24,11 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,6 +42,9 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
 
     int emergencyElementCounter = 0;
 
+    private FusedLocationProviderClient mFusedLocationClient;
+    String lastLocation = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
@@ -41,6 +53,10 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emergency_list);
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        final Activity activity = this;
 
         final int titleSize = sharedPref.getInt("TitleFontSize", 0);
         final int bodySize = sharedPref.getInt("BodyFontSize", 0);
@@ -55,10 +71,11 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Intent is what you use to start another activity
-                Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
+                final Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
                 // save full message somewhere?
                 String emergencyMessage = "General";
                 intent.putExtra("scenario", emergencyMessage);
+
                 startActivity(intent);
             }
         });
@@ -68,6 +85,38 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
         gridView.setVerticalSpacing(50);
 
         loadInfo();
+
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) { // coarse permission is granted
+            // Todo
+
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                // Logic to handle location object
+
+                                lastLocation += location.convert(Math.abs(location.getLatitude()), location.FORMAT_DEGREES);
+                                lastLocation += location.getLatitude() >= 0 ? " N " : " S ";
+                                lastLocation += location.convert(Math.abs(location.getLongitude()), location.FORMAT_DEGREES);
+                                lastLocation += location.getLongitude() >= 0 ? " E" : " W";
+
+                            }
+                        }
+                    });
+
+
+        } else { // permission is not granted, request for permission
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_COARSE_LOCATION)) { // show some info to user why you want this permission
+                Toast.makeText(getApplicationContext(), "Allow Location Permission to use this functionality.", Toast.LENGTH_SHORT).show();
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 123 /*LOCATION_PERMISSION_REQUEST_CODE*/);
+            } else {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 123 /*LOCATION_PERMISSION_REQUEST_CODE*/);
+
+            }
+        }
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -96,11 +145,12 @@ public class ChooseEmergencyActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         // Intent is what you use to start another activity
-                        Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
+                        final Intent intent = new Intent(ChooseEmergencyActivity.this, SelectedEmergencyActivity.class);
                         String emergencyTag = (imageButton.getTag()).toString(); //to be passed in
                         // save full message somewhere?
                         String emergencyMessage = emergencyTag;
                         intent.putExtra("scenario", emergencyMessage);
+                        intent.putExtra("location", lastLocation);
                         startActivity(intent);
                     }
                 });
