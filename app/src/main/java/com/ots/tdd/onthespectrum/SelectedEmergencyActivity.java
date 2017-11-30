@@ -64,15 +64,28 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
 
         loadProfileInfo();
         String profInfo = "";
+        String caretakerPhone = ""; //for appearance when displayed on screen
+        String caretakerPhoneSpaces = ""; //for speech to text
         for (ProfileElement profElem : profArray) {
             if (profElem.userInfo != "") {
-                profInfo += "\nMy " + profElem.infoType + " is " + profElem.userInfo + ". ";
+                if (profElem.infoType.equals("Caretaker Phone Number")) {
+                    caretakerPhoneSpaces = "My caretaker can be reached at ";
+                    for (int i = 0; i < profElem.userInfo.length(); i++) {
+                        //includes spaces to force numbers to be read one at a time
+                        caretakerPhoneSpaces += profElem.userInfo.charAt(i) + " ";
+                    }
+                    caretakerPhoneSpaces +=  "to answer any questions about me.";
+
+                    caretakerPhone = "\nMy caretaker can be reached at " + profElem.userInfo + " to answer any questions about me.";
+                } else {
+                    profInfo += "\nMy " + profElem.infoType + " is " + profElem.userInfo + ". ";
+                }
             }
         }
 
-        String infoText = "What will be said on your call:\n\nHello. " + appInfo + scenarioInfo + " " + profInfo;
+        String infoText = "What will be said on your call:\n\nHello. " + appInfo + scenarioInfo + " " + profInfo + caretakerPhone;
         infoText += "\nI am located at " + location + ".";
-        toSpeak = "Hello. " + appInfo + scenarioInfo + " " + profInfo;
+        toSpeak = "Hello. " + appInfo + scenarioInfo + " " + profInfo + caretakerPhoneSpaces;
         toSpeak += "\nI am located at " + location + ".";
 
         infoScrollView = (ScrollView) findViewById(R.id.infoScrollView);
@@ -130,6 +143,7 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
             profArray.add(new ProfileElement("Age", "", 2));
             profArray.add(new ProfileElement("Phone Number", "", 3));
             profArray.add(new ProfileElement("Home Address", "", 4));
+            profArray.add(new ProfileElement("Caretaker Phone Number", "", 5));
         } else {
             String[] fields = savedProfFields.split(";;");
             for (int i = 0; i < fields.length; i++) {
