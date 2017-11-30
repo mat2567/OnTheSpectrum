@@ -1,11 +1,18 @@
 package com.ots.tdd.onthespectrum;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.AsyncTask;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -37,10 +44,11 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
         setContentView(R.layout.activity_test_voice);
 
         android.content.Context context = this.getApplicationContext();
-        //ttobj=new TextToSpeech(this, this);
         new callTask().execute(endpointURL);
 
-
+//        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+//        String careTakerNum = sharedPref.getString("Caretaker Phone Number", null);
+//        sendText(careTakerNum);
     }
 
 
@@ -94,6 +102,24 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
     }
 
 
+    public void sendText(String careTakerNum) {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.SEND_SMS},1);
+
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.SEND_SMS);
+        while(permissionCheck == PackageManager.PERMISSION_DENIED) {
+            permissionCheck = ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.SEND_SMS);
+        }
+        if(permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            SmsManager smsManager = SmsManager.getDefault();
+            if (careTakerNum != null)
+                smsManager.sendTextMessage(careTakerNum,
+                        null,"hello Arsh", null,null);
+            //replace Hello Arsh with the string that we want to send to caretaker
+        }
+    }
 
 //    @Override
 //    public void onInit(int status)
