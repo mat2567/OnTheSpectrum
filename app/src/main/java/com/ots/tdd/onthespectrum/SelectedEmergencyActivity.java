@@ -84,9 +84,9 @@ public class SelectedEmergencyActivity extends AppCompatActivity implements Text
         }
 
         String infoText = "What will be said on your call:\n\nHello. " + appInfo + scenarioInfo + " " + profInfo + caretakerPhone;
-        infoText += "\nI am located at the GPS coordinates: " + location + ".";
+        if (location.length() > 0) { infoText += "\nI am located at the GPS coordinates: " + location + "."; }
         toSpeak = "Hello. " + appInfo + scenarioInfo + " " + profInfo + caretakerPhoneSpaces;
-        toSpeak += "\nI am located at the GPS coordinates " + location + ".";
+        if (location.length() > 0) { toSpeak += "\nI am located at the GPS coordinates " + location + "."; }
 
         infoScrollView = (ScrollView) findViewById(R.id.infoScrollView);
         TextView infoTextView = new TextView(this);
