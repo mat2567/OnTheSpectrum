@@ -41,7 +41,6 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
 //        ttobj=new TextToSpeech(this, this);
         new callTask().execute(endpointURL);
 
-
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.SEND_SMS},1);
 
@@ -53,13 +52,11 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
         }
         if(permissionCheck == PackageManager.PERMISSION_GRANTED) {
             SmsManager smsManager = SmsManager.getDefault();
-//            PendingIntent pi = PendingIntent.getActivity(this, 0,
-//                    new Intent(this, SMS.class), 0);
             if (careTakerNum != null)
-            smsManager.sendTextMessage(careTakerNum,
-                    null,"hello Arsh", null,null);
+                smsManager.sendTextMessage(careTakerNum,
+                        null,"hello Arsh", null,null);
+            //TODO: replace Hello Arsh with the string that we want to send to caretaker
         }
-
     }
 
 
