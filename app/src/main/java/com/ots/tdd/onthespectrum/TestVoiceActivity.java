@@ -89,7 +89,7 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            callStatus.setText(result);
+            callStatus.setText("The message was successfully sent.");
         }
     }
 
