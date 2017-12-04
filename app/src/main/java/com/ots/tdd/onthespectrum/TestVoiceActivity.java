@@ -37,18 +37,21 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
     HttpURLConnection connection;
     BufferedReader reader;
     String endpointURL = "https://request-plivo-connection.herokuapp.com//initiate_call/" + SelectedEmergencyActivity.toSpeak;
-
+    SharedPreferences sharedPref;
+    String location = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_voice);
 
+        location = getIntent().getStringExtra("location");
+
         android.content.Context context = this.getApplicationContext();
         new callTask().execute(endpointURL);
 
-//        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
-//        String careTakerNum = sharedPref.getString("Caretaker Phone Number", null);
-//        sendText(careTakerNum);
+        sharedPref = getApplicationContext().getSharedPreferences("OnTheSpectrum", Context.MODE_PRIVATE);
+        String careTakerNum = sharedPref.getString("Caretaker Phone Number", null);
+        sendText(careTakerNum);
     }
 
 
@@ -106,6 +109,12 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.SEND_SMS},1);
 
+        String message =
+                "Hello Caretaker of "+sharedPref.getString("Name", "OnTheSpectrum user")+",\n" +
+                "I am in a "+ sharedPref.getString("ScenarioNames", "emergency") +
+                " situation right now at "+ location+". " + //get location
+                "I have contacted emergency services";
+        //, and they should be reaching out to you shortly.
         int permissionCheck = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.SEND_SMS);
         while(permissionCheck == PackageManager.PERMISSION_DENIED) {
@@ -114,10 +123,10 @@ public class TestVoiceActivity extends AppCompatActivity{ //implements EventList
         }
         if(permissionCheck == PackageManager.PERMISSION_GRANTED) {
             SmsManager smsManager = SmsManager.getDefault();
-            if (careTakerNum != null)
+            if (careTakerNum != null) {
                 smsManager.sendTextMessage(careTakerNum,
-                        null,"hello Arsh", null,null);
-            //replace Hello Arsh with the string that we want to send to caretaker
+                        null, message, null, null);
+            }
         }
     }
 
