@@ -24,13 +24,13 @@
 
 
 ## Install Guide ##
-* Pre-requisites
+* Prerequisites
   * Mobile application with Android OS (minimum API 16)
   * Phone Service/ Phone carrier
   * Email to receive app download
   * At least 2MB storage space on device
 * Download instructions
-  * Locate and download the file called “app-universal-debug.apk” found in the project’s repository.
+  * Locate and download the file called [“app-universal-debug.apk”](https://github.com/ETVargas/OnTheSpectrum/blob/master/app-universal-debug.apk) found in the project’s repository.
   * Email this .apk file to the person who wishes to download the application.
   * Using an Android phone’s email application, open up the email containing the .apk and, when prompted, install the application.
   * Since this device is not installed through the Play Store you may be prompted to verify that you want to download the file. Select “yes” or whatever affirmative action is available. 
